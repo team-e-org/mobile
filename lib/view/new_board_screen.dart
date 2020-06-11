@@ -5,6 +5,17 @@ class NewBoardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Create a new board',
+        ),
+        leading: Container(
+          child: IconButton(
+            icon: Icon(Icons.close),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ), // Hide back button
+      ),
       body: MockScreenCommon(
         name: 'New board screen',
       ),
