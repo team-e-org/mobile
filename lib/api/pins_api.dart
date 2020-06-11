@@ -6,7 +6,7 @@ import 'package:mobile/model/models.dart';
 abstract class PinsApi {
   Future<List<Pin>> pins({int page});
 
-  Future<Pin> pin(int id);
+  Future<Pin> pin({int id});
 
   Future<Pin> newPin({NewPin pin});
 
@@ -28,18 +28,15 @@ class DefaultPinsApi extends PinsApi {
 
   @override
   Future<Pin> editPin({int id, EditPin pin}) async {
-    final body = json.encode(pin);
-    print(body);
-
     final response = await _client.put(
       "/pins/$id",
-      body: body,
+      body: json.encode(pin),
     );
     return Pin.fromJson(jsonDecode(response.body));
   }
 
   @override
-  Future<Pin> pin(int id) async {
+  Future<Pin> pin({int id}) async {
     final response = await _client.get("/pins/$id");
     return Pin.fromJson(jsonDecode(response.body));
   }

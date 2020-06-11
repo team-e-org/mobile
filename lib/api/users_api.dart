@@ -30,11 +30,9 @@ class DefaultUsersApi extends UsersApi {
 
   @override
   Future<User> editUser({int id, EditUser user}) async {
-    final body = json.encode(user);
-    print(body);
     final response = await _client.put(
       "/users/$id",
-      body: body,
+      body: json.encode(user),
     );
 
     return User.fromJson(jsonDecode(response.body));

@@ -44,11 +44,9 @@ class DefaultBoardsApi extends BoardsApi {
 
   @override
   Future<Board> newBoard({NewBoard board}) async {
-    final body = json.encode(board);
-    print(body);
     final response = await _client.post(
       "/boards",
-      body: body,
+      body: json.encode(board),
     );
     return Board.fromJson(jsonDecode(response.body));
   }
