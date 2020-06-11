@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/view/board_detail_screen.dart';
 import 'package:mobile/view/board_edit_screen.dart';
 import 'package:mobile/view/create_new_screen.dart';
+import 'package:mobile/view/new_board_screen.dart';
 import 'package:mobile/view/pin_detail_screen.dart';
 import 'package:mobile/view/pin_edit_screen.dart';
 import 'package:mobile/view/pin_select_photo_screen.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
 
         // Create new pin/board
         '/new': (context) => CreateNewScreen(),
-        '/new/board': (context) => BoardEditScreen(),
+        '/new/board': (context) => NewBoardScreen(),
         '/new/pin/select-photo': (context) => PinSelectPhotoScreen(),
         '/new/pin/edit': (context) => PinEditScreen(),
         '/new/pin/select-board': (context) => SelectBoardScreen(),

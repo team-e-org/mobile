@@ -15,14 +15,14 @@ class CreateNewScreen extends StatelessWidget {
               RaisedButton(
                 child: Text('Board'),
                 onPressed: () {
-                  // TODO do navigation
+                  Navigator.of(context).pushNamed('/new/board');
                 },
               ),
               SizedBox(width: 20),
               RaisedButton(
                 child: Text('Pin'),
                 onPressed: () {
-                  // TODO do navigation
+                  Navigator.of(context).pushNamed('/new/pin/select-photo');
                 },
               ),
             ],
