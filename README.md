@@ -1,3 +1,9 @@
+## fronJson, toJson するためのコード生成
+
+```bash
+$ flutter packages pub run build_runner build
+```
+
 # mobile
 
 A new Flutter project.
