@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:mobile/api/api_client.dart';
 import 'package:mobile/model/models.dart';
+
+part 'pins_api.g.dart';
 
 class NewPin {
   NewPin({
@@ -20,6 +23,7 @@ class NewPin {
   final String image;
 }
 
+@JsonSerializable(includeIfNull: false)
 class EditPin {
   EditPin({
     this.title,
@@ -30,6 +34,8 @@ class EditPin {
   final String title;
   final String description;
   final bool isPrivate;
+
+  Map<String, dynamic> toJson() => _$EditPinToJson(this);
 }
 
 abstract class PinsApi {
@@ -39,7 +45,7 @@ abstract class PinsApi {
 
   Future<Pin> newPin({NewPin pin});
 
-  Future<bool> editPin(EditPin pin);
+  Future<Pin> editPin({int id, EditPin pin});
 
   Future<bool> deletePin(int id);
 }
@@ -56,9 +62,15 @@ class DefaultPinsApi extends PinsApi {
   }
 
   @override
-  Future<bool> editPin(EditPin pin) {
-    // TODO: API仕様変更中のためいったん保留
-    throw UnimplementedError();
+  Future<Pin> editPin({int id, EditPin pin}) async {
+    final body = json.encode(pin);
+    print(body);
+
+    final response = await _client.put(
+      "/pins/$id",
+      body: body,
+    );
+    return Pin.fromJson(jsonDecode(response.body));
   }
 
   @override
