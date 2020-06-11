@@ -64,6 +64,8 @@ class ApiClient {
       return ForbiddenServerError();
     } else if (statusCode == 404) {
       return NotFoundError(url);
+    } else if (statusCode == 422) {
+      return UnprocessableEntity();
     } else if (statusCode >= 500 && statusCode <= 599) {
       return UnknownServerError(errorResponse, statusCode);
     } else {
