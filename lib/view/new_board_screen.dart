@@ -14,7 +14,7 @@ class NewBoardScreen extends StatelessWidget {
             icon: Icon(Icons.close),
             onPressed: () => Navigator.of(context).pop(),
           ),
-        ), // Hide back button
+        ),
       ),
       body: MockScreenCommon(
         name: 'New board screen',
