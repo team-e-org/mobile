@@ -37,6 +37,16 @@ class ApiClient {
     );
   }
 
+  Future<Response> delete(String relativeUrl) async {
+    final headers = await _headers;
+    return await _makeRequestWithErrorHandler(
+      _client.delete(
+        "$apiEndpoint$relativeUrl",
+        headers: headers,
+      ),
+    );
+  }
+
   Future<Map<String, String>> get _headers async {
     Map<String, String> result = {};
 
