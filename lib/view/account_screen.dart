@@ -11,7 +11,7 @@ class AccountScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          // TODO 遷移する
+          Navigator.of(context).pushNamed('/new');
         },
       ),
     );
