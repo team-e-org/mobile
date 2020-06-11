@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/view/mock/mock_screen_common.dart';
 
 class CreateNewScreen extends StatelessWidget {
   @override
@@ -9,8 +8,25 @@ class CreateNewScreen extends StatelessWidget {
         title: Text('Create'),
       ),
       body: Container(
-        child: MockScreenCommon(
-          name: 'Create new screen',
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              RaisedButton(
+                child: Text('Board'),
+                onPressed: () {
+                  // TODO do navigation
+                },
+              ),
+              SizedBox(width: 20),
+              RaisedButton(
+                child: Text('Pin'),
+                onPressed: () {
+                  // TODO do navigation
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
