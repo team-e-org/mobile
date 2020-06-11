@@ -16,8 +16,22 @@ class NewBoardScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: MockScreenCommon(
-        name: 'New board screen',
+      body: Container(
+        padding: EdgeInsets.all(8),
+        child: Column(
+          children: <Widget>[
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Board name',
+                hintText: 'Type something...',
+                border: OutlineInputBorder(),
+              ),
+              onChanged: (value) {
+                // TODO 変更を通知する
+              },
+            )
+          ],
+        ),
       ),
     );
   }
