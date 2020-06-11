@@ -17,6 +17,7 @@ dependencies:
   equatable: ^1.1.1
   meta: ^1.1.8
   dio: ^3.0.9
+  json_serializable: ^3.3.0
 
 dev_dependencies:
   flutter_test:
