@@ -3,35 +3,37 @@ import 'package:mobile/model/models.dart';
 
 class PinCard extends StatelessWidget {
   final Pin pin;
-  final Function onClick;
+  final Function onTap;
 
   PinCard({
     this.pin,
-    this.onClick,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            color: Colors.red,
-            child: Image(
-              image: NetworkImage(pin.imageUrl),
-              fit: BoxFit.contain,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              child: Image(
+                image: NetworkImage(pin.imageUrl),
+                fit: BoxFit.contain,
+              ),
             ),
-          ),
-          Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _pinTitle(),
-              ],
-            ),
-          )
-        ],
+            Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _pinTitle(),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
