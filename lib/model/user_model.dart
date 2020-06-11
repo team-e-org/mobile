@@ -1,3 +1,26 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'user_model.g.dart';
+
+@JsonSerializable(includeIfNull: false)
+class EditUser {
+  EditUser({
+    this.name,
+    this.email,
+    this.icon,
+  });
+
+  final String name;
+  final String email;
+  final String icon;
+
+  factory EditUser.fromJson(Map<String, dynamic> json) =>
+      _$EditUserFromJson(json);
+
+  Map<String, dynamic> toJson() => _$EditUserToJson(this);
+}
+
+@JsonSerializable(includeIfNull: false)
 class User {
   final int id;
   final String name;
@@ -11,11 +34,9 @@ class User {
     this.icon,
   });
 
-  User.fromJson(Map<String, dynamic> json)
-      : id = json['id'] as int,
-        name = json['name'],
-        email = json['email'],
-        icon = json['icon'];
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 
   static User fromMock() {
     return User(

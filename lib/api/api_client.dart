@@ -18,11 +18,10 @@ class ApiClient {
   });
 
   Future<Response> get(String relativeUrl) async {
-    final headers = await _headers;
     return await _makeRequestWithErrorHandler(
       _client.get(
         "$apiEndpoint$relativeUrl",
-        headers: headers,
+        headers: await _headers,
       ),
     );
   }
@@ -32,7 +31,7 @@ class ApiClient {
       _client.post(
         "$apiEndpoint$relativeUrl",
         body: body,
-        headers: await _headers,
+        headers: await _headersContentTypeJson,
       ),
     );
   }
@@ -42,7 +41,7 @@ class ApiClient {
       _client.put(
         "$apiEndpoint$relativeUrl",
         body: body,
-        headers: await _headers,
+        headers: await _headersContentTypeJson,
       ),
     );
   }
@@ -62,8 +61,14 @@ class ApiClient {
 
     // TODO: 実トークンを使う
     result[headerXAuthToken] = 'access_token';
-    // FIXME: 'application/json'を指定すると、Unprocessable errorになってしまう。なぜ?
-    result['Content-Type'] = 'application/x-www-form-urlencoded';
+
+    return result;
+  }
+
+  Future<Map<String, String>> get _headersContentTypeJson async {
+    Map<String, String> result = await _headers;
+
+    result['Content-Type'] = 'application/json';
 
     return result;
   }

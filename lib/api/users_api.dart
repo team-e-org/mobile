@@ -5,24 +5,6 @@ import 'package:mobile/model/board_model.dart';
 import 'package:mobile/model/user_model.dart';
 import 'package:mobile/model/pin_model.dart';
 
-class EditUser {
-  EditUser({
-    this.name,
-    this.email,
-    this.icon,
-  });
-
-  final String name;
-  final String email;
-  final String icon;
-
-  Map<String, dynamic> toJson() => {
-    'name': name,
-    'email': email,
-    'icon': icon,
-  };
-}
-
 abstract class UsersApi {
   Future<User> user({int id});
 

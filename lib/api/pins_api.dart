@@ -1,42 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:mobile/api/api_client.dart';
 import 'package:mobile/model/models.dart';
-
-part 'pins_api.g.dart';
-
-class NewPin {
-  NewPin({
-    @required this.title,
-    @required this.image,
-    this.description,
-    this.url,
-    this.isPrivate,
-  });
-
-  final String title;
-  final String description;
-  final String url;
-  final bool isPrivate;
-  final String image;
-}
-
-@JsonSerializable(includeIfNull: false)
-class EditPin {
-  EditPin({
-    this.title,
-    this.description,
-    this.isPrivate,
-  });
-
-  final String title;
-  final String description;
-  final bool isPrivate;
-
-  Map<String, dynamic> toJson() => _$EditPinToJson(this);
-}
 
 abstract class PinsApi {
   Future<List<Pin>> pins({int page});
