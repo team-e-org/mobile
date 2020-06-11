@@ -4,7 +4,7 @@ import 'package:mobile/model/models.dart';
 class BoardCard extends StatelessWidget {
   final Board board;
   final List<Pin> pins;
-  final Function onTap;
+  final VoidCallback onTap;
   final EdgeInsetsGeometry margin;
 
   BoardCard({
@@ -25,11 +25,7 @@ class BoardCard extends StatelessWidget {
             children: [
               _imageContainer(),
               Container(
-                child: Column(
-                  children: [
-                    _boardName(),
-                  ],
-                ),
+                child: _boardName(),
               ),
             ],
           )),
@@ -54,9 +50,7 @@ class BoardCard extends StatelessWidget {
     return Container(
         child: Row(
       children: [
-        Image(
-          image: NetworkImage(_imageUrl),
-        ),
+        Image.network(_imageUrl),
       ],
     ));
   }
@@ -64,6 +58,8 @@ class BoardCard extends StatelessWidget {
   Widget _boardName() {
     return Text(
       board.name,
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1,
       style: TextStyle(
         fontSize: 24,
       ),

@@ -3,7 +3,7 @@ import 'package:mobile/model/models.dart';
 
 class PinCard extends StatelessWidget {
   final Pin pin;
-  final Function onTap;
+  final VoidCallback onTap;
 
   PinCard({
     this.pin,
