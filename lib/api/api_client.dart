@@ -62,6 +62,8 @@ class ApiClient {
 
     // TODO: 実トークンを使う
     result[headerXAuthToken] = 'access_token';
+    // FIXME: 'application/json'を指定すると、Unprocessable errorになってしまう。なぜ?
+    result['Content-Type'] = 'application/x-www-form-urlencoded';
 
     return result;
   }
