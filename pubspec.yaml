@@ -17,12 +17,15 @@ dependencies:
   equatable: ^1.1.1
   meta: ^1.1.8
   dio: ^3.0.9
+  json_annotation: ^3.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   bloc_test: ^5.0.0
   mockito: ^4.1.1
+  build_runner: ^1.10.0
+  json_serializable: ^3.3.0
 
 flutter:
 
