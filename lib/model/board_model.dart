@@ -15,8 +15,13 @@ class Board {
     this.isArchive,
   });
 
-  // TODO
-  // factory Board fromJson(Map<String, dynamic> json){}
+  Board.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as int,
+        userId = json['userId'] as int,
+        name = json['name'],
+        description = json['description'],
+        isPrivate = json['isPrivate'],
+        isArchive = json['isArchive'];
 
   static Board fromMock() {
     return Board(
