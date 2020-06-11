@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/view/account_screen.dart';
 import 'package:mobile/view/board_detail_screen.dart';
 import 'package:mobile/view/board_edit_screen.dart';
 import 'package:mobile/view/create_new_screen.dart';
-import 'package:mobile/view/home_screen.dart';
 import 'package:mobile/view/pin_detail_screen.dart';
 import 'package:mobile/view/pin_edit_screen.dart';
 import 'package:mobile/view/pin_select_photo_screen.dart';
+import 'package:mobile/view/root_screen.dart';
 import 'package:mobile/view/select_board_screen.dart';
 
 void main() {
@@ -18,12 +17,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Pinterest',
-      home: Container(),
+      home: RootScreen(),
       routes: {
-        // Main screens
-        '/home': (context) => HomeScreen(),
-        '/account': (context) => AccountScreen(),
-
         // Pin
         '/pin/detail': (context) => PinDetailScreen(),
         '/pin/edit': (context) => PinEditScreen(),
