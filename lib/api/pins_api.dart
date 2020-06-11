@@ -1,7 +1,24 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:mobile/api/api_client.dart';
 import 'package:mobile/model/models.dart';
+
+class NewPin {
+  NewPin({
+    @required this.title,
+    @required this.image,
+    this.description,
+    this.url,
+    this.isPrivate,
+  });
+
+  final String title;
+  final String description;
+  final String url;
+  final bool isPrivate;
+  final String image;
+}
 
 class EditPin {
   EditPin({
@@ -19,6 +36,8 @@ abstract class PinsApi {
   Future<List<Pin>> pins({int page});
 
   Future<Pin> pin(int id);
+
+  Future<Pin> newPin({NewPin pin});
 
   Future<bool> editPin(EditPin pin);
 
@@ -54,5 +73,13 @@ class DefaultPinsApi extends PinsApi {
     return (jsonDecode(response.body) as List)
         .map((it) => Pin.fromJson(it))
         .toList();
+  }
+
+  @override
+  Future<Pin> newPin({NewPin pin}) {
+    // multipartリクエストが上手くいかないため保留
+    // See: https://github.com/team-e-org/mobile/issues/49
+    // TODO: implement newPin
+    throw UnimplementedError();
   }
 }
