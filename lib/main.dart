@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
           case '/':
-            return _pageRoute(RootScreen());
+            return _pageRoute(RootScreen(), name: '/');
           // Pin
           case '/pin/detail':
             return _pageRoute(PinDetailScreen());
@@ -38,7 +38,10 @@ class MyApp extends StatelessWidget {
           case '/new/board':
             return _pageRoute(NewBoardScreen());
           case '/new/pin/select-photo':
-            return _pageRoute(PinSelectPhotoScreen(), fullScreenDialog: true);
+            return _pageRoute(
+              PinSelectPhotoScreen(),
+              fullScreenDialog: true,
+            );
           case '/new/pin/edit':
             return _pageRoute(PinEditScreen());
           case '/new/pin/select-board':
@@ -50,8 +53,15 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  MaterialPageRoute _pageRoute(Widget widget, {bool fullScreenDialog = false}) {
-    return MaterialPageRoute(
+  MaterialPageRoute _pageRoute(
+    Widget widget, {
+    bool fullScreenDialog = false,
+    String name,
+  }) {
+    return MaterialPageRoute<dynamic>(
+      settings: RouteSettings(
+        name: name,
+      ),
       builder: (context) => widget,
       fullscreenDialog: fullScreenDialog,
     );

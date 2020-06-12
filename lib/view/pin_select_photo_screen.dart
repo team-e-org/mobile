@@ -9,8 +9,11 @@ class PinSelectPhotoScreen extends StatelessWidget {
         title: Text('Select photo'),
       ),
       body: Container(
-        child: MockScreenCommon(
-          name: 'Pin select photo screen',
+        child: RaisedButton(
+          child: Text('Next'),
+          onPressed: () {
+            Navigator.pushNamed(context, '/new/pin/edit');
+          },
         ),
       ),
     );
