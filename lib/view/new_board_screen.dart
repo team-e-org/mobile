@@ -13,34 +13,38 @@ class NewBoardScreen extends StatelessWidget {
   }
 
   Widget _buildScreen(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Create a new board',
-        ),
-        leading: Container(
-          child: IconButton(
-            icon: Icon(Icons.close),
-            onPressed: () => Navigator.of(context).pop(),
+    return BlocBuilder<NewBoardScreenBloc, NewBoardScreenBlocState>(
+      builder: (context, state) => Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Create a new board',
           ),
-        ),
-        actions: <Widget>[
-          RaisedButton(
-            child: Text('Create'),
-            onPressed: () {
-              // TODO
-            },
-          )
-        ],
-      ),
-      body: Container(
-        padding: EdgeInsets.all(8),
-        child: Column(
-          children: <Widget>[
-            _buildBoardNameTextField(context),
-            SizedBox(height: 20),
-            _buildPrivateBoardSwitch(context),
+          leading: Container(
+            child: IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+          actions: <Widget>[
+            RaisedButton(
+              child: Text('Create'),
+              onPressed: state.boardName.isEmpty
+                  ? null
+                  : () {
+                      // TODO
+                    },
+            )
           ],
+        ),
+        body: Container(
+          padding: EdgeInsets.all(8),
+          child: Column(
+            children: <Widget>[
+              _buildBoardNameTextField(context),
+              SizedBox(height: 20),
+              _buildPrivateBoardSwitch(context),
+            ],
+          ),
         ),
       ),
     );
@@ -54,7 +58,8 @@ class NewBoardScreen extends StatelessWidget {
         border: OutlineInputBorder(),
       ),
       onChanged: (value) {
-        // TODO 変更を通知する
+        BlocProvider.of<NewBoardScreenBloc>(context)
+            .add(BoardNameChanged(value: value));
       },
     );
   }
