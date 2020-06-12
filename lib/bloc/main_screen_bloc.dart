@@ -61,9 +61,9 @@ class DefaultState extends MainScreenState {
   }) : super(page: page, pins: pins);
 }
 
-class IsLoading extends MainScreenState {
+class Loading extends MainScreenState {
   @override
-  IsLoading({
+  Loading({
     @required int page,
     @required List<Pin> pins,
   }) : super(page: page, pins: pins);
