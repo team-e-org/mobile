@@ -22,7 +22,7 @@ class CreateNewScreen extends StatelessWidget {
               RaisedButton(
                 child: Text('Pin'),
                 onPressed: () {
-                  Navigator.of(context).pushNamed('/new/pin/select-photo');
+                  Navigator.of(context).pushReplacementNamed('/new/pin/select-photo');
                 },
               ),
             ],
