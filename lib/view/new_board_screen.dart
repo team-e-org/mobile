@@ -20,21 +20,25 @@ class NewBoardScreen extends StatelessWidget {
         padding: EdgeInsets.all(8),
         child: Column(
           children: <Widget>[
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Board name',
-                hintText: 'Type something...',
-                border: OutlineInputBorder(),
-              ),
-              onChanged: (value) {
-                // TODO 変更を通知する
-              },
-            ),
+            _buildBoardNameTextField(context),
             SizedBox(height: 20),
             _buildPrivateBoardSwitch(context),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildBoardNameTextField(BuildContext context) {
+    return TextField(
+      decoration: InputDecoration(
+        labelText: 'Board name',
+        hintText: 'Type something...',
+        border: OutlineInputBorder(),
+      ),
+      onChanged: (value) {
+        // TODO 変更を通知する
+      },
     );
   }
 
