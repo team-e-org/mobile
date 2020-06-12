@@ -30,14 +30,12 @@ class NewBoardScreen extends StatelessWidget {
               child: Text('Create'),
               onPressed: state.boardName.isEmpty
                   ? null
-                  : () {
-                      // TODO
-                    },
+                  : () => _onCreateButtonPressed(context),
             )
           ],
         ),
         body: Container(
-          padding: EdgeInsets.all(8),
+          padding: EdgeInsets.all(16),
           child: Column(
             children: <Widget>[
               _buildBoardNameTextField(context),
@@ -78,5 +76,10 @@ class NewBoardScreen extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void _onCreateButtonPressed(BuildContext context) {
+    final bloc = BlocProvider.of<NewBoardScreenBloc>(context);
+    bloc.add(CreateBoardRequested());
   }
 }
