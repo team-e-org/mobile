@@ -65,14 +65,15 @@ class NewBoardScreen extends StatelessWidget {
   }
 
   Widget _buildPrivateBoardSwitch(BuildContext context) {
+    final bloc = BlocProvider.of<NewBoardScreenBloc>(context);
     return Row(
       children: <Widget>[
         Text('Private board'),
         Spacer(),
         Switch(
-          value: false, // TODO
+          value: bloc.state.isPrivate, // TODO
           onChanged: (value) {
-            // TODO
+            bloc.add(IsPrivateChanged());
           },
         ),
       ],
