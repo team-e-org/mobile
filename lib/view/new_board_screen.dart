@@ -15,6 +15,14 @@ class NewBoardScreen extends StatelessWidget {
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
+        actions: <Widget>[
+          RaisedButton(
+            child: Text('Create'),
+            onPressed: () {
+              // TODO
+            },
+          )
+        ],
       ),
       body: Container(
         padding: EdgeInsets.all(8),
