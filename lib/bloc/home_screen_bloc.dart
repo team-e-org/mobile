@@ -10,14 +10,14 @@ import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 
 //////// Event ////////
-abstract class MainScreenEvent extends Equatable {
-  const MainScreenEvent();
+abstract class HomeScreenEvent extends Equatable {
+  const HomeScreenEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class LoadPinsPage extends MainScreenEvent {
+class LoadPinsPage extends HomeScreenEvent {
   LoadPinsPage({
     @required this.page,
   });
@@ -27,7 +27,7 @@ class LoadPinsPage extends MainScreenEvent {
   List<Object> get props => [page];
 }
 
-class FinishLoading extends MainScreenEvent {
+class FinishLoading extends HomeScreenEvent {
   FinishLoading({
     @required this.page,
     @required this.additionalPins,
@@ -40,8 +40,8 @@ class FinishLoading extends MainScreenEvent {
 }
 
 //////// State ////////
-abstract class MainScreenState extends Equatable {
-  const MainScreenState({
+abstract class HomeScreenState extends Equatable {
+  const HomeScreenState({
     @required this.page,
     @required this.pins,
   });
@@ -53,12 +53,12 @@ abstract class MainScreenState extends Equatable {
   List<Object> get props => [page, pins];
 }
 
-class InitialState extends MainScreenState {
+class InitialState extends HomeScreenState {
   @override
   InitialState() : super(page: 0, pins: []);
 }
 
-class DefaultState extends MainScreenState {
+class DefaultState extends HomeScreenState {
   @override
   DefaultState({
     @required int page,
@@ -66,7 +66,7 @@ class DefaultState extends MainScreenState {
   }) : super(page: page, pins: pins);
 }
 
-class Loading extends MainScreenState {
+class Loading extends HomeScreenState {
   @override
   Loading({
     @required int page,
@@ -75,8 +75,8 @@ class Loading extends MainScreenState {
 }
 
 //////// Bloc ////////
-class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
-  MainScreenBloc() {
+class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
+  HomeScreenBloc() {
     _apiClient = ApiClient(Client(), apiEndpoint: _apiEndpoint);
     _pinsRepository = PinsRepository(DefaultPinsApi(_apiClient));
     _apiStreams = PinsApiStreams(_pinsRepository);
@@ -89,10 +89,10 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
   PinsApiStreams _apiStreams;
 
   @override
-  MainScreenState get initialState => InitialState();
+  HomeScreenState get initialState => InitialState();
 
   @override
-  Stream<MainScreenState> mapEventToState(MainScreenEvent event) async* {
+  Stream<HomeScreenState> mapEventToState(HomeScreenEvent event) async* {
     if (event is LoadPinsPage) {
       mapLoadPinsPageToState(event);
     } else if (event is FinishLoading) {
@@ -100,7 +100,7 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
     }
   }
 
-  Stream<MainScreenState> mapLoadPinsPageToState(LoadPinsPage event) async* {
+  Stream<HomeScreenState> mapLoadPinsPageToState(LoadPinsPage event) async* {
     if (state is Loading) {
       return;
     } else if (state is InitialState || state is DefaultState) {
@@ -111,7 +111,7 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
     }
   }
 
-  Stream<MainScreenState> mapFinishLoadingToState(FinishLoading event) async* {
+  Stream<HomeScreenState> mapFinishLoadingToState(FinishLoading event) async* {
     if (state is Loading) {
       await _apiSubscription.cancel();
       final _pins = List<Pin>.from(state.pins)..addAll(event.additionalPins);
