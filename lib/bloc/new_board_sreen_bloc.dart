@@ -20,6 +20,8 @@ class BoardNameChanged extends NewBoardScreenBlocEvent {
 
 class IsPrivateChanged extends NewBoardScreenBlocEvent {}
 
+class CreateBoardRequested extends NewBoardScreenBlocEvent {}
+
 abstract class NewBoardScreenBlocState extends Equatable {
   NewBoardScreenBlocState({
     @required this.boardName,
@@ -66,6 +68,11 @@ class NewBoardScreenBloc
         boardName: state.boardName,
         isPrivate: !state.isPrivate,
       );
+    }
+
+    if (event is CreateBoardRequested) {
+      // TODO: 実際にBoardを作成する処理に差し替え
+      print('board name: ${state.boardName}, isPrivate: ${state.isPrivate}');
     }
   }
 }
