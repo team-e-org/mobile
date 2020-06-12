@@ -16,11 +16,39 @@ class InitialLoad extends MainScreenEvent {}
 
 class LoadAdditionalPage extends MainScreenEvent {}
 
+//////// State ////////
 abstract class MainScreenState extends Equatable {
-  const MainScreenState();
+  const MainScreenState({
+    @required this.page,
+    @required this.pins,
+  });
+
+  final int page;
+  final List<Pin> pins;
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [page, pins];
+}
+
+class InitialState extends MainScreenState {
+  @override
+  InitialState() : super(page: 0, pins: []);
+}
+
+class DefaultState extends MainScreenState {
+  @override
+  DefaultState({
+    @required int page,
+    @required List<Pin> pins,
+  }) : super(page: page, pins: pins);
+}
+
+class IsLoading extends MainScreenState {
+  @override
+  IsLoading({
+    @required int page,
+    @required List<Pin> pins,
+  }) : super(page: page, pins: pins);
 }
 
 class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
