@@ -12,7 +12,27 @@ abstract class MainScreenEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadPinsPage extends MainScreenEvent {}
+class LoadPinsPage extends MainScreenEvent {
+  LoadPinsPage({
+    @required this.page,
+  });
+
+  final int page;
+  @override
+  List<Object> get props => [page];
+}
+
+class FinishLoading extends MainScreenEvent {
+  FinishLoading({
+    @required this.page,
+    @required this.additionalPins,
+  });
+
+  final int page;
+  final List<Pin> additionalPins;
+  @override
+  List<Object> get props => [page, additionalPins];
+}
 
 //////// State ////////
 abstract class MainScreenState extends Equatable {
