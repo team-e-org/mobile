@@ -18,23 +18,42 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Pinterest',
-      home: RootScreen(),
-      routes: {
-        // Pin
-        '/pin/detail': (context) => PinDetailScreen(),
-        '/pin/edit': (context) => PinEditScreen(),
+      onGenerateRoute: (RouteSettings settings) {
+        switch (settings.name) {
+          case '/':
+            return _pageRoute(RootScreen());
+          // Pin
+          case '/pin/detail':
+            return _pageRoute(PinDetailScreen());
+          case '/pin/edit':
+            return _pageRoute(PinEditScreen());
+          // Board
+          case '/board/detail':
+            return _pageRoute(BoardDetailScreen());
+          case '/board/edit':
+            return _pageRoute(BoardEditScreen());
+          // Create new pin/board
+          case '/new':
+            return _pageRoute(CreateNewScreen());
+          case '/new/board':
+            return _pageRoute(NewBoardScreen());
+          case '/new/pin/select-photo':
+            return _pageRoute(PinSelectPhotoScreen(), fullScreenDialog: true);
+          case '/new/pin/edit':
+            return _pageRoute(PinEditScreen());
+          case '/new/pin/select-board':
+            return _pageRoute(SelectBoardScreen());
+        }
 
-        // Board
-        '/board/edit': (context) => BoardEditScreen(),
-        '/board/detail': (context) => BoardDetailScreen(),
-
-        // Create new pin/board
-        '/new': (context) => CreateNewScreen(),
-        '/new/board': (context) => NewBoardScreen(),
-        '/new/pin/select-photo': (context) => PinSelectPhotoScreen(),
-        '/new/pin/edit': (context) => PinEditScreen(),
-        '/new/pin/select-board': (context) => SelectBoardScreen(),
+        return null;
       },
+    );
+  }
+
+  MaterialPageRoute _pageRoute(Widget widget, {bool fullScreenDialog = false}) {
+    return MaterialPageRoute(
+      builder: (context) => widget,
+      fullscreenDialog: fullScreenDialog,
     );
   }
 }
