@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/view/account_screen.dart';
 import 'package:mobile/view/home_screen.dart';
+import 'package:mobile/view/playground_screen.dart';
 
 class RootScreenDestination {
   final int index;
@@ -13,6 +14,7 @@ class RootScreenDestination {
 
 final List<RootScreenDestination> rootScreenDestinations = [
   RootScreenDestination(0, 'Home', HomeScreen(), Icons.home),
+  RootScreenDestination(2, 'Playground', PlaygroundScreen(), Icons.airplay),
   RootScreenDestination(1, 'Account', AccountScreen(), Icons.account_circle),
 ];
 
