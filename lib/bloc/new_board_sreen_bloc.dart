@@ -18,7 +18,7 @@ class BoardNameChanged extends NewBoardScreenBlocEvent {
   List<Object> get props => [value];
 }
 
-abstract class IsPrivateChanged extends NewBoardScreenBlocEvent {}
+class IsPrivateChanged extends NewBoardScreenBlocEvent {}
 
 abstract class NewBoardScreenBlocState extends Equatable {
   NewBoardScreenBlocState({
