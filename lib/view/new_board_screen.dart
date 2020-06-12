@@ -69,7 +69,7 @@ class NewBoardScreen extends StatelessWidget {
         Text('Private board'),
         Spacer(),
         Switch(
-          value: bloc.state.isPrivate, // TODO
+          value: bloc.state.isPrivate,
           onChanged: (value) {
             bloc.add(IsPrivateChanged());
           },
