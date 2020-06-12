@@ -1,8 +1,7 @@
-name: Dart CI
+name: flutter test
 
 on:
   push:
-
 
 jobs:
   build:
