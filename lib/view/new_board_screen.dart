@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/bloc/new_board_sreen_bloc.dart';
 import 'package:mobile/view/mock/mock_screen_common.dart';
 
 class NewBoardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    return BlocProvider<NewBoardScreenBloc>(
+      create: (context) => NewBoardScreenBloc(),
+      child: _buildScreen(context),
+    );
+  }
+
+  Widget _buildScreen(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
