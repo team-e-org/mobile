@@ -29,10 +29,27 @@ class NewBoardScreen extends StatelessWidget {
               onChanged: (value) {
                 // TODO 変更を通知する
               },
-            )
+            ),
+            SizedBox(height: 20),
+            _buildPrivateBoardSwitch(context),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildPrivateBoardSwitch(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Text('Private board'),
+        Spacer(),
+        Switch(
+          value: false, // TODO
+          onChanged: (value) {
+            // TODO
+          },
+        ),
+      ],
     );
   }
 }
