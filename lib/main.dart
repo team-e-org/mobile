@@ -19,6 +19,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Pinterest',
       home: RootScreen(),
+      theme: ThemeData(
+        buttonColor: Colors.red,
+      ),
       routes: {
         // Pin
         '/pin/detail': (context) => PinDetailScreen(),
