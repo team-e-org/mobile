@@ -7,7 +7,7 @@ abstract class NewBoardScreenBlocEvent extends Equatable {
   List<Object> get props => [];
 }
 
-abstract class BoardNameChanged extends NewBoardScreenBlocEvent {
+class BoardNameChanged extends NewBoardScreenBlocEvent {
   BoardNameChanged({
     @required this.value,
   });
@@ -55,14 +55,14 @@ class NewBoardScreenBloc
   Stream<NewBoardScreenBlocState> mapEventToState(
       NewBoardScreenBlocEvent event) async* {
     if (event is BoardNameChanged) {
-      DefaultState(
+      yield DefaultState(
         boardName: event.value,
         isPrivate: state.isPrivate,
       );
     }
 
     if (event is IsPrivateChanged) {
-      DefaultState(
+      yield DefaultState(
         boardName: state.boardName,
         isPrivate: !state.isPrivate,
       );
