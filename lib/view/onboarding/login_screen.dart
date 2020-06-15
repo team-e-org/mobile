@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/util/validator.dart';
+import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/onboarding/auth_bloc.dart';
 import 'package:mobile/view/onboarding/auth_common_widget.dart';
 import 'package:mobile/view/onboarding/login_bloc.dart';
@@ -71,10 +72,9 @@ class LoginWidget extends StatelessWidget {
         },
       ),
       action: BlocBuilder<LoginBloc, LoginState>(
-        builder: (context, state) => RaisedButton(
-          child: state is LoginLoading
-              ? CircularProgressIndicator()
-              : Text('Login'),
+        builder: (context, state) => PinterestButton.primary(
+          loading: state is LoginLoading,
+          text: 'Login',
           onPressed: () {
             if (state is LoginLoading) {
               return;

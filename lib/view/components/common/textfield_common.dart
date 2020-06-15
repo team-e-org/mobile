@@ -5,13 +5,17 @@ class PinterestTextField extends StatelessWidget {
     @required this.label,
     @required this.hintText,
     this.validator,
+    this.obscure,
     this.onChanged,
+    this.onSaved,
   });
 
-  final FormFieldValidator validator;
+  final FormFieldValidator<String> validator;
   final String label;
   final String hintText;
+  final bool obscure;
   final ValueChanged<String> onChanged;
+  final ValueChanged<String> onSaved;
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +26,10 @@ class PinterestTextField extends StatelessWidget {
           label,
         ),
         TextFormField(
+          obscureText: obscure,
           validator: validator,
           onChanged: onChanged,
+          onSaved: onSaved,
           decoration: InputDecoration(
             hintText: hintText,
             border: InputBorder.none,

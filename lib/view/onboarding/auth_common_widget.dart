@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/view/components/common/textfield_common.dart';
 
 class AuthCommonWidget extends StatelessWidget {
   AuthCommonWidget({
@@ -110,13 +111,12 @@ class _TextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      obscureText: props.obscure,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        labelText: props.label,
-      ),
+    return PinterestTextField(
+      label: props.label,
+      hintText: props.label,
       validator: props.validator,
+      onChanged: null,
+      obscure: props.obscure,
       onSaved: props.onSaved,
     );
   }
