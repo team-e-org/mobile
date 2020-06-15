@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile/data/user_repository.dart';
+import 'package:mobile/data/account_repository.dart';
 import 'package:mobile/view/onboarding/authentication_bloc.dart';
 
 abstract class LoginState extends Equatable {
@@ -52,11 +52,11 @@ class LoginRequested extends LoginEvent {
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc({
-    @required this.userRepository,
+    @required this.accountRepository,
     @required this.authenticationBloc,
   });
 
-  final UserRepository userRepository;
+  final AccountRepository accountRepository;
   final AuthenticationBloc authenticationBloc;
 
   @override
@@ -69,7 +69,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       try {
         final token =
-            await userRepository.authenticate(event.email, event.password);
+            await accountRepository.authenticate(event.email, event.password);
         print('Token: $token');
         authenticationBloc.add(LoggedIn(token: token));
       } catch (e) {

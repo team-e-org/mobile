@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:mobile/data/user_repository.dart';
+import 'package:mobile/data/account_repository.dart';
 import 'package:mobile/view/onboarding/authentication_bloc.dart';
 import 'package:mobile/view/onboarding/login_bloc.dart';
 
@@ -31,11 +31,11 @@ class SignupRequested extends SignUpEvent {
 
 class SignUpBloc extends Bloc<SignUpEvent, LoginState> {
   SignUpBloc({
-    @required this.userRepository,
+    @required this.accountRepository,
     @required this.authenticationBloc,
   });
 
-  final UserRepository userRepository;
+  final AccountRepository accountRepository;
   final AuthenticationBloc authenticationBloc;
 
   @override
@@ -47,7 +47,7 @@ class SignUpBloc extends Bloc<SignUpEvent, LoginState> {
       yield LoginLoading();
 
       try {
-        final token = await userRepository.register(
+        final token = await accountRepository.register(
           event.username,
           event.email,
           event.password,

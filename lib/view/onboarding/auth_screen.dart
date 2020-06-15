@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile/data/user_repository.dart';
+import 'package:mobile/data/account_repository.dart';
 import 'package:mobile/view/onboarding/auth_bloc.dart';
 import 'package:mobile/view/onboarding/authentication_bloc.dart';
 import 'package:mobile/view/onboarding/login_bloc.dart';
@@ -18,14 +18,14 @@ class AuthWidget extends StatelessWidget {
 
   final login = BlocProvider(
     create: (context) => LoginBloc(
-      userRepository: context.repository<UserRepository>(),
+      accountRepository: context.repository<AccountRepository>(),
       authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
     ),
     child: LoginWidget(),
   );
   final signup = BlocProvider(
     create: (context) => SignUpBloc(
-      userRepository: context.repository<UserRepository>(),
+      accountRepository: context.repository<AccountRepository>(),
       authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
     ),
     child: SignUpWidget(),

@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile/data/user_repository.dart';
+import 'package:mobile/data/account_repository.dart';
 
 abstract class AuthenticationState extends Equatable {
   @override
@@ -37,10 +37,10 @@ class LoggedOut extends AuthenticationEvent {}
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthenticationBloc({
-    @required this.userRepository,
+    @required this.accountRepository,
   });
 
-  final UserRepository userRepository;
+  final AccountRepository accountRepository;
 
   @override
   AuthenticationState get initialState => Unauthenticated();
@@ -49,7 +49,7 @@ class AuthenticationBloc
   Stream<AuthenticationState> mapEventToState(
       AuthenticationEvent event) async* {
     if (event is AppInitialized) {
-      final hasToken = await userRepository.hasToken();
+      final hasToken = await accountRepository.hasToken();
 
       if (hasToken) {
         yield Authenticated();
@@ -60,12 +60,12 @@ class AuthenticationBloc
 
     if (event is LoggedIn) {
       yield Authenticating();
-      await userRepository.persistToken(event.token);
+      await accountRepository.persistToken(event.token);
       yield Authenticated();
     }
 
     if (event is LoggedOut) {
-      await userRepository.deleteToken();
+      await accountRepository.deleteToken();
       yield Unauthenticated();
     }
   }
