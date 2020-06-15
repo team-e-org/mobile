@@ -27,7 +27,13 @@ class PinterestButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return RaisedButton(
       child: loading
-          ? CircularProgressIndicator()
+          ? const SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            )
           : Text(
               text,
               style: TextStyle(
