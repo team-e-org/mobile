@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
 import 'package:mobile/api/api_client.dart';
 import 'package:mobile/api/pins_api.dart';
-import 'package:mobile/bloc/pins_api_stream.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 
@@ -18,7 +17,7 @@ abstract class HomeScreenEvent extends Equatable {
 }
 
 class LoadPinsPage extends HomeScreenEvent {
-  LoadPinsPage({
+  const LoadPinsPage({
     @required this.page,
   });
 
@@ -28,7 +27,7 @@ class LoadPinsPage extends HomeScreenEvent {
 }
 
 class FinishLoading extends HomeScreenEvent {
-  FinishLoading({
+  const FinishLoading({
     @required this.page,
     @required this.additionalPins,
   });
@@ -60,7 +59,7 @@ class InitialState extends HomeScreenState {
 
 class DefaultState extends HomeScreenState {
   @override
-  DefaultState({
+  const DefaultState({
     @required int page,
     @required List<Pin> pins,
   }) : super(page: page, pins: pins);
@@ -68,7 +67,7 @@ class DefaultState extends HomeScreenState {
 
 class Loading extends HomeScreenState {
   @override
-  Loading({
+  const Loading({
     @required int page,
     @required List<Pin> pins,
   }) : super(page: page, pins: pins);
@@ -79,14 +78,12 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
   HomeScreenBloc() {
     _apiClient = ApiClient(Client(), apiEndpoint: _apiEndpoint);
     _pinsRepository = PinsRepository(DefaultPinsApi(_apiClient));
-    _apiStreams = PinsApiStreams(_pinsRepository);
   }
 
-  static const String _apiEndpoint = 'http://localhost:8080';
+  static const String _apiEndpoint = 'http://localhost:3100';
   ApiClient _apiClient;
   PinsRepository _pinsRepository;
   StreamSubscription<dynamic> _apiSubscription;
-  PinsApiStreams _apiStreams;
 
   @override
   HomeScreenState get initialState => InitialState();
@@ -94,9 +91,9 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
   @override
   Stream<HomeScreenState> mapEventToState(HomeScreenEvent event) async* {
     if (event is LoadPinsPage) {
-      mapLoadPinsPageToState(event);
+      yield* mapLoadPinsPageToState(event);
     } else if (event is FinishLoading) {
-      mapFinishLoadingToState(event);
+      yield* mapFinishLoadingToState(event);
     }
   }
 
@@ -104,16 +101,22 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
     if (state is Loading) {
       return;
     } else if (state is InitialState || state is DefaultState) {
-      await _apiSubscription.cancel();
-      _apiSubscription = _apiStreams.getHomePagePins(page: event.page).listen(
-          (pins) => add(FinishLoading(page: state.page, additionalPins: pins)));
       yield Loading(page: state.page, pins: state.pins);
+      try {
+        final _additionalPins =
+            await _pinsRepository.getHomePagePins(page: event.page);
+        final _pins = List<Pin>.from(state.pins)..addAll(_additionalPins);
+        yield DefaultState(page: event.page, pins: _pins);
+      } catch (e) {
+        print(e);
+        yield DefaultState(page: event.page, pins: state.pins);
+      }
     }
   }
 
   Stream<HomeScreenState> mapFinishLoadingToState(FinishLoading event) async* {
     if (state is Loading) {
-      await _apiSubscription.cancel();
+      await _apiSubscription?.cancel();
       final _pins = List<Pin>.from(state.pins)..addAll(event.additionalPins);
       yield DefaultState(page: state.page, pins: _pins);
     }
