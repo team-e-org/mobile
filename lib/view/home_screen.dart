@@ -1,16 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:mobile/model/models.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/bloc/home_screen_bloc.dart';
 import 'package:mobile/view/components/components.dart';
 
 class HomeScreen extends StatelessWidget {
-  var pins = [Pin.fromMock(), Pin.fromMock(), Pin.fromMock(), Pin.fromMock()];
+  const HomeScreen();
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => HomeScreenBloc(),
+      child: _buildContent(context),
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
     return SafeArea(
-      child: Container(
-        child: PinGridView(pins: pins),
+      child: BlocBuilder<HomeScreenBloc, HomeScreenState>(
+        builder: (context, state) {
+          print(state);
+          final blocProvider = BlocProvider.of<HomeScreenBloc>(context);
+          if (state is InitialState) {
+            blocProvider.add(const LoadPinsPage(page: 1));
+          }
+
+          return Container(
+            child: PinGridView(pins: state.pins),
+          );
+        },
       ),
     );
   }
