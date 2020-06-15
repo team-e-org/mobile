@@ -18,6 +18,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Pinterest',
+      theme: ThemeData(
+        buttonColor: Colors.red,
+      ),
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
           case '/':
