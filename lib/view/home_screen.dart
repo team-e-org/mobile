@@ -7,10 +7,16 @@ import 'package:mobile/bloc/home_screen_bloc.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/view/components/components.dart';
-import 'package:mobile/view/pin_detail_screen.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen();
+import 'pin_detail_screen.dart';
+
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int currPage = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +35,24 @@ class HomeScreen extends StatelessWidget {
     return SafeArea(
       child: BlocBuilder<HomeScreenBloc, HomeScreenState>(
         builder: (context, state) {
-          print(state);
           final blocProvider = BlocProvider.of<HomeScreenBloc>(context);
           if (state is InitialState) {
-            blocProvider.add(const LoadPinsPage(page: 1));
+            blocProvider.add(LoadPinsPage());
           }
+
+          final controller = ScrollController();
+          controller.addListener(() {
+            if (controller.position.maxScrollExtent <=
+                controller.position.pixels) {
+              blocProvider.add(LoadPinsPage());
+            }
+          });
 
           return Container(
             child: PinGridView(
               pins: state.pins,
               onTap: _onPinTap,
+              controller: controller,
             ),
           );
         },

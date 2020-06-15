@@ -16,27 +16,7 @@ abstract class HomeScreenEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadPinsPage extends HomeScreenEvent {
-  const LoadPinsPage({
-    @required this.page,
-  });
-
-  final int page;
-  @override
-  List<Object> get props => [page];
-}
-
-class FinishLoading extends HomeScreenEvent {
-  const FinishLoading({
-    @required this.page,
-    @required this.additionalPins,
-  });
-
-  final int page;
-  final List<Pin> additionalPins;
-  @override
-  List<Object> get props => [page, additionalPins];
-}
+class LoadPinsPage extends HomeScreenEvent {}
 
 //////// State ////////
 abstract class HomeScreenState extends Equatable {
@@ -86,32 +66,21 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
   Stream<HomeScreenState> mapEventToState(HomeScreenEvent event) async* {
     if (event is LoadPinsPage) {
       yield* mapLoadPinsPageToState(event);
-    } else if (event is FinishLoading) {
-      yield* mapFinishLoadingToState(event);
     }
   }
 
   Stream<HomeScreenState> mapLoadPinsPageToState(LoadPinsPage event) async* {
-    if (state is Loading) {
-      return;
-    } else if (state is InitialState || state is DefaultState) {
+    if (state is InitialState || state is DefaultState) {
       yield Loading(page: state.page, pins: state.pins);
       try {
         final _additionalPins =
-            await _pinsRepository.getHomePagePins(page: event.page);
+            await _pinsRepository.getHomePagePins(page: state.page + 1);
         final _pins = List<Pin>.from(state.pins)..addAll(_additionalPins);
-        yield DefaultState(page: event.page, pins: _pins);
+        yield DefaultState(page: state.page + 1, pins: _pins);
       } catch (e) {
         print(e);
-        yield DefaultState(page: event.page, pins: state.pins);
+        yield DefaultState(page: state.page, pins: state.pins);
       }
-    }
-  }
-
-  Stream<HomeScreenState> mapFinishLoadingToState(FinishLoading event) async* {
-    if (state is Loading) {
-      final _pins = List<Pin>.from(state.pins)..addAll(event.additionalPins);
-      yield DefaultState(page: state.page, pins: _pins);
     }
     return;
   }

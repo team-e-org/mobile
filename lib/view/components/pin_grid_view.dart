@@ -9,10 +9,12 @@ class PinGridView extends StatelessWidget {
   const PinGridView({
     this.pins = const [],
     this.onTap,
+    this.controller,
   });
 
   final List<Pin> pins;
   final PinGridViewCallback onTap;
+  final ScrollController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,7 @@ class PinGridView extends StatelessWidget {
       itemCount: pins.length,
       itemBuilder: _itemBuilder,
       staggeredTileBuilder: _staggeredTileBuilder,
+      controller: controller,
     );
   }
 
