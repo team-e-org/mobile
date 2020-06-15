@@ -24,7 +24,7 @@ class AuthCommonWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(height: 24),
-            _BigText('Summarist'),
+            _BigText('Pinterest'),
             SizedBox(height: 24),
             _BigText(message),
             SizedBox(height: 24),
@@ -124,8 +124,8 @@ class _TextField extends StatelessWidget {
 
 class _BigText extends StatelessWidget {
   _BigText(
-      this.text,
-      );
+    this.text,
+  );
 
   final String text;
 
