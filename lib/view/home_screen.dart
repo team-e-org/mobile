@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
+import 'package:mobile/api/api_client.dart';
+import 'package:mobile/api/pins_api.dart';
 import 'package:mobile/bloc/home_screen_bloc.dart';
 import 'package:mobile/model/models.dart';
+import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/view/components/components.dart';
 import 'package:mobile/view/pin_detail_screen.dart';
 
@@ -10,8 +14,13 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const _endpoint = 'http://localhost:3100';
+    final _client = ApiClient(Client(), apiEndpoint: _endpoint);
+    final _api = DefaultPinsApi(_client);
+    final _repository = PinsRepository(_api);
+
     return BlocProvider(
-      create: (context) => HomeScreenBloc(),
+      create: (context) => HomeScreenBloc(_repository),
       child: _buildContent(context),
     );
   }

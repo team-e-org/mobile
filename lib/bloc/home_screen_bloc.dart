@@ -75,15 +75,10 @@ class Loading extends HomeScreenState {
 
 //////// Bloc ////////
 class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
-  HomeScreenBloc() {
-    _apiClient = ApiClient(Client(), apiEndpoint: _apiEndpoint);
-    _pinsRepository = PinsRepository(DefaultPinsApi(_apiClient));
-  }
+  HomeScreenBloc(this._pinsRepository);
 
-  static const String _apiEndpoint = 'http://localhost:3100';
-  ApiClient _apiClient;
-  PinsRepository _pinsRepository;
   StreamSubscription<dynamic> _apiSubscription;
+  final PinsRepository _pinsRepository;
 
   @override
   HomeScreenState get initialState => InitialState();
