@@ -4,9 +4,17 @@ import 'package:mobile/view/mock/mock_screen_common.dart';
 class PinSelectPhotoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: MockScreenCommon(
-        name: 'Pin select photo screen',
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Select photo'),
+      ),
+      body: Container(
+        child: RaisedButton(
+          child: Text('Next'),
+          onPressed: () {
+            Navigator.pushNamed(context, '/new/pin/edit');
+          },
+        ),
       ),
     );
   }

@@ -1,12 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/view/mock/mock_screen_common.dart';
 
 class CreateNewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: MockScreenCommon(
-        name: 'Create new screen',
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Create'),
+      ),
+      body: Container(
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              RaisedButton(
+                child: Text('Board'),
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/new/board');
+                },
+              ),
+              SizedBox(width: 20),
+              RaisedButton(
+                child: Text('Pin'),
+                onPressed: () {
+                  Navigator.of(context).pushReplacementNamed('/new/pin/select-photo');
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
