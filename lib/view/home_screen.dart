@@ -38,6 +38,10 @@ class HomeScreen extends StatelessWidget {
   }
 
   void _onPinTap(BuildContext context, Pin pin) {
+    if (pin == null) {
+      return;
+    }
+
     Navigator.of(context).pushNamed(
       '/pin/detail',
       arguments: PinDetailScreenArguments(pin: pin),
