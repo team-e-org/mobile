@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/models.dart';
+import 'package:http/http.dart' as http;
 
 class PinCard extends StatelessWidget {
-  final Pin pin;
-  final VoidCallback onTap;
-
-  PinCard({
+  const PinCard({
     this.pin,
     this.onTap,
   });
+
+  final Pin pin;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +19,7 @@ class PinCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              child: Image(
-                image: NetworkImage(pin.imageUrl),
-                fit: BoxFit.contain,
-              ),
-            ),
+            Container(child: _pinImage()),
             Container(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,6 +31,28 @@ class PinCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Future<bool> _validateImageUrl() async {
+    try {
+      final res = await http.head(pin.imageUrl);
+      return res.statusCode == 200;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Widget _pinImage() {
+    return FutureBuilder(
+      future: _validateImageUrl(),
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        var imageUrl = '';
+        if (snapshot.hasData && snapshot.data == true) {
+          imageUrl = pin.imageUrl;
+        }
+        return Image.network(imageUrl);
+      },
     );
   }
 
