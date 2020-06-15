@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class PinterestTextField extends StatelessWidget {
-  PinterestTextField({
+class PinterestTextFieldProps {
+  PinterestTextFieldProps({
     @required this.label,
     @required this.hintText,
     this.validator,
@@ -16,6 +16,14 @@ class PinterestTextField extends StatelessWidget {
   final bool obscure;
   final ValueChanged<String> onChanged;
   final ValueChanged<String> onSaved;
+}
+
+class PinterestTextField extends StatelessWidget {
+  PinterestTextField({
+    @required this.props,
+  });
+
+  final PinterestTextFieldProps props;
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +31,15 @@ class PinterestTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          label,
+          props.label,
         ),
         TextFormField(
-          obscureText: obscure,
-          validator: validator,
-          onChanged: onChanged,
-          onSaved: onSaved,
+          obscureText: props.obscure,
+          validator: props.validator,
+          onChanged: props.onChanged,
+          onSaved: props.onSaved,
           decoration: InputDecoration(
-            hintText: hintText,
+            hintText: props.hintText,
             border: InputBorder.none,
           ),
           style: TextStyle(

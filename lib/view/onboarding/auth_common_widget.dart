@@ -11,7 +11,7 @@ class AuthCommonWidget extends StatelessWidget {
   });
 
   final String message;
-  final List<TextFieldProps> textFieldsProps;
+  final List<PinterestTextFieldProps> textFieldsProps;
   final AuthCalloutProps calloutProps;
   final GlobalKey<FormState> formKey;
   final Widget action;
@@ -55,7 +55,7 @@ class _TextFieldList extends StatelessWidget {
     @required this.textFieldProps,
   });
 
-  final List<TextFieldProps> textFieldProps;
+  final List<PinterestTextFieldProps> textFieldProps;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +64,7 @@ class _TextFieldList extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         final props = textFieldProps[index];
-        return _TextField(
+        return PinterestTextField(
           props: props,
         );
       },
@@ -102,26 +102,6 @@ class _Callout extends StatelessWidget {
   }
 }
 
-class _TextField extends StatelessWidget {
-  _TextField({
-    this.props,
-  });
-
-  final TextFieldProps props;
-
-  @override
-  Widget build(BuildContext context) {
-    return PinterestTextField(
-      label: props.label,
-      hintText: props.label,
-      validator: props.validator,
-      onChanged: null,
-      obscure: props.obscure,
-      onSaved: props.onSaved,
-    );
-  }
-}
-
 class _BigText extends StatelessWidget {
   _BigText(
     this.text,
@@ -140,20 +120,6 @@ class _BigText extends StatelessWidget {
       ),
     );
   }
-}
-
-class TextFieldProps {
-  TextFieldProps({
-    @required this.label,
-    @required this.obscure,
-    @required this.validator,
-    @required this.onSaved,
-  });
-
-  final String label;
-  final bool obscure;
-  final String Function(String) validator;
-  final void Function(String) onSaved;
 }
 
 class AuthCalloutProps {

@@ -15,7 +15,7 @@ class AccountScreen extends StatelessWidget {
               onPressed: () {
                 BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut());
               },
-              loading: state is Unauthenticating,
+              loading: state is UnAuthenticating,
             ),
           ),
         ),

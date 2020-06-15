@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/util/validator.dart';
 import 'package:mobile/view/components/common/button_common.dart';
+import 'package:mobile/view/components/common/textfield_common.dart';
 import 'package:mobile/view/onboarding/auth_bloc.dart';
 import 'package:mobile/view/onboarding/auth_common_widget.dart';
 import 'package:mobile/view/onboarding/login_bloc.dart';
@@ -34,8 +35,9 @@ class SignUpWidget extends StatelessWidget {
       formKey: _formKey,
       message: 'Welcome!',
       textFieldsProps: [
-        TextFieldProps(
+        PinterestTextFieldProps(
           label: 'User name',
+          hintText: 'Your user name',
           obscure: false,
           validator: (value) {
             if (value.isEmpty) {
@@ -47,8 +49,9 @@ class SignUpWidget extends StatelessWidget {
             _model.username = value;
           },
         ),
-        TextFieldProps(
+        PinterestTextFieldProps(
           label: 'Email',
+          hintText: 'Your Email',
           obscure: false,
           validator: (value) {
             if (!Validator.isValidEmail(value)) {
@@ -60,8 +63,9 @@ class SignUpWidget extends StatelessWidget {
             _model.email = value;
           },
         ),
-        TextFieldProps(
+        PinterestTextFieldProps(
           label: 'Password',
+          hintText: 'Your password',
           obscure: true,
           validator: (value) {
             if (!Validator.isValidPassword(value)) {

@@ -16,14 +16,15 @@ class AuthWidget extends StatelessWidget {
     );
   }
 
-  final login = BlocProvider(
+  final _login = BlocProvider(
     create: (context) => LoginBloc(
       accountRepository: context.repository<AccountRepository>(),
       authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
     ),
     child: LoginWidget(),
   );
-  final signup = BlocProvider(
+
+  final _signUp = BlocProvider(
     create: (context) => SignUpBloc(
       accountRepository: context.repository<AccountRepository>(),
       authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
@@ -37,7 +38,7 @@ class AuthWidget extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: BlocBuilder<AuthNavigationBloc, AuthNavigationState>(
-            builder: (_, state) => state is SignInState ? login : signup),
+            builder: (_, state) => state is SignInState ? _login : _signUp),
       ),
     );
   }
