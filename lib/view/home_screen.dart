@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/bloc/home_screen_bloc.dart';
+import 'package:mobile/model/models.dart';
 import 'package:mobile/view/components/components.dart';
+import 'package:mobile/view/pin_detail_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen();
@@ -25,10 +27,20 @@ class HomeScreen extends StatelessWidget {
           }
 
           return Container(
-            child: PinGridView(pins: state.pins),
+            child: PinGridView(
+              pins: state.pins,
+              onTap: _onPinTap,
+            ),
           );
         },
       ),
+    );
+  }
+
+  void _onPinTap(BuildContext context, Pin pin) {
+    Navigator.of(context).pushNamed(
+      '/pin/detail',
+      arguments: PinDetailScreenArguments(pin: pin),
     );
   }
 }
