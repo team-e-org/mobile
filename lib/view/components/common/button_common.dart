@@ -9,13 +9,13 @@ class PinterestButton extends StatelessWidget {
   PinterestButton.primary({
     @required this.text,
     @required this.onPressed,
-    bool this.loading,
+    bool this.loading = false,
   }) : variant = PinterestButtonVariant.primary;
 
   PinterestButton.secondary({
     @required this.text,
     @required this.onPressed,
-    bool this.loading,
+    bool this.loading = false,
   }) : variant = PinterestButtonVariant.secondary;
 
   final String text;

@@ -14,6 +14,8 @@ class Unauthenticated extends AuthenticationState {}
 
 class Authenticating extends AuthenticationState {}
 
+class Unauthenticating extends AuthenticationState {}
+
 abstract class AuthenticationEvent extends Equatable {
   @override
   List<Object> get props => [];
@@ -65,6 +67,7 @@ class AuthenticationBloc
     }
 
     if (event is LoggedOut) {
+      yield Unauthenticating();
       await accountRepository.deleteToken();
       yield Unauthenticated();
     }
