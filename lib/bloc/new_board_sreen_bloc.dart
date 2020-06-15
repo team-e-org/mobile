@@ -74,25 +74,5 @@ class NewBoardScreenBloc
       // TODO: 実際にBoardを作成する処理に差し替え
       print('board name: ${state.boardName}, isPrivate: ${state.isPrivate}');
     }
-
-    // state:
-    // initial
-    // loading
-    // default
-
-    // event:
-    // load_pins_page
-    // (finish_loading)
-
-    if (event is load_pins_page) {
-      yield loading_state()
-          try {
-            data = await repo.fetch_data()
-            yield default_state(data)
-          }catch {
-           yield error_state()
-          }
-    }
-
   }
 }

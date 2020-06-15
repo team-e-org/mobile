@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/textfield_common.dart';
-import 'package:mobile/view/mock/mock_screen_common.dart';
 
 class PlaygroundScreen extends StatelessWidget {
   @override
