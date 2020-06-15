@@ -47,7 +47,6 @@ class MyApp extends StatelessWidget {
           case '/new/pin/select-board':
             return _pageRoute(SelectBoardScreen());
         }
-
         return null;
       },
     );
