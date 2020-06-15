@@ -77,7 +77,6 @@ class Loading extends HomeScreenState {
 class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
   HomeScreenBloc(this._pinsRepository);
 
-  StreamSubscription<dynamic> _apiSubscription;
   final PinsRepository _pinsRepository;
 
   @override
@@ -111,7 +110,6 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
 
   Stream<HomeScreenState> mapFinishLoadingToState(FinishLoading event) async* {
     if (state is Loading) {
-      await _apiSubscription?.cancel();
       final _pins = List<Pin>.from(state.pins)..addAll(event.additionalPins);
       yield DefaultState(page: state.page, pins: _pins);
     }
