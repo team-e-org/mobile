@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/view/components/notification.dart';
+import 'package:logger/logger.dart';
 
 abstract class NewBoardScreenBlocEvent extends Equatable {
   @override
@@ -79,6 +80,8 @@ class NewBoardScreenBloc
         title: 'boardName: ${state.boardName}',
         subtitle: 'isPrivate: ${state.isPrivate}',
       );
+      Logger()
+          .d('board name: ${state.boardName}, isPrivate: ${state.isPrivate}');
     }
   }
 }
