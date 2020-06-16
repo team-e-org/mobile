@@ -9,10 +9,12 @@ class PinDetailScreenArguments {
 }
 
 class PinDetailScreen extends StatelessWidget {
+  const PinDetailScreen({this.args});
+
+  final PinDetailScreenArguments args;
+
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context).settings.arguments as PinDetailScreenArguments;
     final pin = args.pin;
 
     if (pin == null) {
