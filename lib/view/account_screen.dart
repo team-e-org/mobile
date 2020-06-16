@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/onboarding/authentication_bloc.dart';
 
@@ -23,7 +24,7 @@ class AccountScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Navigator.of(context).pushNamed('/new');
+          Navigator.of(context).pushNamed(Routes.createNew);
         },
       ),
     );
