@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/view/components/notification.dart';
 import 'package:logger/logger.dart';
 
 abstract class NewBoardScreenBlocEvent extends Equatable {
@@ -73,6 +75,10 @@ class NewBoardScreenBloc
 
     if (event is CreateBoardRequested) {
       // TODO: 実際にBoardを作成する処理に差し替え
+      PinterestNotification.show(
+        title: 'boardName: ${state.boardName}',
+        subtitle: 'isPrivate: ${state.isPrivate}',
+      );
       Logger()
           .d('board name: ${state.boardName}, isPrivate: ${state.isPrivate}');
     }
