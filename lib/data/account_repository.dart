@@ -26,16 +26,11 @@ class DefaultAccountRepository extends AccountRepository {
   final SharedPreferences prefs;
 
   @override
-  Future<String> authenticate(String email, String password) async {
-    final token =
-        api.signIn(SignInRequestBody(email: email, password: password));
-    return token;
-  }
+  Future<String> authenticate(String email, String password) =>
+      api.signIn(SignInRequestBody(email: email, password: password));
 
   @override
-  Future<void> deleteToken() {
-    return prefs.remove(TOKEN_KEY);
-  }
+  Future<void> deleteToken() => prefs.remove(TOKEN_KEY);
 
   @override
   Future<bool> hasToken() {
@@ -45,21 +40,15 @@ class DefaultAccountRepository extends AccountRepository {
   }
 
   @override
-  Future<void> persistToken(String token) async {
-    await prefs.setString(TOKEN_KEY, token);
-  }
+  Future<void> persistToken(String token) => prefs.setString(TOKEN_KEY, token);
 
   @override
-  Future<String> register(
-      String username, String email, String password) async {
-    final token = await api.signUp(SignUpRequestBody(
-      name: username,
-      email: email,
-      password: password,
-    ));
-
-    return token;
-  }
+  Future<String> register(String username, String email, String password) =>
+      api.signUp(SignUpRequestBody(
+        name: username,
+        email: email,
+        password: password,
+      ));
 }
 
 class MockAccountRepository extends AccountRepository {
