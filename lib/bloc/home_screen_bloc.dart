@@ -2,9 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:http/http.dart';
-import 'package:mobile/api/api_client.dart';
-import 'package:mobile/api/pins_api.dart';
+import 'package:logger/logger.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 
@@ -78,7 +76,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
         final _pins = List<Pin>.from(state.pins)..addAll(_additionalPins);
         yield DefaultState(page: state.page + 1, pins: _pins);
       } catch (e) {
-        print(e);
+        Logger().e(e);
         yield DefaultState(page: state.page, pins: state.pins);
       }
     }
