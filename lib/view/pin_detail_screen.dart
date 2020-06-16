@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/view/mock/mock_screen_common.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class PinDetailScreenArguments {
   const PinDetailScreenArguments({this.pin});
@@ -30,7 +31,7 @@ class PinDetailScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Image.network(pin.imageUrl),
+                    _pinImage(pin.imageUrl),
                     // TODO
                     // UserCard()
                     Text(pin.title),
@@ -43,6 +44,21 @@ class PinDetailScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _pinImage(String url) {
+    return CachedNetworkImage(
+      imageUrl: url,
+      placeholder: (context, url) => Container(
+        height: 200,
+        width: 200,
+      ),
+      errorWidget: (context, url, dynamic error) => const Placeholder(
+        fallbackHeight: 200,
+        fallbackWidth: 200,
+        color: Colors.grey,
       ),
     );
   }
