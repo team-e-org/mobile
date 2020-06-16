@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:mobile/view/board_detail_screen.dart';
 import 'package:mobile/view/board_edit_screen.dart';
 import 'package:mobile/view/create_new_screen.dart';
@@ -10,6 +11,7 @@ import 'package:mobile/view/root_screen.dart';
 import 'package:mobile/view/select_board_screen.dart';
 
 void main() {
+  Logger.level = Level.verbose;
   runApp(MyApp());
 }
 
