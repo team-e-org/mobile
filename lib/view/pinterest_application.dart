@@ -28,12 +28,12 @@ class PinterestApplication extends StatelessWidget {
             create: (_) => accountRepo,
           ),
         ],
-        child: _materialApp(),
+        child: _app(),
       ),
     );
   }
 
-  Widget _materialApp() {
+  Widget _app() {
     return OverlaySupport(
       child: MaterialApp(
         title: 'Pinterest',

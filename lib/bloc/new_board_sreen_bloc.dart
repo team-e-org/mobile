@@ -75,7 +75,6 @@ class NewBoardScreenBloc
 
     if (event is CreateBoardRequested) {
       // TODO: 実際にBoardを作成する処理に差し替え
-      print('board name: ${state.boardName}, isPrivate: ${state.isPrivate}');
       PinterestNotification.show(
         title: 'boardName: ${state.boardName}',
         subtitle: 'isPrivate: ${state.isPrivate}',
