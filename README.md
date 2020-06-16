@@ -4,6 +4,12 @@
 $ flutter packages pub run build_runner build
 ```
 
+## splash screen の生成
+
+```bash
+$ flutter packages pub run flutter_native_splash:create
+```
+
 # mobile
 
 A new Flutter project.
