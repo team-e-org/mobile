@@ -43,12 +43,16 @@ class PlaygroundScreen extends StatelessWidget {
       'TextField',
       children: <Widget>[
         PinterestTextField(
-          label: 'Title',
-          hintText: 'hint etxt',
+          props: PinterestTextFieldProps(
+            label: 'Title',
+            hintText: 'hint etxt',
+          ),
         ),
         PinterestTextField(
-          label: 'Name',
-          hintText: 'Type your name',
+          props: PinterestTextFieldProps(
+            label: 'Name',
+            hintText: 'Type your name',
+          ),
         ),
       ],
     );
