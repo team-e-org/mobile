@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mobile/api/api_client.dart';
 
@@ -38,9 +39,9 @@ class DefaultAuthApi extends AuthApi {
 @JsonSerializable(includeIfNull: false)
 class SignUpRequestBody {
   SignUpRequestBody({
-    this.name,
-    this.email,
-    this.password,
+    @required this.name,
+    @required this.email,
+    @required this.password,
   });
 
   String name;
@@ -56,8 +57,8 @@ class SignUpRequestBody {
 @JsonSerializable(includeIfNull: false)
 class SignInRequestBody {
   SignInRequestBody({
-    this.email,
-    this.password,
+    @required this.email,
+    @required this.password,
   });
 
   String email;
@@ -72,7 +73,7 @@ class SignInRequestBody {
 @JsonSerializable(includeIfNull: false)
 class AuthResponse {
   AuthResponse({
-    this.token,
+    @required this.token,
   });
 
   String token;
