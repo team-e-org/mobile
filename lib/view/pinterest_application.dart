@@ -55,7 +55,6 @@ class PinterestApplication extends StatelessWidget {
           // Pin
           case '/pin/detail':
             final args = settings.arguments as PinDetailScreenArguments;
-            print(args.pin.title);
             return _pageRoute(PinDetailScreen(args: args));
           case '/pin/edit':
             return _pageRoute(PinEditScreen());
