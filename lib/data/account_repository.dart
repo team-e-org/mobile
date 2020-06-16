@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/api/users_api.dart';
+import 'package:mobile/api/auth_api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+const TOKEN_KEY = 'token';
 
 abstract class AccountRepository {
   Future<String> authenticate(String email, String password);
@@ -16,38 +19,46 @@ abstract class AccountRepository {
 class DefaultAccountRepository extends AccountRepository {
   DefaultAccountRepository({
     @required this.api,
+    @required this.prefs,
   });
 
-  final UsersApi api;
+  final AuthApi api;
+  final SharedPreferences prefs;
 
   @override
-  Future<String> authenticate(String email, String password) {
-    // TODO: implement authenticate
-    throw UnimplementedError();
+  Future<String> authenticate(String email, String password) async {
+    final token =
+        api.signIn(SignInRequestBody(email: email, password: password));
+    return token;
   }
 
   @override
   Future<void> deleteToken() {
-    // TODO: implement deleteToken
-    throw UnimplementedError();
+    return prefs.remove(TOKEN_KEY);
   }
 
   @override
   Future<bool> hasToken() {
-    // TODO: implement hasToken
-    throw UnimplementedError();
+    final token = prefs.getString(TOKEN_KEY);
+    final hasToken = token != null && token.isNotEmpty;
+    return Future.value(hasToken);
   }
 
   @override
-  Future<void> persistToken(String token) {
-    // TODO: implement persistToken
-    throw UnimplementedError();
+  Future<void> persistToken(String token) async {
+    await prefs.setString(TOKEN_KEY, token);
   }
 
   @override
-  Future<String> register(String username, String email, String password) {
-    // TODO: implement register
-    throw UnimplementedError();
+  Future<String> register(
+      String username, String email, String password) async {
+    final token = await api.signUp(SignUpRequestBody(
+      name: username,
+      email: email,
+      password: password,
+    ));
+
+    return token;
   }
 }
 
