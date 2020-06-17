@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
+import 'package:mobile/api/api_client.dart';
+import 'package:mobile/api/pins_api.dart';
+import 'package:mobile/config.dart';
 import 'package:mobile/data/account_repository.dart';
+import 'package:mobile/repository/pins_repository.dart';
 import 'package:mobile/view/board_detail_screen.dart';
 import 'package:mobile/view/board_edit_screen.dart';
 import 'package:mobile/view/create_new_screen.dart';
@@ -15,10 +20,16 @@ import 'package:mobile/view/select_board_screen.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 class PinterestApplication extends StatelessWidget {
-  final accountRepo = MockAccountRepository();
-
   @override
   Widget build(BuildContext context) {
+    final config = readConfig();
+    final accountRepo = MockAccountRepository();
+
+    final pinsRepository = PinsRepository(DefaultPinsApi(ApiClient(
+      Client(),
+      apiEndpoint: config.apiEndpoint,
+    )));
+
     return BlocProvider(
       create: (context) => AuthenticationBloc(accountRepository: accountRepo)
         ..add(AppInitialized()),
@@ -27,6 +38,9 @@ class PinterestApplication extends StatelessWidget {
           RepositoryProvider<AccountRepository>(
             create: (_) => accountRepo,
           ),
+          RepositoryProvider<PinsRepository>(
+            create: (_) => pinsRepository,
+          )
         ],
         child: _app(),
       ),

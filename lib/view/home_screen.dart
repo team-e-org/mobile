@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart';
-import 'package:mobile/api/api_client.dart';
-import 'package:mobile/api/pins_api.dart';
 import 'package:mobile/bloc/home_screen_bloc.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
@@ -20,13 +17,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const _endpoint = 'http://localhost:3100';
-    final _client = ApiClient(Client(), apiEndpoint: _endpoint);
-    final _api = DefaultPinsApi(_client);
-    final _repository = PinsRepository(_api);
+    final pinsRepository = RepositoryProvider.of<PinsRepository>(context);
 
     return BlocProvider(
-      create: (context) => HomeScreenBloc(_repository),
+      create: (context) => HomeScreenBloc(pinsRepository),
       child: _buildContent(context),
     );
   }
