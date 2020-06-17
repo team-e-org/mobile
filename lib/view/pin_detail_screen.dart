@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/models.dart';
-import 'package:mobile/view/mock/mock_screen_common.dart';
+import 'package:mobile/view/components/common/button_common.dart';
+import 'package:mobile/view/components/common/typography_common.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class PinDetailScreenArguments {
@@ -24,23 +25,22 @@ class PinDetailScreen extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: SizedBox.expand(
-          child: Stack(
+        child: SingleChildScrollView(
+          child: Column(
             children: [
-              SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _pinImage(pin.imageUrl),
-                    // TODO
-                    // UserCard()
-                    Text(pin.title),
-                    Text(pin.description),
-                  ],
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _pinImage(pin.imageUrl),
+                  // TODO 投稿者情報を入れる
+                ],
               ),
-              _backButton(context),
-              _floatingButtomActionButtons(),
+              _buildPinInfo(
+                title: pin.title,
+                description: pin.description,
+              ),
+              SizedBox(height: 32),
+              _buildActions(),
             ],
           ),
         ),
@@ -55,7 +55,7 @@ class PinDetailScreen extends StatelessWidget {
         height: 200,
         width: 200,
       ),
-      errorWidget: (context, url, dynamic error) => const Placeholder(
+      errorWidget: (_, __, dynamic err) => const Placeholder(
         fallbackHeight: 200,
         fallbackWidth: 200,
         color: Colors.grey,
@@ -73,7 +73,17 @@ class PinDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _floatingButtomActionButtons() {
+  Widget _buildPinInfo({String title, String description}) {
+    return Column(
+      children: <Widget>[
+        PinterestTypography.body1(title),
+        SizedBox(height: 8),
+        PinterestTypography.body2(description),
+      ],
+    );
+  }
+
+  Widget _buildActions() {
     return Positioned(
       bottom: 10,
       left: 0,
@@ -82,16 +92,18 @@ class PinDetailScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // TODO: アクションボタンの共通コンポーネント化
-            FlatButton(
-              child: Text("Access"),
-              color: Colors.grey,
-              onPressed: () {},
+            PinterestButton.secondary(
+              text: 'Access',
+              onPressed: () {
+                // TODO
+              },
             ),
-            FlatButton(
-              child: Text("Save"),
-              color: Colors.red,
-              onPressed: () {},
+            SizedBox(width: 20),
+            PinterestButton.primary(
+              text: 'Save',
+              onPressed: () {
+                // TODO
+              },
             ),
           ],
         ),
