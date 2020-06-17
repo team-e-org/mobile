@@ -1,9 +1,12 @@
-## fronJson, toJson するためのコード生成
+## pink mobile
 
-```bash
-$ flutter packages pub run build_runner build
-```
+![flutter test](https://github.com/team-e-org/mobile/workflows/flutter%20test/badge.svg?branch=develop)
 
+
+## Sprint
+
+📌 [GitHub Projects](https://github.com/team-e-org/mobile/projects/1)
+=======
 ## splash screen の生成
 
 ```bash
@@ -12,17 +15,22 @@ $ flutter packages pub run flutter_native_splash:create
 
 # mobile
 
-A new Flutter project.
+| name     | plan | period                |
+|----------|------|-----------------------|
+| Sprint 1 | N/A  | 2020/06/09-2020/06/12 |
+| Sprint 2 | [#71](https://github.com/team-e-org/mobile/issues/71)  | 2020/06/15-2020/06/19 |
+| Sprint 3 | N/A  | 2020/06/22-2020/06/26 |
+| Sprint 4 | N/A  | 2020/06/29-2020/07/03 |
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## 見積もり
 
-A few resources to get you started if this is your first Flutter project:
+`0.25h` `0.5h` `1h` `2h` のラベルをIssueにつけて見積もりをしています。
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## お役立ち情報 🍵
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### fronJson, toJson するためのコード生成
+
+```bash
+$ flutter packages pub run build_runner build
+```
