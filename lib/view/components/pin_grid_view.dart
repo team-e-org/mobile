@@ -19,7 +19,7 @@ class PinGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StaggeredGridView.countBuilder(
-      crossAxisCount: 2,
+      crossAxisCount: 4,
       mainAxisSpacing: 4,
       crossAxisSpacing: 4,
       itemCount: pins.length,
@@ -38,6 +38,6 @@ class PinGridView extends StatelessWidget {
 
   // TODO(dh9489): 高さをPinCardの高さに変更する
   StaggeredTile _staggeredTileBuilder(int index) {
-    return const StaggeredTile.count(1, 1);
+    return StaggeredTile.fit(2);
   }
 }
