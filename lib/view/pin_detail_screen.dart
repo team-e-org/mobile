@@ -26,52 +26,53 @@ class PinDetailScreen extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _buildPinImageArea(context, pin.imageUrl),
-              // TODO 投稿者情報を入れる
-              SizedBox(height: 32),
-              _buildPinInfo(
-                title: pin.title,
-                description: pin.description,
-              ),
-              SizedBox(height: 32),
-              _buildActions(),
-            ],
+        child: Stack(children: [
+          SingleChildScrollView(child: _buildContent(context, pin)),
+          Positioned(
+            left: 12,
+            top: 16,
+            child: _backButton(context),
           ),
-        ),
+        ]),
       ),
     );
   }
 
-  Widget _buildPinImageArea(BuildContext context, String imageUrl) {
-    return Stack(
-      fit: StackFit.passthrough,
-      children: <Widget>[
-        _pinImage(imageUrl),
-        Positioned(
-          left: 12,
-          top: 16,
-          child: _backButton(context),
-        ),
-      ],
+  Widget _buildContent(BuildContext context, Pin pin) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 32),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _pinImage(pin.imageUrl),
+          // TODO 投稿者情報を入れる
+          SizedBox(height: 32),
+          _buildPinInfo(
+            title: pin.title,
+            description: pin.description,
+          ),
+          SizedBox(height: 32),
+          _buildActions(),
+        ],
+      ),
     );
   }
 
   Widget _pinImage(String imageUrl) {
-    return CachedNetworkImage(
-      imageUrl: imageUrl,
-      fit: BoxFit.cover,
-      placeholder: (context, url) => Container(
-        height: 200,
-        width: 200,
-      ),
-      errorWidget: (_, __, dynamic err) => const Placeholder(
-        fallbackHeight: 200,
-        fallbackWidth: 200,
-        color: Colors.grey,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxHeight: 500), // FIXME 決め打ちにしない
+      child: CachedNetworkImage(
+        imageUrl: imageUrl,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => Container(
+          height: 200,
+          width: 200,
+        ),
+        errorWidget: (_, __, dynamic err) => const Placeholder(
+          fallbackHeight: 200,
+          fallbackWidth: 200,
+          color: Colors.grey,
+        ),
       ),
     );
   }

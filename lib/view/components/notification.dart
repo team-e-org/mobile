@@ -18,7 +18,7 @@ class PinterestNotification {
 
   static void showNotImplemented() {
     show(
-      title: 'すまん。まだ実装してないねん。',
+      title: 'まだ実装してないねん。',
       subtitle: 'ほんまにごめんな...',
     );
   }
