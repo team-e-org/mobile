@@ -22,12 +22,10 @@ class LoadInitial extends AccountScreenEvent {
 //////// State ////////
 abstract class AccountScreenState extends Equatable {
   const AccountScreenState({
-    @required this.user,
     @required this.boardMap,
     this.error,
   });
 
-  final User user;
   final Map<Board, List<Pin>> boardMap;
   final dynamic error;
 
@@ -37,32 +35,29 @@ abstract class AccountScreenState extends Equatable {
 
 class InitialState extends AccountScreenState {
   @override
-  InitialState() : super(user: null, boardMap: null);
+  InitialState() : super(boardMap: null);
 }
 
 class DefaultState extends AccountScreenState {
   @override
   const DefaultState({
-    @required User user,
     @required Map<Board, List<Pin>> boardMap,
-  }) : super(user: user, boardMap: boardMap);
+  }) : super(boardMap: boardMap);
 }
 
 class Loading extends AccountScreenState {
   @override
   const Loading({
-    @required User user,
     @required Map<Board, List<Pin>> boardMap,
-  }) : super(user: user, boardMap: boardMap);
+  }) : super(boardMap: boardMap);
 }
 
 class ErrorState extends AccountScreenState {
   @override
   const ErrorState({
-    @required User user,
     @required Map<Board, List<Pin>> boardMap,
     @required dynamic error,
-  }) : super(user: user, boardMap: boardMap, error: error);
+  }) : super(boardMap: boardMap, error: error);
 }
 
 //////// Bloc ////////
@@ -84,14 +79,14 @@ class AccountScreenBloc extends Bloc<AccountScreenEvent, AccountScreenState> {
 
   Stream<AccountScreenState> mapLoadInitialToState(LoadInitial event) async* {
     if (state is InitialState) {
-      yield const Loading(user: null, boardMap: null);
+      yield const Loading(boardMap: null);
       try {
         final user = await usersRepository.getUser(event.userId);
-        yield Loading(user: user, boardMap: null);
+        yield Loading(boardMap: null);
         final boardMap = await boardsRepository.getBoardMapByUser(event.userId);
-        yield DefaultState(user: user, boardMap: boardMap);
+        yield DefaultState(boardMap: boardMap);
       } on Exception catch (e) {
-        yield ErrorState(user: state.user, boardMap: state.boardMap, error: e);
+        yield ErrorState(boardMap: state.boardMap, error: e);
       }
     }
     return;
