@@ -32,7 +32,12 @@ dev_dependencies:
   pedantic_mono: any
   build_runner: ^1.10.0
   json_serializable: ^3.3.0
+  flutter_native_splash: ^0.1.9
 
 flutter:
 
   uses-material-design: true
+
+flutter_native_splash:
+  image: "assets/logo/logo.png"
+  color: "dddddd"
