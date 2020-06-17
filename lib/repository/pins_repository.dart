@@ -30,7 +30,7 @@ class MockPinsRepository extends PinsRepository {
   static MockPinsRepository _instance;
 
   Future<List<Pin>> getHomePagePins({int page}) async {
-    final pins = List.filled(10, Pin.fromMock());
+    final pins = List.filled(10, 1).map((_) => Pin.fromMock()).toList();
     return Future.value(pins);
   }
 }
