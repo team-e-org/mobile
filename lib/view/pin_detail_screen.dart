@@ -62,11 +62,22 @@ class PinDetailScreen extends StatelessWidget {
   }
 
   Widget _backButton(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(8),
-      child: IconButton(
-        icon: const Icon(Icons.chevron_left),
-        onPressed: () => {Navigator.of(context).pop()},
+    return ClipOval(
+      child: Material(
+        color: Colors.black.withOpacity(0.3), // button color
+        child: InkWell(
+          child: SizedBox(
+            width: 42,
+            height: 42,
+            child: Icon(
+              Icons.chevron_left,
+              color: Colors.white,
+            ),
+          ),
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
     );
   }
