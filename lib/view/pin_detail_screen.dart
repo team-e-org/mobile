@@ -28,13 +28,9 @@ class PinDetailScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _pinImage(pin.imageUrl),
-                  // TODO 投稿者情報を入れる
-                ],
-              ),
+              _pinImage(pin.imageUrl),
+              // TODO 投稿者情報を入れる
+              SizedBox(height: 32),
               _buildPinInfo(
                 title: pin.title,
                 description: pin.description,
