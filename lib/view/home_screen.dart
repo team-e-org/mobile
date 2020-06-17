@@ -20,10 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const _endpoint = 'http://localhost:3100';
-    final _client = ApiClient(Client(), apiEndpoint: _endpoint);
-    final _api = DefaultPinsApi(_client);
-    final _repository = DefaultPinsRepository(_api);
+    final _repository = MockPinsRepository();
 
     return BlocProvider(
       create: (context) => HomeScreenBloc(_repository),
