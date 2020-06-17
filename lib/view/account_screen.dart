@@ -9,7 +9,7 @@ import 'package:mobile/bloc/account_screen_bloc.dart';
 import 'package:mobile/model/board_model.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
-import 'package:mobile/view/components/common/button_common.dart';
+import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/components.dart';
 import 'package:mobile/view/onboarding/authentication_bloc.dart';
 
@@ -47,7 +47,7 @@ class AccountScreen extends StatelessWidget {
           floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.add),
             onPressed: () {
-              Navigator.of(context).pushNamed('/new');
+              Navigator.of(context).pushNamed(Routes.createNew);
             },
           ),
         );

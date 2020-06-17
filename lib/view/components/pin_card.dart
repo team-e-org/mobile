@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:mobile/model/models.dart';
-import 'package:http/http.dart' as http;
+import 'package:mobile/view/components/common/typography_common.dart';
 
 class PinCard extends StatelessWidget {
   const PinCard({
@@ -18,46 +20,39 @@ class PinCard extends StatelessWidget {
         onTap: onTap,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(child: _pinImage()),
-            Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _pinTitle(),
-                ],
-              ),
-            )
-          ],
+          children: pin.title.isEmpty
+              ? [_pinImage()]
+              : [_pinImage(), const SizedBox(height: 4), _pinTitle()],
         ),
       ),
     );
   }
 
-  Future<bool> _validateImageUrl() async {
-    try {
-      final res = await http.head(pin.imageUrl);
-      return res.statusCode == 200;
-    } catch (e) {
-      return false;
-    }
-  }
-
   Widget _pinImage() {
-    return FutureBuilder(
-      future: _validateImageUrl(),
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        var imageUrl = '';
-        if (snapshot.hasData && snapshot.data == true) {
-          imageUrl = pin.imageUrl;
-        }
-        return Image.network(imageUrl);
+    return CachedNetworkImage(
+      imageUrl: pin.imageUrl,
+      placeholder: (context, url) => Container(
+        height: 200,
+        color: Colors.grey[100],
+        child: Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.grey[300]),
+          ),
+        ),
+      ),
+      errorWidget: (context, url, dynamic error) {
+        Logger().e(error);
+        return Container(
+          child: const Text(
+            'Sorry, failed to load image.',
+          ),
+        );
       },
     );
   }
 
   Widget _pinTitle() {
-    return Text(
+    return PinterestTypography.body2(
       pin.title,
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
