@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 
@@ -58,14 +60,15 @@ class ApiClient {
   Future<StreamedResponse> fileUpload(
       String relativeUrl, {
         Map<String, String> fields,
-        List<int> fileBytes,
+        String fileKey,
+        Uint8List fileBytes,
       }) async {
     // Reference: https://pub.dev/documentation/http/latest/http/MultipartRequest-class.html
     final uri = Uri.parse('$apiEndpoint$relativeUrl');
     final request = MultipartRequest('POST', uri);
 
     request.fields.addAll(fields);
-    request.files.add(await MultipartFile.fromBytes('image', fileBytes));
+    request.files.add(MultipartFile.fromBytes(fileKey, fileBytes));
     request.headers.addAll(await _headers);
 
     final response = await request.send();
