@@ -1,14 +1,18 @@
 import 'package:mobile/api/pins_api.dart';
 import 'package:mobile/model/models.dart';
 
-class PinsRepository {
-  factory PinsRepository(PinsApi api) {
-    return _instance ?? PinsRepository._internal(api);
+abstract class PinsRepository {
+  Future<List<Pin>> getHomePagePins({int page});
+}
+
+class DefaultPinsRepository extends PinsRepository {
+  factory DefaultPinsRepository(PinsApi api) {
+    return _instance ?? DefaultPinsRepository._internal(api);
   }
 
-  PinsRepository._internal(this._api);
+  DefaultPinsRepository._internal(this._api);
 
-  static PinsRepository _instance;
+  static DefaultPinsRepository _instance;
   PinsApi _api;
 
   Future<List<Pin>> getHomePagePins({int page}) async {

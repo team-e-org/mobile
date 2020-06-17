@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const _endpoint = 'http://localhost:3100';
     final _client = ApiClient(Client(), apiEndpoint: _endpoint);
     final _api = DefaultPinsApi(_client);
-    final _repository = PinsRepository(_api);
+    final _repository = DefaultPinsRepository(_api);
 
     return BlocProvider(
       create: (context) => HomeScreenBloc(_repository),
