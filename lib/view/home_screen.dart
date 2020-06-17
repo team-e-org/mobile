@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart';
-import 'package:mobile/api/api_client.dart';
-import 'package:mobile/api/pins_api.dart';
 import 'package:mobile/bloc/home_screen_bloc.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
+import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/components.dart';
 
 import 'pin_detail_screen.dart';
@@ -20,10 +18,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _repository = MockPinsRepository();
+
+    final pinsRepository = RepositoryProvider.of<PinsRepository>(context);
 
     return BlocProvider(
-      create: (context) => HomeScreenBloc(_repository)..add(LoadPinsPage()),
+      create: (context) => HomeScreenBloc(pinsRepository),
       child: _buildContent(context),
     );
   }
@@ -62,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     Navigator.of(context).pushNamed(
-      '/pin/detail',
+      Routes.pinDetail,
       arguments: PinDetailScreenArguments(pin: pin),
     );
   }
