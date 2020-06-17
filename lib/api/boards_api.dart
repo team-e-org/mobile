@@ -23,7 +23,7 @@ class DefaultBoardsApi extends BoardsApi {
   Future<List<Pin>> boardPins({int id, int page = 1}) async {
     final response = await _client.get("/boards/$id/pins?page=$page");
     return (jsonDecode(response.body) as List)
-        .map((it) => Pin.fromJson(it))
+        .map((dynamic it) => Pin.fromJson(it as Map<String, dynamic>))
         .toList();
   }
 
@@ -39,7 +39,7 @@ class DefaultBoardsApi extends BoardsApi {
       '/boards/$id',
       body: json.encode(board),
     );
-    return Board.fromJson(jsonDecode(response.body));
+    return Board.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   }
 
   @override
@@ -48,6 +48,6 @@ class DefaultBoardsApi extends BoardsApi {
       "/boards",
       body: json.encode(board),
     );
-    return Board.fromJson(jsonDecode(response.body));
+    return Board.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   }
 }

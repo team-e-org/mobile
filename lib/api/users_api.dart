@@ -35,20 +35,20 @@ class DefaultUsersApi extends UsersApi {
       body: json.encode(user),
     );
 
-    return User.fromJson(jsonDecode(response.body));
+    return User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   }
 
   @override
   Future<User> user({int id}) async {
     final response = await _client.get("/users/$id");
-    return User.fromJson(jsonDecode(response.body));
+    return User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   }
 
   @override
   Future<List<Board>> userBoards({int id}) async {
     final response = await _client.get("/users/$id/boards");
     return (jsonDecode(response.body) as List)
-        .map((it) => Board.fromJson(it))
+        .map((dynamic it) => Board.fromJson(it as Map<String, dynamic>))
         .toList();
   }
 
@@ -56,7 +56,7 @@ class DefaultUsersApi extends UsersApi {
   Future<List<Pin>> userPins({int id}) async {
     final response = await _client.get("/users/$id/pins");
     return (jsonDecode(response.body) as List)
-        .map((it) => Pin.fromJson(it))
+        .map((dynamic it) => Pin.fromJson(it as Map<String, dynamic>))
         .toList();
   }
 }
