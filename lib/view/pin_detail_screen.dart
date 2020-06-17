@@ -29,7 +29,7 @@ class PinDetailScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _pinImage(pin.imageUrl),
+              _buildPinImageArea(context, pin.imageUrl),
               // TODO 投稿者情報を入れる
               SizedBox(height: 32),
               _buildPinInfo(
@@ -42,6 +42,20 @@ class PinDetailScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildPinImageArea(BuildContext context, String imageUrl) {
+    return Stack(
+      fit: StackFit.passthrough,
+      children: <Widget>[
+        _pinImage(imageUrl),
+        Positioned(
+          left: 12,
+          top: 16,
+          child: _backButton(context),
+        ),
+      ],
     );
   }
 
