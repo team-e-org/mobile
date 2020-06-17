@@ -15,6 +15,13 @@ class PinterestNotification {
       duration: duration,
     );
   }
+
+  static void showNotImplemented() {
+    show(
+      title: 'まだ実装してないねん。',
+      subtitle: 'ほんまにごめんな...',
+    );
+  }
 }
 
 class _PinterestNotificationWidget extends StatelessWidget {
