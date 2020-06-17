@@ -11,7 +11,7 @@ class BoardsRepository {
   static BoardsRepository _instance;
   BoardsApi _api;
 
-  Future<Map<Board, List<Pin>>> getBoardMapByUser(int userId) async {
-    return {};
+  Future<List<Pin>> getBoardPins({int id, int page}) async {
+    return _api.boardPins(id: 111, page: page);
   }
 }

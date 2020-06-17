@@ -22,42 +22,54 @@ class LoadInitial extends AccountScreenEvent {
 //////// State ////////
 abstract class AccountScreenState extends Equatable {
   const AccountScreenState({
-    @required this.boardMap,
+    @required this.user,
+    @required this.boards,
+    @required this.boardPinMap,
     this.error,
   });
 
-  final Map<Board, List<Pin>> boardMap;
+  final User user;
+  final List<Board> boards;
+  final Map<int, List<Pin>> boardPinMap;
   final dynamic error;
 
   @override
-  List<Object> get props => [boardMap];
+  List<Object> get props => [user, boardPinMap, error];
 }
 
 class InitialState extends AccountScreenState {
   @override
-  InitialState() : super(boardMap: null);
+  const InitialState()
+      : super(user: null, boards: const [], boardPinMap: const {});
 }
 
 class DefaultState extends AccountScreenState {
   @override
   const DefaultState({
-    @required Map<Board, List<Pin>> boardMap,
-  }) : super(boardMap: boardMap);
+    @required User user,
+    @required List<Board> boards,
+    @required Map<int, List<Pin>> boardPinMap,
+  }) : super(user: user, boards: boards, boardPinMap: boardPinMap);
 }
 
 class Loading extends AccountScreenState {
   @override
   const Loading({
-    @required Map<Board, List<Pin>> boardMap,
-  }) : super(boardMap: boardMap);
+    @required User user,
+    @required List<Board> boards,
+    @required Map<int, List<Pin>> boardPinMap,
+  }) : super(user: user, boards: boards, boardPinMap: boardPinMap);
 }
 
 class ErrorState extends AccountScreenState {
   @override
-  const ErrorState({
-    @required Map<Board, List<Pin>> boardMap,
-    @required dynamic error,
-  }) : super(boardMap: boardMap, error: error);
+  const ErrorState(
+      {@required User user,
+      @required List<Board> boards,
+      @required Map<int, List<Pin>> boardPinMap,
+      @required dynamic error})
+      : super(
+            user: user, boards: boards, boardPinMap: boardPinMap, error: error);
 }
 
 //////// Bloc ////////
@@ -68,7 +80,7 @@ class AccountScreenBloc extends Bloc<AccountScreenEvent, AccountScreenState> {
   final BoardsRepository boardsRepository;
 
   @override
-  AccountScreenState get initialState => InitialState();
+  AccountScreenState get initialState => const InitialState();
 
   @override
   Stream<AccountScreenState> mapEventToState(AccountScreenEvent event) async* {
@@ -79,14 +91,29 @@ class AccountScreenBloc extends Bloc<AccountScreenEvent, AccountScreenState> {
 
   Stream<AccountScreenState> mapLoadInitialToState(LoadInitial event) async* {
     if (state is InitialState) {
-      yield const Loading(boardMap: null);
+      yield const Loading(user: null, boards: [], boardPinMap: {});
       try {
         final user = await usersRepository.getUser(event.userId);
-        yield Loading(boardMap: null);
-        final boardMap = await boardsRepository.getBoardMapByUser(event.userId);
-        yield DefaultState(boardMap: boardMap);
+        yield Loading(user: user, boards: const [], boardPinMap: const {});
+
+        final boards = await usersRepository.getUserBoards(event.userId);
+        yield Loading(user: user, boards: boards, boardPinMap: const {});
+
+        final boardPinMap = <int, List<Pin>>{};
+        for (var i = 0; i < boards.length; i++) {
+          final pins =
+              await boardsRepository.getBoardPins(id: boards[i].id, page: 1);
+          boardPinMap.putIfAbsent(boards[i].id, () => pins);
+        }
+        yield DefaultState(
+            user: user, boards: boards, boardPinMap: boardPinMap);
       } on Exception catch (e) {
-        yield ErrorState(boardMap: state.boardMap, error: e);
+        yield ErrorState(
+          user: state.user,
+          boards: state.boards,
+          boardPinMap: state.boardPinMap,
+          error: e,
+        );
       }
     }
     return;
