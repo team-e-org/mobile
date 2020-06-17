@@ -3,6 +3,7 @@ import 'package:mobile/model/models.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/typography_common.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:mobile/view/components/notification.dart';
 
 class PinDetailScreenArguments {
   const PinDetailScreenArguments({this.pin});
@@ -107,30 +108,25 @@ class PinDetailScreen extends StatelessWidget {
   }
 
   Widget _buildActions() {
-    return Positioned(
-      bottom: 10,
-      left: 0,
-      right: 0,
-      child: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            PinterestButton.secondary(
-              text: 'Access',
-              onPressed: () {
-                // TODO
-              },
-            ),
-            SizedBox(width: 20),
-            PinterestButton.primary(
-              text: 'Save',
-              onPressed: () {
-                // TODO
-              },
-            ),
-          ],
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        PinterestButton.secondary(
+          text: 'Access',
+          onPressed: () {
+            // TODO
+            PinterestNotification.showNotImplemented();
+          },
         ),
-      ),
+        SizedBox(width: 20),
+        PinterestButton.primary(
+          text: 'Save',
+          onPressed: () {
+            // TODO
+            PinterestNotification.showNotImplemented();
+          },
+        ),
+      ],
     );
   }
 }
