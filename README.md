@@ -6,6 +6,14 @@
 ## Sprint
 
 📌 [GitHub Projects](https://github.com/team-e-org/mobile/projects/1)
+=======
+## splash screen の生成
+
+```bash
+$ flutter packages pub run flutter_native_splash:create
+```
+
+# mobile
 
 | name     | plan | period                |
 |----------|------|-----------------------|

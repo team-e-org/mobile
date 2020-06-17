@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
+import 'package:mobile/api/api_client.dart';
+import 'package:mobile/api/auth_api.dart';
 import 'package:mobile/data/account_repository.dart';
 import 'package:mobile/view/board_detail_screen.dart';
 import 'package:mobile/view/board_edit_screen.dart';
@@ -12,13 +17,32 @@ import 'package:mobile/view/pin_edit_screen.dart';
 import 'package:mobile/view/pin_select_photo_screen.dart';
 import 'package:mobile/view/root_screen.dart';
 import 'package:mobile/view/select_board_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 class PinterestApplication extends StatelessWidget {
-  final accountRepo = MockAccountRepository();
+  PinterestApplication({
+    @required this.prefs,
+  });
+
+  final SharedPreferences prefs;
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Build環境分ける
+    final apiEndpoint =
+        Platform.isAndroid ? 'http://10.0.2.2:3100' : 'http://localhost:8080';
+
+    final accountRepo = DefaultAccountRepository(
+      api: DefaultAuthApi(
+        ApiClient(
+          Client(),
+          apiEndpoint: apiEndpoint,
+        ),
+      ),
+      prefs: prefs,
+    );
+
     return BlocProvider(
       create: (context) => AuthenticationBloc(accountRepository: accountRepo)
         ..add(AppInitialized()),
