@@ -99,19 +99,3 @@ class ApiClient {
     }
   }
 }
-
-var s = {
-  "type": "https://stoplight.io/prism/errors#UNPROCESSABLE_ENTITY",
-  "title": "Invalid request body payload",
-  "status": 422,
-  "detail":
-      "Your request is not valid and no HTTP validation response was found in the spec, so Prism is generating this error for you.",
-  "validation": [
-    {
-      "location": ["path"],
-      "severity": "Error",
-      "code": "required",
-      "message": "should have required property ':id'",
-    },
-  ],
-};

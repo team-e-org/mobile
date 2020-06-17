@@ -14,9 +14,4 @@ class UsersRepository {
   Future<User> getUser(int id) async {
     return User.fromMock();
   }
-
-  Future<List<Board>> getUserBoards(int id) async {
-    // return _api.userBoards(id);
-    return _api.userBoards(id: 111);
-  }
 }
