@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -11,6 +12,7 @@ import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/components.dart';
+import 'package:mobile/view/components/user_icon.dart';
 import 'package:mobile/view/onboarding/authentication_bloc.dart';
 
 class AccountScreen extends StatelessWidget {
@@ -48,20 +50,52 @@ class AccountScreen extends StatelessWidget {
   Widget _buildContent(BuildContext context) {
     return BlocBuilder<AccountScreenBloc, AccountScreenState>(
       builder: (context, state) {
-        // final authBlocProvider = BlocProvider.of<AuthenticationBloc>(context);
+        final authBlocProvider = BlocProvider.of<AuthenticationBloc>(context);
         final blocProvider = BlocProvider.of<AccountScreenBloc>(context);
 
         if (blocProvider.state is InitialState) {
           blocProvider.add(const LoadInitial(111));
         }
 
-        return _boardsGridView(context, state.boards, state.boardPinMap);
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              flex: 1,
+              child: _accountContainer(context, state.user),
+            ),
+            Expanded(
+              flex: 3,
+              child: _boardsGridView(context, state.boards, state.boardPinMap),
+            ),
+          ],
+        );
       },
     );
   }
 
-  Widget _accountContainer() {
-    return Container();
+  Widget _accountContainer(BuildContext context, User user) {
+    return Card(
+      child: Container(
+        height: 200,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        margin: const EdgeInsets.all(0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            UserIcon(
+              imageUrl: user.icon,
+              radius: 32,
+              margin: EdgeInsets.all(8),
+            ),
+            Text(
+              user.name,
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _boardsGridView(
@@ -71,7 +105,7 @@ class AccountScreen extends StatelessWidget {
   ) {
     if (boards.isNotEmpty) {
       return StaggeredGridView.countBuilder(
-        padding: const EdgeInsets.all(2),
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 2),
         crossAxisCount: 2,
         mainAxisSpacing: 4,
         crossAxisSpacing: 4,
