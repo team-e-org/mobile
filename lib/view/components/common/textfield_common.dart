@@ -5,7 +5,7 @@ class PinterestTextFieldProps {
     @required this.label,
     @required this.hintText,
     this.validator,
-    this.obscure,
+    this.obscure = false,
     this.onChanged,
     this.onSaved,
   });

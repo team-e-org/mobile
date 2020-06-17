@@ -54,6 +54,13 @@ class PlaygroundScreen extends StatelessWidget {
             hintText: 'Type your name',
           ),
         ),
+        PinterestTextField(
+          props: PinterestTextFieldProps(
+            label: 'Password',
+            hintText: 'Type your password',
+            obscure: true,
+          ),
+        ),
       ],
     );
   }
