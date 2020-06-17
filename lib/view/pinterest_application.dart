@@ -26,16 +26,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 class PinterestApplication extends StatelessWidget {
+  const PinterestApplication({
+    this.prefs,
+  });
+
+  final SharedPreferences prefs;
+
   @override
   Widget build(BuildContext context) {
     final config = readConfig();
-    final accountRepo = MockAccountRepository();
+    final accountRepo = DefaultAccountRepository(
+      api: DefaultAuthApi(ApiClient(Client(), apiEndpoint: config.apiEndpoint)),
+      prefs: prefs,
+    );
+    final pinsRepo = MockPinsRepository();
 
-    final pinsRepository = PinsRepository(DefaultPinsApi(ApiClient(
-      Client(),
-      apiEndpoint: config.apiEndpoint,
-    )));
-  
     return BlocProvider(
       create: (context) => AuthenticationBloc(accountRepository: accountRepo)
         ..add(AppInitialized()),
@@ -45,7 +50,7 @@ class PinterestApplication extends StatelessWidget {
             create: (_) => accountRepo,
           ),
           RepositoryProvider<PinsRepository>(
-            create: (_) => pinsRepository,
+            create: (_) => pinsRepo,
           )
         ],
         child: _app(),
