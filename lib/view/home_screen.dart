@@ -18,11 +18,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     final pinsRepository = RepositoryProvider.of<PinsRepository>(context);
 
     return BlocProvider(
-      create: (context) => HomeScreenBloc(pinsRepository),
+      create: (context) => HomeScreenBloc(pinsRepository)..add(LoadPinsPage()),
       child: _buildContent(context),
     );
   }
