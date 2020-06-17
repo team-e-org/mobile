@@ -55,6 +55,29 @@ class ApiClient {
     );
   }
 
+  Future<StreamedResponse> fileUpload(
+      String relativeUrl, {
+        Map<String, String> fields,
+        List<int> fileBytes,
+      }) async {
+    // Reference: https://pub.dev/documentation/http/latest/http/MultipartRequest-class.html
+    final uri = Uri.parse('$apiEndpoint$relativeUrl');
+    final request = MultipartRequest('POST', uri);
+
+    request.fields.addAll(fields);
+    request.files.add(await MultipartFile.fromBytes('image', fileBytes));
+    request.headers.addAll(await _headers);
+
+    final response = await request.send();
+    if (response.statusCode >= 400) {
+      throw _handleError(
+          response.statusCode,
+          await response.stream.bytesToString(),
+          response.request?.url?.toString());
+    }
+    return response;
+  }
+
   Future<Map<String, String>> get _headers async {
     Map<String, String> result = {};
 
