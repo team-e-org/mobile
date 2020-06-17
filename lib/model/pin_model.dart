@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -67,14 +69,18 @@ class Pin {
   Map<String, dynamic> toJson() => _$PinToJson(this);
 
   static Pin fromMock() {
+    final random = Random();
+    final base = 200;
+    final width = base;
+    final height = random.nextInt(2 * base) + base;
+
     return Pin(
       id: 123,
       title: "title",
       description: "description",
       url: "http://www.sample.com",
       userId: 143,
-      imageUrl:
-          'https://source.unsplash.com/random/300x400',
+      imageUrl: 'https://source.unsplash.com/random/${width}x${height}',
       isPrivate: false,
     );
   }

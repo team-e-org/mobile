@@ -1,6 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
+import 'package:mobile/api/api_client.dart';
+import 'package:mobile/api/pins_api.dart';
+import 'package:mobile/config.dart';
 import 'package:mobile/data/account_repository.dart';
+import 'package:mobile/repository/pins_repository.dart';
+import 'package:mobile/api/auth_api.dart';
+import 'package:mobile/data/account_repository.dart';
+import 'package:mobile/routes.dart';
 import 'package:mobile/view/board_detail_screen.dart';
 import 'package:mobile/view/board_edit_screen.dart';
 import 'package:mobile/view/create_new_screen.dart';
@@ -12,13 +22,20 @@ import 'package:mobile/view/pin_edit_screen.dart';
 import 'package:mobile/view/pin_select_photo_screen.dart';
 import 'package:mobile/view/root_screen.dart';
 import 'package:mobile/view/select_board_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 class PinterestApplication extends StatelessWidget {
-  final accountRepo = MockAccountRepository();
-
   @override
   Widget build(BuildContext context) {
+    final config = readConfig();
+    final accountRepo = MockAccountRepository();
+
+    final pinsRepository = PinsRepository(DefaultPinsApi(ApiClient(
+      Client(),
+      apiEndpoint: config.apiEndpoint,
+    )));
+  
     return BlocProvider(
       create: (context) => AuthenticationBloc(accountRepository: accountRepo)
         ..add(AppInitialized()),
@@ -27,6 +44,9 @@ class PinterestApplication extends StatelessWidget {
           RepositoryProvider<AccountRepository>(
             create: (_) => accountRepo,
           ),
+          RepositoryProvider<PinsRepository>(
+            create: (_) => pinsRepository,
+          )
         ],
         child: _app(),
       ),
@@ -42,7 +62,7 @@ class PinterestApplication extends StatelessWidget {
         ),
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
-            case '/':
+            case Routes.root:
               return _pageRoute(
                 BlocBuilder<AuthenticationBloc, AuthenticationState>(
                   builder: (context, state) {
@@ -52,32 +72,32 @@ class PinterestApplication extends StatelessWidget {
                     return RootScreen();
                   },
                 ),
-                name: '/',
+                name: Routes.root,
               );
             // Pin
-            case '/pin/detail':
+            case Routes.pinDetail:
               final args = settings.arguments as PinDetailScreenArguments;
               return _pageRoute(PinDetailScreen(args: args));
-            case '/pin/edit':
+            case Routes.pinEdit:
               return _pageRoute(PinEditScreen());
             // Board
-            case '/board/detail':
+            case Routes.boardDetail:
               return _pageRoute(BoardDetailScreen());
-            case '/board/edit':
+            case Routes.boardEdit:
               return _pageRoute(BoardEditScreen());
             // Create new pin/board
-            case '/new':
+            case Routes.createNew:
               return _pageRoute(CreateNewScreen());
-            case '/new/board':
+            case Routes.createNewBoard:
               return _pageRoute(NewBoardScreen());
-            case '/new/pin/select-photo':
+            case Routes.createNewPinSelectPhoto:
               return _pageRoute(
                 PinSelectPhotoScreen(),
                 fullScreenDialog: true,
               );
-            case '/new/pin/edit':
+            case Routes.createNewPinEdit:
               return _pageRoute(PinEditScreen());
-            case '/new/pin/select-board':
+            case Routes.createNewPinSelectBoard:
               return _pageRoute(SelectBoardScreen());
           }
           return null;

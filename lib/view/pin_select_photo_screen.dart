@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/routes.dart';
 import 'package:mobile/view/mock/mock_screen_common.dart';
 
 class PinSelectPhotoScreen extends StatelessWidget {
@@ -12,7 +13,7 @@ class PinSelectPhotoScreen extends StatelessWidget {
         child: RaisedButton(
           child: Text('Next'),
           onPressed: () {
-            Navigator.pushNamed(context, '/new/pin/edit');
+            Navigator.pushNamed(context, Routes.createNewPinEdit);
           },
         ),
       ),
