@@ -20,8 +20,8 @@ class PinGridView extends StatelessWidget {
   Widget build(BuildContext context) {
     return StaggeredGridView.countBuilder(
       crossAxisCount: 4,
-      mainAxisSpacing: 4,
-      crossAxisSpacing: 4,
+      mainAxisSpacing: 18,
+      crossAxisSpacing: 8,
       itemCount: pins.length,
       itemBuilder: _itemBuilder,
       staggeredTileBuilder: _staggeredTileBuilder,

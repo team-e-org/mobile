@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final _repository = MockPinsRepository();
 
     return BlocProvider(
-      create: (context) => HomeScreenBloc(_repository),
+      create: (context) => HomeScreenBloc(_repository)..add(LoadPinsPage()),
       child: _buildContent(context),
     );
   }
@@ -31,28 +31,27 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildContent(BuildContext context) {
     return SafeArea(
       child: BlocBuilder<HomeScreenBloc, HomeScreenState>(
-        builder: (context, state) {
-          final blocProvider = BlocProvider.of<HomeScreenBloc>(context);
-          if (state is InitialState) {
-            blocProvider.add(LoadPinsPage());
-          }
+        builder: _contentBuilder,
+      ),
+    );
+  }
 
-          final controller = ScrollController();
-          controller.addListener(() {
-            if (controller.position.maxScrollExtent <=
-                controller.position.pixels) {
-              blocProvider.add(LoadPinsPage());
-            }
-          });
+  Widget _contentBuilder(BuildContext context, HomeScreenState state) {
+    final blocProvider = BlocProvider.of<HomeScreenBloc>(context);
 
-          return Container(
-            child: PinGridView(
-              pins: state.pins,
-              onTap: _onPinTap,
-              controller: controller,
-            ),
-          );
-        },
+    final controller = ScrollController();
+    controller.addListener(() {
+      if (controller.position.maxScrollExtent <= controller.position.pixels) {
+        blocProvider.add(LoadPinsPage());
+      }
+    });
+
+    return Container(
+      padding: const EdgeInsets.all(8),
+      child: PinGridView(
+        pins: state.pins,
+        onTap: _onPinTap,
+        controller: controller,
       ),
     );
   }
