@@ -27,6 +27,7 @@ class PinDetailScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _pinImage(pin.imageUrl),
               // TODO 投稿者情報を入れる
@@ -44,9 +45,10 @@ class PinDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _pinImage(String url) {
+  Widget _pinImage(String imageUrl) {
     return CachedNetworkImage(
-      imageUrl: url,
+      imageUrl: imageUrl,
+      fit: BoxFit.cover,
       placeholder: (context, url) => Container(
         height: 200,
         width: 200,
