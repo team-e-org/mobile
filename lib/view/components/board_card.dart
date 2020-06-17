@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:mobile/model/models.dart';
+import 'package:http/http.dart' as http;
 
 class BoardCard extends StatelessWidget {
-  final Board board;
-  final List<Pin> pins;
-  final VoidCallback onTap;
-  final EdgeInsetsGeometry margin;
-
-  BoardCard({
+  const BoardCard({
     this.board,
     this.pins = const [],
     this.onTap,
     this.margin = const EdgeInsets.all(0),
   });
+
+  final Board board;
+  final List<Pin> pins;
+  final VoidCallback onTap;
+  final EdgeInsetsGeometry margin;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,8 @@ class BoardCard extends StatelessWidget {
             children: [
               _imageContainer(),
               Container(
+                margin: const EdgeInsets.only(top: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: _boardName(),
               ),
             ],
@@ -45,14 +49,28 @@ class BoardCard extends StatelessWidget {
     );
   }
 
+  Future<bool> _validateImageUrl(String url) async {
+    try {
+      final res = await http.head(url);
+      return res.statusCode == 200;
+    } on Exception catch (e) {
+      Logger().w(e);
+      return false;
+    }
+  }
+
   Widget _imageGrids() {
-    var _imageUrl = pins.length > 0 ? pins[0].imageUrl : "";
-    return Container(
-        child: Row(
-      children: [
-        Image.network(_imageUrl),
-      ],
-    ));
+    final pin = pins[0];
+    return FutureBuilder(
+      future: _validateImageUrl(pin.imageUrl),
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        var imageUrl = '';
+        if (snapshot.hasData && snapshot.data == true) {
+          imageUrl = pin.imageUrl;
+        }
+        return Image.network(imageUrl);
+      },
+    );
   }
 
   Widget _boardName() {
@@ -60,8 +78,8 @@ class BoardCard extends StatelessWidget {
       board.name,
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
-      style: TextStyle(
-        fontSize: 24,
+      style: const TextStyle(
+        fontSize: 14,
       ),
     );
   }
