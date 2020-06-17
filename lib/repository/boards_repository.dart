@@ -12,6 +12,6 @@ class BoardsRepository {
   BoardsApi _api;
 
   Future<List<Pin>> getBoardPins({int id, int page}) async {
-    return _api.boardPins(id: 111, page: page);
+    return _api.boardPins(id: id, page: page);
   }
 }
