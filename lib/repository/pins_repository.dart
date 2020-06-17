@@ -19,3 +19,18 @@ class DefaultPinsRepository extends PinsRepository {
     return _api.pins(page: page ?? 1);
   }
 }
+
+class MockPinsRepository extends PinsRepository {
+  factory MockPinsRepository() {
+    return _instance ?? MockPinsRepository._internal();
+  }
+
+  MockPinsRepository._internal();
+
+  static MockPinsRepository _instance;
+
+  Future<List<Pin>> getHomePagePins({int page}) async {
+    final pins = List.filled(10, Pin.fromMock());
+    return Future.value(pins);
+  }
+}
