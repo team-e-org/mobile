@@ -6,6 +6,7 @@ import 'package:mobile/api/pins_api.dart';
 import 'package:mobile/bloc/home_screen_bloc.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
+import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/components.dart';
 
 import 'pin_detail_screen.dart';
@@ -66,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     Navigator.of(context).pushNamed(
-      '/pin/detail',
+      Routes.pinDetail,
       arguments: PinDetailScreenArguments(pin: pin),
     );
   }
