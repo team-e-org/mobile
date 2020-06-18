@@ -16,6 +16,19 @@ class PinterestNotification {
     );
   }
 
+  // TODO: エラーの通知なので通知の色を
+  // エラーっぽい色にする
+  static void showError({
+    String title = 'Notification title',
+    String subtitle = '',
+    Duration duration = const Duration(seconds: 4),
+  }) =>
+      PinterestNotification.show(
+        title: title,
+        subtitle: subtitle,
+        duration: duration,
+      );
+
   static void showNotImplemented() {
     show(
       title: 'まだ実装してないねん。',
