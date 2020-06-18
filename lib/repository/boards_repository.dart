@@ -40,8 +40,12 @@ class MockBoardsRepository extends BoardsRepository {
   }
 
   @override
-  Future<Board> createBoard(NewBoard board) {
-    // TODO: implement createBoard
-    throw UnimplementedError();
+  Future<Board> createBoard(NewBoard board) async {
+    await Future<void>.delayed(const Duration(seconds: 1));
+    return Board(
+      name: board.name,
+      description: board.description,
+      isPrivate: board.isPrivate,
+    );
   }
 }
