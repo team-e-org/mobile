@@ -2,7 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile/view/components/notification.dart';
+import 'package:mobile/model/board_model.dart';
+import 'package:mobile/repository/boards_repository.dart';
 import 'package:logger/logger.dart';
 
 abstract class NewBoardScreenBlocEvent extends Equatable {
@@ -27,29 +28,62 @@ class CreateBoardRequested extends NewBoardScreenBlocEvent {}
 
 abstract class NewBoardScreenBlocState extends Equatable {
   NewBoardScreenBlocState({
-    @required this.boardName,
-    @required this.isPrivate,
+    this.boardName,
+    this.isPrivate,
   });
 
   final String boardName;
   final bool isPrivate;
 
   @override
-  List<Object> get props => [boardName, isPrivate];
+  List<Object> get props => [
+        boardName,
+        isPrivate,
+      ];
 }
 
 class DefaultState extends NewBoardScreenBlocState {
   DefaultState({
     @required String boardName,
     @required bool isPrivate,
-  }) : super(
-          boardName: boardName,
-          isPrivate: isPrivate,
-        );
+  }) : super(boardName: boardName, isPrivate: isPrivate);
+}
+
+class BoardCreatingState extends NewBoardScreenBlocState {
+  BoardCreatingState({
+    @required String boardName,
+    @required bool isPrivate,
+  }) : super(boardName: boardName, isPrivate: isPrivate);
+}
+
+class BoardCreateSuccessState extends DefaultState {
+  BoardCreateSuccessState({
+    @required String boardName,
+    @required bool isPrivate,
+    @required this.createdBoard,
+  }) : super(boardName: boardName, isPrivate: isPrivate);
+
+  final Board createdBoard;
+}
+
+class BoardCreateErrorState extends DefaultState {
+  BoardCreateErrorState({
+    @required String boardName,
+    @required bool isPrivate,
+    @required this.errorMessage,
+  }) : super(boardName: boardName, isPrivate: isPrivate);
+
+  final String errorMessage;
 }
 
 class NewBoardScreenBloc
     extends Bloc<NewBoardScreenBlocEvent, NewBoardScreenBlocState> {
+  NewBoardScreenBloc({
+    @required this.boardRepo,
+  });
+
+  final BoardsRepository boardRepo;
+
   @override
   NewBoardScreenBlocState get initialState => DefaultState(
         boardName: '',
@@ -74,13 +108,32 @@ class NewBoardScreenBloc
     }
 
     if (event is CreateBoardRequested) {
-      // TODO: 実際にBoardを作成する処理に差し替え
-      PinterestNotification.show(
-        title: 'boardName: ${state.boardName}',
-        subtitle: 'isPrivate: ${state.isPrivate}',
+      yield BoardCreatingState(
+        boardName: state.boardName,
+        isPrivate: state.isPrivate,
       );
-      Logger()
-          .d('board name: ${state.boardName}, isPrivate: ${state.isPrivate}');
+
+      final newBoard = NewBoard(
+        name: state.boardName,
+        isPrivate: state.isPrivate,
+      );
+
+      Logger().d('board: $newBoard');
+
+      try {
+        final createdBoard = await boardRepo.createBoard(newBoard);
+        yield BoardCreateSuccessState(
+          boardName: state.boardName,
+          isPrivate: state.isPrivate,
+          createdBoard: createdBoard,
+        );
+      } catch (e) {
+        yield BoardCreateErrorState(
+          boardName: state.boardName,
+          isPrivate: state.isPrivate,
+          errorMessage: e.toString(),
+        );
+      }
     }
   }
 }
