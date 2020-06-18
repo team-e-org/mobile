@@ -8,6 +8,9 @@ class PinterestTextFieldProps {
     this.obscure = false,
     this.onChanged,
     this.onSaved,
+    this.maxLines,
+    this.minLines,
+    this.keyboardType,
   });
 
   final FormFieldValidator<String> validator;
@@ -16,6 +19,8 @@ class PinterestTextFieldProps {
   final bool obscure;
   final ValueChanged<String> onChanged;
   final ValueChanged<String> onSaved;
+  final int maxLines, minLines;
+  final TextInputType keyboardType;
 }
 
 class PinterestTextField extends StatelessWidget {
@@ -38,6 +43,9 @@ class PinterestTextField extends StatelessWidget {
           validator: props.validator,
           onChanged: props.onChanged,
           onSaved: props.onSaved,
+          maxLines: props.maxLines,
+          minLines: props.minLines,
+          keyboardType: props.keyboardType,
           decoration: InputDecoration(
             hintText: props.hintText,
             border: InputBorder.none,

@@ -21,4 +21,20 @@ class Validator {
 
     return true;
   }
+
+  static String isValidPinTitle(String s) {
+    if (s.length > 20) {
+      return 'title is too long.';
+    }
+
+    return null;
+  }
+
+  static String isValidPinDescription(String s) {
+    if (s.length > 280) {
+      return 'description is too long.';
+    }
+
+    return null;
+  }
 }
