@@ -31,4 +31,9 @@ class Validator {
     // TODO(dh9489): url防ぐとかなんやらかんやら
     return null;
   }
+
+  static String isValidPinUrl(String s) {
+    // TODO(dh9489): url防ぐとかなんやらかんやら
+    return null;
+  }
 }

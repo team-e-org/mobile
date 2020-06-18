@@ -1,10 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:mobile/model/models.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/util/validator.dart';
 import 'package:mobile/view/components/common/textfield_common.dart';
+import 'package:mobile/view/select_board_screen.dart';
 
 class PinEditScreenArguments {
   PinEditScreenArguments({this.file});
@@ -22,25 +23,44 @@ class PinEditScreen extends StatefulWidget {
 }
 
 class PinFormData {
-  PinFormData();
+  PinFormData({
+    this.image,
+    this.title = '',
+    this.description = '',
+    this.url = '',
+    this.isPrivate = false,
+  });
 
+  String image;
   String title;
   String description;
   String url;
   bool isPrivate;
+
+  NewPin toNewPin([File imageFile]) {
+    return NewPin(
+      image: image,
+      imageFile: imageFile,
+      title: title,
+      description: description,
+      url: url,
+      isPrivate: isPrivate,
+    );
+  }
 }
 
 class _PinEditScreenState extends State<PinEditScreen> {
-  final formdata = PinFormData();
+  final PinFormData _formdata = PinFormData();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Create pin'),
+          title: const Text('Create pin'),
         ),
         body: SingleChildScrollView(
           child: Container(
+            margin: const EdgeInsets.only(bottom: 40),
             child: Column(
               children: [
                 Container(
@@ -50,14 +70,11 @@ class _PinEditScreenState extends State<PinEditScreen> {
                     fit: BoxFit.contain,
                   ),
                 ),
-                Divider(),
-                _formField(formdata),
+                const Divider(),
+                _formField(_formdata),
                 RaisedButton(
-                  child: Text('Next'),
-                  onPressed: () {
-                    Navigator.pushNamed(
-                        context, Routes.createNewPinSelectPhoto);
-                  },
+                  child: const Text('Next'),
+                  onPressed: _onNextPressed,
                 )
               ],
             ),
@@ -67,7 +84,7 @@ class _PinEditScreenState extends State<PinEditScreen> {
 
   Widget _formField(PinFormData formData) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8),
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: Column(
         children: [
           PinterestTextField(
@@ -79,7 +96,7 @@ class _PinEditScreenState extends State<PinEditScreen> {
                 maxLengthEnforced: false,
                 onChanged: (value) => {
                       setState(() {
-                        formdata.title = value;
+                        _formdata.title = value;
                       })
                     }),
           ),
@@ -95,44 +112,52 @@ class _PinEditScreenState extends State<PinEditScreen> {
               maxLengthEnforced: false,
               onChanged: (value) => {
                 setState(() {
-                  formdata.description = value;
+                  _formdata.description = value;
                 })
               },
             ),
           ),
+          PinterestTextField(
+            props: PinterestTextFieldProps(
+                label: 'URL',
+                hintText: 'ここにURLを書く',
+                validator: Validator.isValidPinUrl,
+                maxLengthEnforced: false,
+                onChanged: (value) => {
+                      setState(() {
+                        _formdata.title = value;
+                      })
+                    }),
+          ),
           Container(
             height: 50,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  child: const Text('Private'),
-                ),
-                Expanded(
+                const Text('Private'),
+                Container(
                   child: Switch(
-                    value: formdata.isPrivate,
+                    value: _formdata.isPrivate,
                     onChanged: (value) {
-                      formdata.isPrivate = value;
+                      setState(() {
+                        _formdata.isPrivate = value;
+                      });
                     },
                   ),
-                ),
+                )
               ],
             ),
           )
-          //             Row(
-          //   children: <Widget>[
-          //     Text('Private board'),
-          //     Spacer(),
-          //     Switch(
-          //       value: formdata.isPrivate,
-          //       onChanged: (value) {
-          //         formdata.isPrivate = value;
-          //       },
-          //     ),
-          //   ],
-          // ),
         ],
       ),
     );
+  }
+
+  void _onNextPressed() {
+    final newPin = _formdata.toNewPin(widget.args.file);
+    Navigator.pushNamed(context, Routes.createNewPinSelectBoard,
+        arguments: SelectBoardScreenArguments(
+          newPin: newPin,
+        ));
   }
 }
