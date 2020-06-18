@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/model/board_model.dart';
 import 'package:mobile/routes.dart';
+import 'package:mobile/view/components/notification.dart';
 
 class CreateNewScreen extends StatelessWidget {
   @override
@@ -15,8 +17,16 @@ class CreateNewScreen extends StatelessWidget {
             children: <Widget>[
               RaisedButton(
                 child: Text('Board'),
-                onPressed: () {
-                  Navigator.of(context).pushNamed(Routes.createNewBoard);
+                onPressed: () async {
+                  final result = await Navigator.of(context)
+                      .pushReplacementNamed(Routes.createNewBoard);
+
+                  if (result is Board) {
+                    PinterestNotification.show(
+                      title: 'New board created',
+                      subtitle: result.name,
+                    );
+                  }
                 },
               ),
               SizedBox(width: 20),

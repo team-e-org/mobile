@@ -72,7 +72,7 @@ class BoardCreateErrorState extends DefaultState {
 class NewBoardScreenBloc
     extends Bloc<NewBoardScreenBlocEvent, NewBoardScreenBlocState> {
   NewBoardScreenBloc({
-    this.boardRepo,
+   @required this.boardRepo,
   });
 
   final BoardsRepository boardRepo;
