@@ -49,6 +49,13 @@ class DefaultState extends NewBoardScreenBlocState {
   }) : super(boardName: boardName, isPrivate: isPrivate);
 }
 
+class BoardCreatingState extends NewBoardScreenBlocState {
+  BoardCreatingState({
+    @required String boardName,
+    @required bool isPrivate,
+  }) : super(boardName: boardName, isPrivate: isPrivate);
+}
+
 class BoardCreateSuccessState extends DefaultState {
   BoardCreateSuccessState({
     @required String boardName,
@@ -72,7 +79,7 @@ class BoardCreateErrorState extends DefaultState {
 class NewBoardScreenBloc
     extends Bloc<NewBoardScreenBlocEvent, NewBoardScreenBlocState> {
   NewBoardScreenBloc({
-   @required this.boardRepo,
+    @required this.boardRepo,
   });
 
   final BoardsRepository boardRepo;
@@ -101,6 +108,11 @@ class NewBoardScreenBloc
     }
 
     if (event is CreateBoardRequested) {
+      yield BoardCreatingState(
+        boardName: state.boardName,
+        isPrivate: state.isPrivate,
+      );
+
       final newBoard = NewBoard(
         name: state.boardName,
         isPrivate: state.isPrivate,

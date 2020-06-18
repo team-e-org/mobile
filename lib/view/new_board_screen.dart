@@ -62,6 +62,7 @@ class NewBoardScreen extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: PinterestButton.primary(
             text: 'Create',
+            loading: state is BoardCreatingState,
             onPressed: state.boardName.isEmpty
                 ? null
                 : () => _onCreateButtonPressed(context),
