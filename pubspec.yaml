@@ -23,6 +23,7 @@ dependencies:
   logger: ^0.9.1
   shared_preferences: ^0.5.7+3
   cached_network_image: ^2.2.0
+  image_picker: ^0.6.7
 
 dev_dependencies:
   flutter_test:

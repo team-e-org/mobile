@@ -1,8 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobile/routes.dart';
-import 'package:mobile/view/mock/mock_screen_common.dart';
+
+class PinEditScreenArguments {
+  PinEditScreenArguments({this.file});
+
+  File file;
+}
 
 class PinEditScreen extends StatelessWidget {
+  const PinEditScreen({this.args});
+
+  final PinEditScreenArguments args;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,11 +22,16 @@ class PinEditScreen extends StatelessWidget {
         title: Text('Create pin'),
       ),
       body: Container(
-        child: RaisedButton(
-          child: Text('Next'),
-          onPressed: () {
-            Navigator.pushNamed(context, Routes.createNewPinSelectPhoto);
-          },
+        child: Column(
+          children: [
+            Image.file(args.file),
+            RaisedButton(
+              child: Text('Next'),
+              onPressed: () {
+                Navigator.pushNamed(context, Routes.createNewPinSelectPhoto);
+              },
+            )
+          ],
         ),
       ),
     );

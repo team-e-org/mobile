@@ -44,5 +44,12 @@
 	<key>UIStatusBarHidden</key>
 	<true/>
 
+	<!-- image_picker library https://pub.dev/packages/image_picker -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>I WANT TO USE YOUR PHOTOS!!!!!</string>
+	<key>NSCameraUsageDescription</key>
+	<string>I WANT TO SEE YOU!!!!!</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>I WANT TO LISTEN YOUR VOICE!!!!!</string>
 </dict>
 </plist>
