@@ -54,7 +54,7 @@ class DefaultAccountRepository extends AccountRepository {
 class MockAccountRepository extends AccountRepository {
   @override
   Future<String> authenticate(String email, String password) async {
-    await Future<void>.delayed(Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(seconds: 1));
     return 'login token';
   }
 

@@ -22,7 +22,7 @@ class ApiClient {
   Future<Response> get(String relativeUrl) async {
     return await _makeRequestWithErrorHandler(
       _client.get(
-        "$apiEndpoint$relativeUrl",
+        '$apiEndpoint$relativeUrl',
         headers: await _headers,
       ),
     );
@@ -31,7 +31,7 @@ class ApiClient {
   Future<Response> post(String relativeUrl, {String body}) async {
     return await _makeRequestWithErrorHandler(
       _client.post(
-        "$apiEndpoint$relativeUrl",
+        '$apiEndpoint$relativeUrl',
         body: body,
         headers: await _headersContentTypeJson,
       ),
@@ -41,7 +41,7 @@ class ApiClient {
   Future<Response> put(String relativeUrl, {String body}) async {
     return await _makeRequestWithErrorHandler(
       _client.put(
-        "$apiEndpoint$relativeUrl",
+        '$apiEndpoint$relativeUrl',
         body: body,
         headers: await _headersContentTypeJson,
       ),
@@ -51,18 +51,18 @@ class ApiClient {
   Future<Response> delete(String relativeUrl) async {
     return await _makeRequestWithErrorHandler(
       _client.delete(
-        "$apiEndpoint$relativeUrl",
+        '$apiEndpoint$relativeUrl',
         headers: await _headers,
       ),
     );
   }
 
   Future<StreamedResponse> fileUpload(
-      String relativeUrl, {
-        Map<String, String> fields,
-        String fileKey,
-        Uint8List fileBytes,
-      }) async {
+    String relativeUrl, {
+    Map<String, String> fields,
+    String fileKey,
+    Uint8List fileBytes,
+  }) async {
     // Reference: https://pub.dev/documentation/http/latest/http/MultipartRequest-class.html
     final uri = Uri.parse('$apiEndpoint$relativeUrl');
     final request = MultipartRequest('POST', uri);
@@ -109,7 +109,11 @@ class ApiClient {
     return response;
   }
 
-  static DefaultError _handleError(int statusCode, errorResponse, String url) {
+  static DefaultError _handleError(
+    int statusCode,
+    dynamic errorResponse,
+    String url,
+  ) {
     if (statusCode == 401) {
       return UnauthorizedError();
     } else if (statusCode == 403) {

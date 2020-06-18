@@ -23,7 +23,9 @@ class DefaultAuthApi extends AuthApi {
       '/users/sign-in',
       body: json.encode(body),
     );
-    return AuthResponse.fromJson(jsonDecode(response.body)).token;
+    return AuthResponse.fromJson(
+            jsonDecode(response.body) as Map<String, dynamic>)
+        .token;
   }
 
   @override
@@ -32,7 +34,9 @@ class DefaultAuthApi extends AuthApi {
       '/users/sign-up',
       body: json.encode(body),
     );
-    return AuthResponse.fromJson(jsonDecode(response.body)).token;
+    return AuthResponse.fromJson(
+            jsonDecode(response.body) as Map<String, dynamic>)
+        .token;
   }
 }
 
