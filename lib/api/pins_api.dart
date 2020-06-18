@@ -32,20 +32,20 @@ class DefaultPinsApi extends PinsApi {
       "/pins/$id",
       body: json.encode(pin),
     );
-    return Pin.fromJson(jsonDecode(response.body));
+    return Pin.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   }
 
   @override
   Future<Pin> pin({int id}) async {
     final response = await _client.get("/pins/$id");
-    return Pin.fromJson(jsonDecode(response.body));
+    return Pin.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   }
 
   @override
   Future<List<Pin>> pins({int page = 1}) async {
     final response = await _client.get("/pins?page=$page");
     return (jsonDecode(response.body) as List)
-        .map((it) => Pin.fromJson(it))
+        .map((dynamic it) => Pin.fromJson(it as Map<String, dynamic>))
         .toList();
   }
 
