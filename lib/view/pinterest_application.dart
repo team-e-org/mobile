@@ -102,16 +102,17 @@ class PinterestApplication extends StatelessWidget {
               return _pageRoute(BoardEditScreen());
             // Create new pin/board
             case Routes.createNew:
-              return _pageRoute(CreateNewScreen());
+              return _pageRoute(
+                CreateNewScreen(),
+                fullScreenDialog: true,
+              );
             case Routes.createNewBoard:
               return _pageRoute(NewBoardScreen());
             case Routes.createNewPinSelectPhoto:
-              return _pageRoute(
-                PinSelectPhotoScreen(),
-                fullScreenDialog: true,
-              );
+              return _pageRoute(PinSelectPhotoScreen());
             case Routes.createNewPinEdit:
-              return _pageRoute(PinEditScreen());
+              final args = settings.arguments as PinEditScreenArguments;
+              return _pageRoute(PinEditScreen(args: args));
             case Routes.createNewPinSelectBoard:
               return _pageRoute(SelectBoardScreen());
           }
