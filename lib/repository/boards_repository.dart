@@ -29,6 +29,7 @@ class MockBoardsRepository extends BoardsRepository {
 
   static MockBoardsRepository _instance;
 
+  @override
   Future<List<Pin>> getBoardPins({int id, int page}) async {
     final pins = List.filled(10, 1).map((_) => Pin.fromMock()).toList();
     return Future.value(pins);
