@@ -28,7 +28,7 @@ class PinterestNotification {
     String subtitle = '',
     Duration duration = const Duration(seconds: 4),
   }) =>
-      PinterestNotification.show(
+      show(
         title: title,
         subtitle: subtitle,
         duration: duration,
@@ -39,6 +39,7 @@ class PinterestNotification {
     show(
       title: 'まだ実装してないねん。',
       subtitle: 'ほんまにごめんな...',
+      color: Colors.orange[300],
     );
   }
 }
@@ -65,10 +66,12 @@ class _PinterestNotificationWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 4),
       child: SafeArea(
         child: ListTile(
-          leading: SizedBox.fromSize(
-            size: const Size(40, 40),
-            child: leading,
-          ),
+          leading: leading != null
+              ? SizedBox.fromSize(
+                  size: const Size(40, 40),
+                  child: leading,
+                )
+              : null,
           title: PinterestTypography.body1(
             title,
             color: textColor,
