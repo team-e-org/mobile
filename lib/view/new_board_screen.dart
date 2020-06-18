@@ -85,7 +85,6 @@ class NewBoardScreen extends StatelessWidget {
   }
 
   void _onCreateButtonPressed(BuildContext context) {
-    final bloc = BlocProvider.of<NewBoardScreenBloc>(context);
-    bloc.add(CreateBoardRequested());
+    BlocProvider.of<NewBoardScreenBloc>(context).add(CreateBoardRequested());
   }
 }
