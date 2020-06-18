@@ -2,7 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class UserIcon extends StatelessWidget {
-  const UserIcon({this.imageUrl, this.onPressed, this.radius, this.margin});
+  const UserIcon({
+    this.imageUrl = '',
+    this.onPressed,
+    this.radius = 16,
+    this.margin = const EdgeInsets.all(0),
+  });
 
   final String imageUrl;
   final VoidCallback onPressed;
@@ -16,7 +21,7 @@ class UserIcon extends StatelessWidget {
       child: RawMaterialButton(
         onPressed: onPressed,
         child: CircleAvatar(
-          backgroundImage: NetworkImage(imageUrl),
+          backgroundImage: CachedNetworkImageProvider(imageUrl),
           radius: radius,
         ),
       ),

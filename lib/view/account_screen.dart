@@ -84,12 +84,12 @@ class AccountScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             UserIcon(
-              imageUrl: user.icon,
+              imageUrl: user == null ? '' : user.icon,
               radius: 32,
               margin: EdgeInsets.all(8),
             ),
             Text(
-              user.name,
+              user == null ? '' : user.name,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],
