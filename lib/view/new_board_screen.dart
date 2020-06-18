@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/bloc/new_board_sreen_bloc.dart';
-import 'package:mobile/view/mock/mock_screen_common.dart';
+import 'package:mobile/view/components/common/textfield_common.dart';
 
 class NewBoardScreen extends StatelessWidget {
   @override
@@ -49,16 +49,14 @@ class NewBoardScreen extends StatelessWidget {
   }
 
   Widget _buildBoardNameTextField(BuildContext context) {
-    return TextField(
-      decoration: InputDecoration(
-        labelText: 'Board name',
-        hintText: 'Type something...',
-        border: OutlineInputBorder(),
-      ),
-      onChanged: (value) {
-        BlocProvider.of<NewBoardScreenBloc>(context)
-            .add(BoardNameChanged(value: value));
-      },
+    return PinterestTextField(
+      props: PinterestTextFieldProps(
+          label: 'Board name',
+          hintText: 'Add',
+          onChanged: (value) {
+            BlocProvider.of<NewBoardScreenBloc>(context)
+                .add(BoardNameChanged(value: value));
+          }),
     );
   }
 
