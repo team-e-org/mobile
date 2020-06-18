@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/bloc/new_board_sreen_bloc.dart';
+import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/textfield_common.dart';
 
 class NewBoardScreen extends StatelessWidget {
@@ -15,25 +16,7 @@ class NewBoardScreen extends StatelessWidget {
   Widget _buildScreen(BuildContext context) {
     return BlocBuilder<NewBoardScreenBloc, NewBoardScreenBlocState>(
       builder: (context, state) => Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Create a new board',
-          ),
-          leading: Container(
-            child: IconButton(
-              icon: Icon(Icons.close),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ),
-          actions: <Widget>[
-            RaisedButton(
-              child: Text('Create'),
-              onPressed: state.boardName.isEmpty
-                  ? null
-                  : () => _onCreateButtonPressed(context),
-            )
-          ],
-        ),
+        appBar: _buildAppBar(context, state),
         body: Container(
           padding: EdgeInsets.all(16),
           child: Column(
@@ -45,6 +28,31 @@ class NewBoardScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context, NewBoardScreenBlocState state) {
+    return AppBar(
+      title: const Text(
+        'Create a new board',
+      ),
+      leading: Container(
+        child: IconButton(
+          icon: Icon(Icons.close),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+      actions: <Widget>[
+        Container(
+          padding: const EdgeInsets.all(8),
+          child: PinterestButton.primary(
+            text: 'Create',
+            onPressed: state.boardName.isEmpty
+                ? null
+                : () => _onCreateButtonPressed(context),
+          ),
+        ),
+      ],
     );
   }
 
