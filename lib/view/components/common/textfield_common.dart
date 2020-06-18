@@ -11,6 +11,8 @@ class PinterestTextFieldProps {
     this.maxLines,
     this.minLines,
     this.keyboardType,
+    this.maxLength = null,
+    this.maxLengthEnforced = false,
   });
 
   final FormFieldValidator<String> validator;
@@ -21,6 +23,8 @@ class PinterestTextFieldProps {
   final ValueChanged<String> onSaved;
   final int maxLines, minLines;
   final TextInputType keyboardType;
+  final int maxLength;
+  final bool maxLengthEnforced;
 }
 
 class PinterestTextField extends StatelessWidget {
@@ -46,6 +50,8 @@ class PinterestTextField extends StatelessWidget {
           maxLines: props.maxLines,
           minLines: props.minLines,
           keyboardType: props.keyboardType,
+          maxLength: props.maxLength,
+          maxLengthEnforced: props.maxLengthEnforced,
           decoration: InputDecoration(
             hintText: props.hintText,
             border: InputBorder.none,

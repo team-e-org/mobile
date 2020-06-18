@@ -23,18 +23,12 @@ class Validator {
   }
 
   static String isValidPinTitle(String s) {
-    if (s.length > 20) {
-      return 'title is too long.';
-    }
-
+    // TODO(dh9489): url防ぐとかなんやらかんやら
     return null;
   }
 
   static String isValidPinDescription(String s) {
-    if (s.length > 280) {
-      return 'description is too long.';
-    }
-
+    // TODO(dh9489): url防ぐとかなんやらかんやら
     return null;
   }
 }
