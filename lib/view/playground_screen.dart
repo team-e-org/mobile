@@ -87,13 +87,26 @@ class PlaygroundScreen extends StatelessWidget {
     return _Section(
       'Notification',
       children: <Widget>[
-        Row(
+        Wrap(
           children: <Widget>[
             PinterestButton.secondary(
                 text: 'normal',
                 onPressed: () {
                   PinterestNotification.show(title: 'normal notification');
                 }),
+            PinterestButton.secondary(
+                text: 'normal with leading',
+                onPressed: () {
+                  PinterestNotification.show(
+                    title: 'normal notification',
+                    subtitle: 'with leading image',
+                    leading: Image.asset('assets/logo/logo.png'),
+                  );
+                }),
+            PinterestButton.secondary(
+              text: 'not implemented warning',
+              onPressed: PinterestNotification.showNotImplemented,
+            ),
             PinterestButton.secondary(
                 text: 'error',
                 onPressed: () {
