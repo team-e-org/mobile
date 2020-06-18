@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:mobile/routes.dart';
-import 'package:mobile/view/pin_edit_screen.dart';
 import 'package:mobile/model/board_model.dart';
+import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/notification.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mobile/view/pin_edit_screen.dart';
 
 class CreateNewScreen extends StatelessWidget {
   final ImagePicker picker = ImagePicker();
