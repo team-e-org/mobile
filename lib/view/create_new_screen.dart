@@ -48,11 +48,11 @@ class CreateNewScreen extends StatelessWidget {
   }
 
   Future _onPinPressed(BuildContext context) async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    final file = File(pickedFile.path);
+    // final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    // final file = File(pickedFile.path);
     Navigator.of(context).pushReplacementNamed(
-      Routes.createNewPinEdit,
-      arguments: PinEditScreenArguments(file: file),
+      Routes.createNewPin,
+      // arguments: PinEditScreenArguments(file: file),
     );
   }
 }

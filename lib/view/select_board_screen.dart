@@ -9,12 +9,14 @@ import 'package:mobile/view/components/components.dart';
 import 'components/board_grid_view.dart';
 import 'onboarding/authentication_bloc.dart';
 
+typedef SelectBoardScreenCallback = void Function(BuildContext, Board);
+
 class SelectBoardScreenArguments {
   SelectBoardScreenArguments({
-    this.newPin,
+    this.onBoardPressed,
   });
 
-  final NewPin newPin;
+  final SelectBoardScreenCallback onBoardPressed;
 }
 
 class SelectBoardScreen extends StatelessWidget {
@@ -70,9 +72,7 @@ class SelectBoardScreen extends StatelessWidget {
                 shrinkWrap: true,
                 primary: true,
                 physics: NeverScrollableScrollPhysics(),
-                onTap: (context, board) {
-                  Navigator.popUntil(context, ModalRoute.withName(Routes.root));
-                },
+                onTap: args.onBoardPressed,
               ),
             ],
           ),
