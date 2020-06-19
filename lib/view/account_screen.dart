@@ -15,7 +15,9 @@ import 'package:mobile/view/components/components.dart';
 import 'package:mobile/view/components/user_icon.dart';
 import 'package:mobile/view/onboarding/authentication_bloc.dart';
 
-const choiseLogout = 'Logout';
+class _Choices {
+  static const logout = 'Logout';
+}
 
 class AccountScreen extends StatelessWidget {
   UsersRepository usersRepository;
@@ -50,15 +52,15 @@ class AccountScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
-    final choices = [choiseLogout];
+  AppBar _buildAppBar(BuildContext context) {
+    final choices = [_Choices.logout];
 
     return AppBar(
       title: const Text('Account'),
       actions: <Widget>[
         PopupMenuButton<String>(
           onSelected: (String choice) {
-            if (choice == choiseLogout) {
+            if (choice == _Choices.logout) {
               BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut());
             }
           },
