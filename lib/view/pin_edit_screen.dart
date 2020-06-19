@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/util/validator.dart';
+import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/textfield_common.dart';
 import 'package:mobile/view/select_board_screen.dart';
 
@@ -75,11 +76,10 @@ class _PinEditScreenState extends State<PinEditScreen> {
                 ),
                 const Divider(),
                 _formField(_formdata),
-                RaisedButton(
-                  child: const Text('Next'),
-                  onPressed: () => widget.args.onNextPressed(
-                      context, _formdata.toNewPin(widget.args?.file)),
-                )
+                PinterestButton.primary(
+                    text: 'Next',
+                    onPressed: () => widget.args.onNextPressed(
+                        context, _formdata.toNewPin(widget.args?.file))),
               ],
             ),
           ),
