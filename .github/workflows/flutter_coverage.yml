@@ -1,0 +1,27 @@
+name: flutter coverage
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: subosito/flutter-action@v1
+      with:
+        flutter-version: '1.17.3'
+    - name: Install dependencies
+      run: flutter pub get
+    - name: Run coverage
+      run: flutter test --coverage --coverage-path=lcov.info
+    - name: tree
+      run: ls -la
+    - name: current dir
+      run: pwd
+    - name: Upload coverage to codecov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: lcov.info
