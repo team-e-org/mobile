@@ -16,7 +16,8 @@ jobs:
       run: flutter pub get
     - name: Run coverage
       run: flutter test --coverage --coverage-path=lcov.info
-      working-directory: ./src/github.com/${{ github.repository }}
+    - name: tree
+      run: ls -la
     - name: Upload coverage to codecov
       uses: codecov/codecov-action@v1
       with:
