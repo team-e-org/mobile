@@ -1,4 +1,4 @@
-name: flutter test
+name: flutter coverage
 
 on:
   push:
@@ -16,6 +16,7 @@ jobs:
       run: flutter pub get
     - name: Run coverage
       run: flutter test --coverage --coverage-path=./coverage/lcov.info
+      working-directory: ./src/github.com/${{ github.repository }}
     - name: Upload coverage to codecov
       uses: codecov/codecov-action@v1
       with:
