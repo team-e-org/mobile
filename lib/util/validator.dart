@@ -21,4 +21,19 @@ class Validator {
 
     return true;
   }
+
+  static String isValidPinTitle(String s) {
+    // TODO(dh9489): url防ぐとかなんやらかんやら
+    return null;
+  }
+
+  static String isValidPinDescription(String s) {
+    // TODO(dh9489): url防ぐとかなんやらかんやら
+    return null;
+  }
+
+  static String isValidPinUrl(String s) {
+    // TODO(dh9489): url防ぐとかなんやらかんやら
+    return null;
+  }
 }
