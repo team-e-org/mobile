@@ -15,6 +15,10 @@ import 'package:mobile/view/components/components.dart';
 import 'package:mobile/view/components/user_icon.dart';
 import 'package:mobile/view/onboarding/authentication_bloc.dart';
 
+class _Choices {
+  static const logout = 'Logout';
+}
+
 class AccountScreen extends StatelessWidget {
   UsersRepository usersRepository;
   BoardsRepository boardsRepository;
@@ -27,6 +31,7 @@ class AccountScreen extends StatelessWidget {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, stateAuth) {
         return Scaffold(
+          appBar: _buildAppBar(context),
           body: SafeArea(
             child: BlocProvider(
               create: (context) => AccountScreenBloc(
@@ -44,6 +49,29 @@ class AccountScreen extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    final choices = [_Choices.logout];
+
+    return AppBar(
+      title: const Text('Account'),
+      actions: <Widget>[
+        PopupMenuButton<String>(
+          onSelected: (String choice) {
+            if (choice == _Choices.logout) {
+              BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut());
+            }
+          },
+          itemBuilder: (BuildContext context) => choices
+              .map((choice) => PopupMenuItem(
+                    value: choice,
+                    child: Text(choice),
+                  ))
+              .toList(),
+        )
+      ],
     );
   }
 
