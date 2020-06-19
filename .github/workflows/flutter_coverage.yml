@@ -15,10 +15,10 @@ jobs:
     - name: Install dependencies
       run: flutter pub get
     - name: Run coverage
-      run: flutter test --coverage --coverage-path=./coverage/lcov.info
+      run: flutter test --coverage --coverage-path=lcov.info
       working-directory: ./src/github.com/${{ github.repository }}
     - name: Upload coverage to codecov
       uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./src/github.com/${{ github.repository }}/coverage/lcov.info
+        file: ./src/github.com/${{ github.repository }}/lcov.info
