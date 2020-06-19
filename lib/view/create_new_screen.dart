@@ -22,7 +22,7 @@ class CreateNewScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               RaisedButton(
-                child: Text('Board'),
+                child: const Text('Board'),
                 onPressed: () async {
                   final result = await Navigator.of(context)
                       .pushReplacementNamed(Routes.createNewBoard);

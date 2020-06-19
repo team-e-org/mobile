@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/textfield_common.dart';
 import 'package:mobile/view/components/common/typography_common.dart';
+import 'package:mobile/view/components/notification.dart';
 
 class PlaygroundScreen extends StatelessWidget {
   @override
@@ -15,6 +16,7 @@ class PlaygroundScreen extends StatelessWidget {
               _buildButtonsSection(),
               _buildTextFieldSection(),
               _buildTypographySection(),
+              _buildNotificationSection(),
             ],
           ),
         ),
@@ -80,6 +82,41 @@ class PlaygroundScreen extends StatelessWidget {
       ],
     );
   }
+
+  Widget _buildNotificationSection() {
+    return _Section(
+      'Notification',
+      children: <Widget>[
+        Wrap(
+          children: <Widget>[
+            PinterestButton.secondary(
+                text: 'normal',
+                onPressed: () {
+                  PinterestNotification.show(title: 'normal notification');
+                }),
+            PinterestButton.secondary(
+                text: 'normal with leading',
+                onPressed: () {
+                  PinterestNotification.show(
+                    title: 'normal notification',
+                    subtitle: 'with leading image',
+                    leading: Image.asset('assets/logo/logo.png'),
+                  );
+                }),
+            PinterestButton.secondary(
+              text: 'not implemented warning',
+              onPressed: PinterestNotification.showNotImplemented,
+            ),
+            PinterestButton.secondary(
+                text: 'error',
+                onPressed: () {
+                  PinterestNotification.showError(title: 'error notification');
+                }),
+          ],
+        ),
+      ],
+    );
+  }
 }
 
 class _Section extends StatelessWidget {
@@ -96,7 +133,7 @@ class _Section extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 32),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           PinterestTypography.header(header),
           const SizedBox(height: 18),
