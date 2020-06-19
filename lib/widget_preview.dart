@@ -5,7 +5,7 @@ class WidgetPreview extends StatelessWidget {
   // Widget child = PinCard();
   Widget child = Container(
     child: Column(
-      children: [BoardCard(), BoardCard()],
+      children: [BoardCardLarge(), BoardCardLarge()],
     ),
   );
 

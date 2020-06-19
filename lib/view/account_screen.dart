@@ -1,16 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:http/http.dart';
-import 'package:mobile/api/api_client.dart';
-import 'package:mobile/api/boards_api.dart';
-import 'package:mobile/api/users_api.dart';
 import 'package:mobile/bloc/account_screen_bloc.dart';
 import 'package:mobile/model/board_model.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
+import 'package:mobile/view/components/board_grid_view.dart';
 import 'package:mobile/view/components/components.dart';
 import 'package:mobile/view/components/user_icon.dart';
 import 'package:mobile/view/onboarding/authentication_bloc.dart';
@@ -66,7 +62,12 @@ class AccountScreen extends StatelessWidget {
             ),
             Expanded(
               flex: 3,
-              child: _boardsGridView(context, state.boards, state.boardPinMap),
+              child: BoardGridView(
+                boards: state.boards,
+                boardPinMap: state.boardPinMap,
+                layout: BoardGridViewLayout.large,
+                onTap: (context, board) {},
+              ),
             ),
           ],
         );
@@ -96,41 +97,6 @@ class AccountScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Widget _boardsGridView(
-    BuildContext context,
-    List<Board> boards,
-    Map<int, List<Pin>> boardPinMap,
-  ) {
-    if (boards.isNotEmpty) {
-      return StaggeredGridView.countBuilder(
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 2),
-        crossAxisCount: 2,
-        mainAxisSpacing: 4,
-        crossAxisSpacing: 4,
-        staggeredTileBuilder: (index) {
-          return const StaggeredTile.fit(2);
-        },
-        itemCount: boards.length,
-        itemBuilder: (context, index) {
-          final board = boards[index];
-          final pins = boardPinMap[board.id];
-          return BoardCard(
-            board: board,
-            pins: pins,
-            onTap: () => _onBoardTap(context, board),
-            margin: const EdgeInsets.all(4),
-          );
-        },
-      );
-    } else {
-      return Container(
-        child: const Center(
-          child: Text('ボードがありませんでした'),
-        ),
-      );
-    }
   }
 
   void _onBoardTap(BuildContext context, Board board) {
