@@ -24,10 +24,11 @@ class BoardCardLarge extends BoardCardBase {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: margin,
-      child: GestureDetector(
-        onTap: onTap,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: margin,
+        color: ThemeData().scaffoldBackgroundColor,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -66,10 +67,11 @@ class BoardCardCompact extends BoardCardBase {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: margin,
-      child: GestureDetector(
-        onTap: onTap,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: margin,
+        color: ThemeData().scaffoldBackgroundColor,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -108,11 +110,12 @@ class BoardCardSlim extends BoardCardBase {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: margin,
-      height: 60,
-      child: GestureDetector(
-        onTap: onTap,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        color: ThemeData().scaffoldBackgroundColor,
+        margin: margin,
+        height: 60,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -122,6 +125,70 @@ class BoardCardSlim extends BoardCardBase {
           ],
         ),
       ),
+    );
+  }
+}
+
+class ActionCardSlim extends StatelessWidget {
+  const ActionCardSlim({
+    this.text,
+    this.icon,
+    this.onTap,
+    this.margin,
+  });
+
+  final String text;
+  final Icon icon;
+  final VoidCallback onTap;
+  final EdgeInsetsGeometry margin;
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: margin,
+        color: ThemeData().scaffoldBackgroundColor,
+        height: 60,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            _imageContainer(),
+            const SizedBox(width: 10),
+            _infoContainer(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _imageContainer() {
+    return AspectRatio(
+      aspectRatio: 3 / 2,
+      child: Container(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Center(
+            child: icon,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _infoContainer() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          text,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          style: const TextStyle(fontSize: 16),
+        ),
+      ],
     );
   }
 }

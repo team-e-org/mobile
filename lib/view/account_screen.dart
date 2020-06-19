@@ -65,7 +65,7 @@ class AccountScreen extends StatelessWidget {
               child: BoardGridView(
                 boards: state.boards,
                 boardPinMap: state.boardPinMap,
-                layout: BoardGridViewLayout.large,
+                layout: BoardGridViewLayout.compact,
                 onTap: (context, board) {},
               ),
             ),

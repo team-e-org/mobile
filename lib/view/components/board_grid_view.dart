@@ -12,12 +12,17 @@ class BoardGridView extends StatefulWidget {
     this.boardPinMap,
     this.layout = BoardGridViewLayout.large,
     this.onTap,
+    this.shrinkWrap = false,
+    this.primary = false,
+    this.physics,
   });
 
   final List<Board> boards;
   final Map<int, List<Pin>> boardPinMap;
   final BoardGridViewLayout layout;
   final BoardGridViewCallback onTap;
+  final bool shrinkWrap, primary;
+  final ScrollPhysics physics;
 
   @override
   _BoardGridViewState createState() => _BoardGridViewState();
@@ -36,6 +41,9 @@ class _BoardGridViewState extends State<BoardGridView> {
       crossAxisCount: 1,
       mainAxisSpacing: 4,
       crossAxisSpacing: 4,
+      shrinkWrap: widget.shrinkWrap,
+      primary: widget.primary,
+      physics: widget.physics,
       staggeredTileBuilder: (index) {
         return const StaggeredTile.fit(1);
       },
@@ -56,6 +64,9 @@ class _BoardGridViewState extends State<BoardGridView> {
       crossAxisCount: 2,
       mainAxisSpacing: 4,
       crossAxisSpacing: 4,
+      shrinkWrap: widget.shrinkWrap,
+      primary: widget.primary,
+      physics: widget.physics,
       staggeredTileBuilder: (index) {
         return const StaggeredTile.fit(1);
       },
@@ -76,6 +87,9 @@ class _BoardGridViewState extends State<BoardGridView> {
       crossAxisCount: 1,
       mainAxisSpacing: 4,
       crossAxisSpacing: 4,
+      shrinkWrap: widget.shrinkWrap,
+      primary: widget.primary,
+      physics: widget.physics,
       staggeredTileBuilder: (index) {
         return const StaggeredTile.fit(1);
       },
