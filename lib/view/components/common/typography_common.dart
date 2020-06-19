@@ -5,12 +5,14 @@ class PinterestTypography extends Text {
     String data, {
     TextOverflow overflow,
     int maxLines,
+    Color color,
   }) : super(
           data,
           overflow: overflow,
           maxLines: maxLines,
           style: TextStyle(
             fontSize: 18,
+            color: color,
           ),
         );
 
@@ -18,21 +20,29 @@ class PinterestTypography extends Text {
     String data, {
     TextOverflow overflow,
     int maxLines,
+    Color color,
   }) : super(
           data,
           overflow: overflow,
           maxLines: maxLines,
-          style: TextStyle(fontSize: 14),
+          style: TextStyle(
+            fontSize: 14,
+            color: color,
+          ),
         );
 
   PinterestTypography.header(
     String data, {
     TextOverflow overflow,
     int maxLines,
+    Color color,
   }) : super(
           data,
           overflow: overflow,
           maxLines: maxLines,
-          style: TextStyle(fontSize: 32),
+          style: TextStyle(
+            fontSize: 32,
+            color: color,
+          ),
         );
 }

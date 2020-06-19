@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mobile/model/board_model.dart';
 import 'package:mobile/routes.dart';
+import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/notification.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/view/pin_edit_screen.dart';
@@ -21,8 +22,8 @@ class CreateNewScreen extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              RaisedButton(
-                child: Text('Board'),
+              PinterestButton.primary(
+                text: 'Board',
                 onPressed: () async {
                   final result = await Navigator.of(context)
                       .pushReplacementNamed(Routes.createNewBoard);
@@ -36,8 +37,8 @@ class CreateNewScreen extends StatelessWidget {
                 },
               ),
               const SizedBox(width: 20),
-              RaisedButton(
-                child: const Text('Pin'),
+              PinterestButton.primary(
+                text: 'Pin',
                 onPressed: () => _onPinPressed(context),
               ),
             ],
