@@ -4,13 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/util/validator.dart';
+import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/textfield_common.dart';
 import 'package:mobile/view/select_board_screen.dart';
 
+typedef PinEditScreenCallback = void Function(BuildContext, NewPin);
+
 class PinEditScreenArguments {
-  PinEditScreenArguments({this.file});
+  PinEditScreenArguments({this.file, this.onNextPressed});
 
   File file;
+  PinEditScreenCallback onNextPressed;
 }
 
 class PinEditScreen extends StatefulWidget {
@@ -72,10 +76,10 @@ class _PinEditScreenState extends State<PinEditScreen> {
                 ),
                 const Divider(),
                 _formField(_formdata),
-                RaisedButton(
-                  child: const Text('Next'),
-                  onPressed: _onNextPressed,
-                )
+                PinterestButton.primary(
+                    text: 'Next',
+                    onPressed: () => widget.args.onNextPressed(
+                        context, _formdata.toNewPin(widget.args?.file))),
               ],
             ),
           ),
@@ -151,13 +155,5 @@ class _PinEditScreenState extends State<PinEditScreen> {
         ],
       ),
     );
-  }
-
-  void _onNextPressed() {
-    final newPin = _formdata.toNewPin(widget.args.file);
-    Navigator.pushNamed(context, Routes.createNewPinSelectBoard,
-        arguments: SelectBoardScreenArguments(
-          newPin: newPin,
-        ));
   }
 }

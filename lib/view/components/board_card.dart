@@ -1,19 +1,21 @@
-import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:logger/logger.dart';
 import 'package:mobile/model/models.dart';
-import 'package:http/http.dart' as http;
 
-class BoardCard extends StatelessWidget {
-  const BoardCard({
-    this.board,
+class BoardCardLarge extends BoardCardBase {
+  const BoardCardLarge({
+    @required this.board,
     this.pins = const [],
     this.onTap,
-    this.margin = const EdgeInsets.all(0),
-  });
+    this.margin,
+  }) : super(
+          board: board,
+          pins: pins,
+          onTap: onTap,
+          margin: margin,
+          titleStyle: const TextStyle(fontSize: 16),
+          subtitleStyle: const TextStyle(fontSize: 12),
+        );
 
   final Board board;
   final List<Pin> pins;
@@ -22,32 +24,206 @@ class BoardCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: margin,
-      child: GestureDetector(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: margin,
+        color: ThemeData().scaffoldBackgroundColor,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _imageGridContainer(),
+            Container(
+              margin: const EdgeInsets.only(top: 8, bottom: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: _infoContainer(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class BoardCardCompact extends BoardCardBase {
+  const BoardCardCompact({
+    @required this.board,
+    this.pins = const [],
+    this.onTap,
+    this.margin,
+  }) : super(
+          board: board,
+          pins: pins,
           onTap: onTap,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _imageGridContainer(),
-              Container(
-                margin: const EdgeInsets.only(top: 8, bottom: 16),
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: _boardName(),
-              ),
-            ],
-          )),
+          margin: margin,
+          titleStyle: const TextStyle(fontSize: 12),
+          subtitleStyle: const TextStyle(fontSize: 8),
+        );
+
+  final Board board;
+  final List<Pin> pins;
+  final VoidCallback onTap;
+  final EdgeInsetsGeometry margin;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: margin,
+        color: ThemeData().scaffoldBackgroundColor,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _imageGridContainer(),
+            Container(
+              margin: const EdgeInsets.only(top: 8, bottom: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: _infoContainer(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class BoardCardSlim extends BoardCardBase {
+  const BoardCardSlim({
+    @required this.board,
+    this.pins = const [],
+    this.onTap,
+    this.margin,
+  }) : super(
+          board: board,
+          pins: pins,
+          onTap: onTap,
+          margin: margin,
+          titleStyle: const TextStyle(fontSize: 14),
+          subtitleStyle: const TextStyle(fontSize: 12),
+        );
+
+  final Board board;
+  final List<Pin> pins;
+  final VoidCallback onTap;
+  final EdgeInsetsGeometry margin;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        color: ThemeData().scaffoldBackgroundColor,
+        margin: margin,
+        height: 60,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            _imageContainer(),
+            const SizedBox(width: 10),
+            _infoContainer(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ActionCardSlim extends StatelessWidget {
+  const ActionCardSlim({
+    this.text,
+    this.icon,
+    this.onTap,
+    this.margin,
+  });
+
+  final String text;
+  final Icon icon;
+  final VoidCallback onTap;
+  final EdgeInsetsGeometry margin;
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: margin,
+        color: ThemeData().scaffoldBackgroundColor,
+        height: 60,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            _imageContainer(),
+            const SizedBox(width: 10),
+            _infoContainer(),
+          ],
+        ),
+      ),
     );
   }
 
-  Future<bool> _validateImageUrl(String url) async {
-    try {
-      final res = await http.head(url);
-      return res.statusCode == 200;
-    } on Exception catch (e) {
-      Logger().w(e);
-      return false;
-    }
+  Widget _imageContainer() {
+    return AspectRatio(
+      aspectRatio: 3 / 2,
+      child: Container(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Center(
+            child: icon,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _infoContainer() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          text,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          style: const TextStyle(fontSize: 16),
+        ),
+      ],
+    );
+  }
+}
+
+abstract class BoardCardBase extends StatelessWidget {
+  const BoardCardBase({
+    @required this.board,
+    this.pins = const [],
+    this.onTap,
+    this.margin,
+    this.titleStyle = _titleStyle,
+    this.subtitleStyle = _subtitleStyle,
+  });
+
+  final Board board;
+  final List<Pin> pins;
+  final VoidCallback onTap;
+  final EdgeInsetsGeometry margin;
+  final TextStyle titleStyle, subtitleStyle;
+
+  Widget _imageContainer() {
+    return AspectRatio(
+      aspectRatio: 3 / 2,
+      child: Container(
+        child:
+            ClipRRect(borderRadius: BorderRadius.circular(8), child: _image()),
+      ),
+    );
+  }
+
+  Widget _image() {
+    return CachedNetworkImage(
+      imageUrl: pins[0].imageUrl,
+      fit: BoxFit.cover,
+    );
   }
 
   Widget _imageGridContainer() {
@@ -56,13 +232,13 @@ class BoardCard extends StatelessWidget {
       child: Container(
         child: ClipRRect(
           borderRadius: BorderRadius.circular(16),
-          child: _imageGrids(pins),
+          child: _imageGrids(),
         ),
       ),
     );
   }
 
-  Widget _imageGrids(List<Pin> pins) {
+  Widget _imageGrids() {
     if (pins.isEmpty) {
       return Container(
         color: Colors.grey,
@@ -108,14 +284,27 @@ class BoardCard extends StatelessWidget {
     );
   }
 
-  Widget _boardName() {
-    return Text(
-      board.name,
-      overflow: TextOverflow.ellipsis,
-      maxLines: 1,
-      style: const TextStyle(
-        fontSize: 16,
-      ),
+  static const TextStyle _titleStyle = TextStyle(fontSize: 16);
+  static const TextStyle _subtitleStyle = TextStyle(fontSize: 12);
+
+  Widget _infoContainer() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          board.name,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          style: titleStyle,
+        ),
+        Text(
+          pins.length.toString() + ' pins',
+          overflow: TextOverflow.clip,
+          maxLines: 1,
+          style: subtitleStyle,
+        ),
+      ],
     );
   }
 }
