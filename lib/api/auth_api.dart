@@ -78,9 +78,11 @@ class SignInRequestBody {
 class AuthResponse {
   AuthResponse({
     @required this.token,
+    @required this.userId,
   });
 
   String token;
+  String userId;
 
   factory AuthResponse.fromJson(Map<String, dynamic> json) =>
       _$AuthResponseFromJson(json);
