@@ -6,8 +6,8 @@ class AuthenticationPreferences {
     @required this.prefs,
   });
 
-  static const _accessToken = 'token';
-  static const _userID = 'userID';
+  static const _accessToken = 'accessToken';
+  static const _userID = 'userId';
 
   final SharedPreferences prefs;
 
