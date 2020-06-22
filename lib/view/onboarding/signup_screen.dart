@@ -4,6 +4,7 @@ import 'package:mobile/data/account_repository.dart';
 import 'package:mobile/util/validator.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/textfield_common.dart';
+import 'package:mobile/view/components/notification.dart';
 import 'package:mobile/view/onboarding/auth_bloc.dart';
 import 'package:mobile/view/onboarding/auth_common_widget.dart';
 import 'package:mobile/view/onboarding/authentication_bloc.dart';
@@ -38,11 +39,23 @@ class SignUpWidget extends StatelessWidget {
         accountRepository: RepositoryProvider.of<AccountRepository>(context),
         authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
       ),
-      child: _buildContent(context),
+      child: BlocConsumer<SignUpBloc, LoginState>(
+        listener: _listener,
+        builder: _buildContent,
+      ),
     );
   }
 
-  Widget _buildContent(BuildContext context) {
+  void _listener(BuildContext context, LoginState state) {
+    if (state is LoginFailure) {
+      PinterestNotification.showError(
+        title: 'Failed to sign up.',
+        subtitle: state.errorMessage,
+      );
+    }
+  }
+
+  Widget _buildContent(BuildContext context, LoginState state) {
     return AuthCommonWidget(
       formKey: _formKey,
       message: 'Welcome!',
