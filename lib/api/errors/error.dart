@@ -25,7 +25,7 @@ class UnauthorizedError implements DefaultError {
   String getMessage() => "(401) Unathorized connection";
 }
 
-class UnprocessableEntity implements DefaultError {
+class UnprocessableEntityError implements DefaultError {
   @override
   String getMessage() => "(422) Unprocessable Entity";
 }

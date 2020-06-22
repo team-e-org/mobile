@@ -20,12 +20,13 @@ class ApiClient {
   });
 
   Future<Response> get(String relativeUrl) async {
-    return _makeRequestWithErrorHandler(
-      _client.get(
-        '$apiEndpoint$relativeUrl',
-        headers: await _headers,
-      ),
+    final headers = await _headers;
+    final getFuture = _client.get(
+      '$apiEndpoint$relativeUrl',
+      headers: headers,
     );
+
+    return _makeRequestWithErrorHandler(getFuture);
   }
 
   Future<Response> post(String relativeUrl, {String body}) async {
@@ -120,7 +121,7 @@ class ApiClient {
     } else if (statusCode == 404) {
       return NotFoundError(url);
     } else if (statusCode == 422) {
-      return UnprocessableEntity();
+      return UnprocessableEntityError();
     } else if (statusCode >= 500 && statusCode <= 599) {
       return UnknownServerError(errorResponse, statusCode);
     } else {
