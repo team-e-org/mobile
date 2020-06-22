@@ -16,6 +16,7 @@ import 'package:mobile/view/board_detail_screen.dart';
 import 'package:mobile/view/board_edit_screen.dart';
 import 'package:mobile/view/create_new_screen.dart';
 import 'package:mobile/view/new_board_screen.dart';
+import 'package:mobile/view/new_pin_screen.dart';
 import 'package:mobile/view/onboarding/auth_screen.dart';
 import 'package:mobile/view/onboarding/authentication_bloc.dart';
 import 'package:mobile/view/pin_detail_screen.dart';
@@ -114,6 +115,8 @@ class PinterestApplication extends StatelessWidget {
               return _pageRoute(NewBoardScreen());
             case Routes.createNewPinSelectPhoto:
               return _pageRoute(PinSelectPhotoScreen());
+            case Routes.createNewPin:
+              return _pageRoute(NewPinScreen(), fullScreenDialog: true);
             case Routes.createNewPinEdit:
               final args = settings.arguments as PinEditScreenArguments;
               return _pageRoute(PinEditScreen(args: args));

@@ -1,3 +1,6 @@
+import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
+
 class Validator {
   static bool isValidEmail(String s) {
     final regex = new RegExp(
@@ -35,5 +38,15 @@ class Validator {
   static String isValidPinUrl(String s) {
     // TODO(dh9489): url防ぐとかなんやらかんやら
     return null;
+  }
+
+  static Future<bool> isValidImageUrl(String s) async {
+    try {
+      final res = await http.head(s);
+      return res.statusCode == 200;
+    } on Exception catch (e) {
+      Logger().w(e);
+      return false;
+    }
   }
 }
