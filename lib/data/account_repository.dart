@@ -23,51 +23,57 @@ abstract class AccountRepository {
 }
 
 class DefaultAccountRepository extends AccountRepository {
-  DefaultAccountRepository({
-    @required this.api,
-    @required this.prefs,
-  });
+  factory DefaultAccountRepository({
+    @required AuthApi api,
+    @required SharedPreferences prefs,
+  }) {
+    return _instance ?? DefaultAccountRepository._internal(api, prefs);
+  }
 
-  final AuthApi api;
-  final SharedPreferences prefs;
+  DefaultAccountRepository._internal(this._api, this._prefs);
+
+  static DefaultAccountRepository _instance;
+
+  final AuthApi _api;
+  final SharedPreferences _prefs;
 
   @override
   Future<String> authenticate(String email, String password) =>
-      api.signIn(SignInRequestBody(email: email, password: password));
+      _api.signIn(SignInRequestBody(email: email, password: password));
 
   @override
   Future<bool> hasToken() {
-    final token = prefs.getString(TOKEN_KEY);
+    final token = _prefs.getString(TOKEN_KEY);
     final hasToken = token != null && token.isNotEmpty;
     return Future.value(hasToken);
   }
 
   @override
-  Future<void> persistToken(String token) => prefs.setString(TOKEN_KEY, token);
+  Future<void> persistToken(String token) => _prefs.setString(TOKEN_KEY, token);
 
   @override
   String getPersistToken() {
-    return prefs.getString(TOKEN_KEY);
+    return _prefs.getString(TOKEN_KEY);
   }
 
   @override
-  Future<void> deleteToken() => prefs.remove(TOKEN_KEY);
+  Future<void> deleteToken() => _prefs.remove(TOKEN_KEY);
 
   @override
   Future<void> persistUserId(int userId) =>
-      prefs.setString(USERID_KEY, userId.toString());
+      _prefs.setString(USERID_KEY, userId.toString());
 
   @override
   int getPersistUserId() {
-    return int.parse(prefs.getString(USERID_KEY));
+    return int.parse(_prefs.getString(USERID_KEY));
   }
 
   @override
-  Future<void> deleteUserId() => prefs.remove(USERID_KEY);
+  Future<void> deleteUserId() => _prefs.remove(USERID_KEY);
 
   @override
   Future<String> register(String username, String email, String password) =>
-      api.signUp(SignUpRequestBody(
+      _api.signUp(SignUpRequestBody(
         name: username,
         email: email,
         password: password,
