@@ -8,7 +8,7 @@ class PinterestTextFieldProps {
     this.obscure = false,
     this.onChanged,
     this.onSaved,
-    this.maxLines,
+    this.maxLines = 1,
     this.minLines,
     this.keyboardType,
     this.maxLength = null,
