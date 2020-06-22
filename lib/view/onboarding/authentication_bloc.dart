@@ -61,7 +61,6 @@ class AuthenticationBloc
 
     if (event is LoggedIn) {
       yield Authenticating();
-      print("aaaaaa");
       print(event.auth.token);
       print(event.auth.userId);
       await accountRepository.persistToken(event.auth.token);

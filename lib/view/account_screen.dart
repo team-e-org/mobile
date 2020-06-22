@@ -78,7 +78,6 @@ class AccountScreen extends StatelessWidget {
   Widget _buildContent(BuildContext context) {
     return BlocBuilder<AccountScreenBloc, AccountScreenState>(
       builder: (context, state) {
-        final authBlocProvider = BlocProvider.of<AuthenticationBloc>(context);
         final blocProvider = BlocProvider.of<AccountScreenBloc>(context);
 
         if (blocProvider.state is InitialState) {
