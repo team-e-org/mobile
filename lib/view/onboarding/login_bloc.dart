@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logger/logger.dart';
 import 'package:mobile/data/account_repository.dart';
 import 'package:mobile/view/onboarding/authentication_bloc.dart';
 
@@ -72,7 +73,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             await accountRepository.authenticate(event.email, event.password);
         print('Token: $token');
         authenticationBloc.add(LoggedIn(token: token));
-      } catch (e) {
+      } on Exception catch (e) {
+        Logger().e(e);
         yield LoginFailure(errorMessage: e.toString());
       }
     }

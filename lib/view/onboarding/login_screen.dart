@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/data/account_repository.dart';
 import 'package:mobile/util/validator.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/textfield_common.dart';
+import 'package:mobile/view/components/notification.dart';
 import 'package:mobile/view/onboarding/auth_bloc.dart';
 import 'package:mobile/view/onboarding/auth_common_widget.dart';
+import 'package:mobile/view/onboarding/authentication_bloc.dart';
 import 'package:mobile/view/onboarding/login_bloc.dart';
 
 class LoginFormModel {
@@ -32,6 +35,28 @@ class LoginWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => LoginBloc(
+        accountRepository: RepositoryProvider.of<AccountRepository>(context),
+        authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+      ),
+      child: BlocConsumer<LoginBloc, LoginState>(
+        listener: _listener,
+        builder: _buildContent,
+      ),
+    );
+  }
+
+  void _listener(BuildContext context, LoginState state) {
+    if (state is LoginFailure) {
+      PinterestNotification.showError(
+        title: 'Failed to login.',
+        subtitle: state.errorMessage,
+      );
+    }
+  }
+
+  Widget _buildContent(BuildContext context, LoginState state) {
     return AuthCommonWidget(
       formKey: _formKey,
       message: 'Welcome back!',
@@ -74,26 +99,24 @@ class LoginWidget extends StatelessWidget {
           // Switch page
         },
       ),
-      action: BlocBuilder<LoginBloc, LoginState>(
-        builder: (context, state) => PinterestButton.primary(
-          loading: state is LoginLoading,
-          text: 'Login',
-          onPressed: () {
-            if (state is LoginLoading) {
-              return;
-            }
-            if (_formKey.currentState.validate()) {
-              _formKey.currentState.save();
-              print(_model);
-              BlocProvider.of<LoginBloc>(context).add(
-                LoginRequested(
-                  email: _model.email,
-                  password: _model.password,
-                ),
-              );
-            }
-          },
-        ),
+      action: PinterestButton.primary(
+        loading: state is LoginLoading,
+        text: 'Login',
+        onPressed: () {
+          if (state is LoginLoading) {
+            return;
+          }
+          if (_formKey.currentState.validate()) {
+            _formKey.currentState.save();
+            print(_model);
+            BlocProvider.of<LoginBloc>(context).add(
+              LoginRequested(
+                email: _model.email,
+                password: _model.password,
+              ),
+            );
+          }
+        },
       ),
     );
   }
