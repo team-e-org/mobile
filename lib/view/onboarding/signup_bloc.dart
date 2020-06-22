@@ -24,10 +24,10 @@ class SignupRequested extends SignUpEvent {
 
   @override
   List<Object> get props => [
-    username,
-    email,
-    password,
-  ];
+        username,
+        email,
+        password,
+      ];
 }
 
 class SignUpBloc extends Bloc<SignUpEvent, LoginState> {
@@ -48,13 +48,14 @@ class SignUpBloc extends Bloc<SignUpEvent, LoginState> {
       yield LoginLoading();
 
       try {
-        final token = await accountRepository.register(
+        final auth = await accountRepository.register(
           event.username,
           event.email,
           event.password,
         );
-        print('Token: $token');
-        authenticationBloc.add(LoggedIn(token: token));
+        print('Token: ${auth.token}');
+        print('User ID: ${auth.userId}');
+        authenticationBloc.add(LoggedIn(auth: auth));
       } on Exception catch (e) {
         Logger().e(e);
         yield LoginFailure(errorMessage: e.toString());

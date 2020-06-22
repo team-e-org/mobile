@@ -17,7 +17,7 @@ class DefaultUsersRepository extends UsersRepository {
   UsersApi _api;
 
   Future<User> getUser(int id) async {
-    return User.fromMock();
+    return _api.user(id: id);
   }
 
   Future<List<Board>> getUserBoards(int id) async {

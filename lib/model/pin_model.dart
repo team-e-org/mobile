@@ -14,7 +14,6 @@ class NewPin {
     this.description,
     this.url,
     this.isPrivate,
-    this.imageFile,
   });
 
   final String title;
@@ -22,7 +21,6 @@ class NewPin {
   final String url;
   final bool isPrivate;
   final String image;
-  final File imageFile;
 
   factory NewPin.fromJson(Map<String, dynamic> json) => _$NewPinFromJson(json);
 

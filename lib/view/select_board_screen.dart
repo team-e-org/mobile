@@ -55,7 +55,7 @@ class SelectBoardScreen extends StatelessWidget {
 
         print(state);
         if (blocProvider.state is InitialState) {
-          blocProvider.add(const LoadInitial(111));
+          blocProvider.add(const LoadInitial());
         }
 
         return SingleChildScrollView(

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class PinEditScreen extends StatefulWidget {
 
 class PinFormData {
   PinFormData({
-    this.image,
+    this.image = '',
     this.title = '',
     this.description = '',
     this.url = '',
@@ -42,9 +43,17 @@ class PinFormData {
   bool isPrivate;
 
   NewPin toNewPin([File imageFile]) {
+    String _image;
+    if (imageFile != null) {
+      List<int> imageBytes = imageFile.readAsBytesSync();
+      String base64Image = base64Encode(imageBytes);
+      _image = base64Image;
+    } else {
+      _image = image;
+    }
+
     return NewPin(
-      image: image,
-      imageFile: imageFile,
+      image: _image,
       title: title,
       description: description,
       url: url,

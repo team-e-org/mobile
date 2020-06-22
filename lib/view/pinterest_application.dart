@@ -1,15 +1,12 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:mobile/api/api_client.dart';
-import 'package:mobile/api/pins_api.dart';
+import 'package:mobile/api/users_api.dart';
 import 'package:mobile/config.dart';
 import 'package:mobile/data/account_repository.dart';
 import 'package:mobile/repository/pins_repository.dart';
 import 'package:mobile/api/auth_api.dart';
-import 'package:mobile/data/account_repository.dart';
 import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/view/board_detail_screen.dart';
@@ -37,17 +34,19 @@ class PinterestApplication extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final config = readConfig();
+    final apiClient = ApiClient(
+      Client(),
+      apiEndpoint: config.apiEndpoint,
+      prefs: prefs,
+    );
     final accountRepo = DefaultAccountRepository(
-      api: DefaultAuthApi(ApiClient(
-        Client(),
-        apiEndpoint: config.apiEndpoint,
-        prefs: prefs,
-      )),
+      api: DefaultAuthApi(apiClient),
       prefs: prefs,
     );
     // final accountRepo = MockAccountRepository();
     final pinsRepo = MockPinsRepository();
     final boardsRepo = MockBoardsRepository();
+    // final usersRepo = DefaultUsersRepository(DefaultUsersApi(apiClient));
     final usersRepo = MockUsersRepository();
 
     return BlocProvider(
