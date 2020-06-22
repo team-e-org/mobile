@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/data/account_repository.dart';
 import 'package:mobile/util/validator.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/textfield_common.dart';
 import 'package:mobile/view/onboarding/auth_bloc.dart';
 import 'package:mobile/view/onboarding/auth_common_widget.dart';
+import 'package:mobile/view/onboarding/authentication_bloc.dart';
 import 'package:mobile/view/onboarding/login_bloc.dart';
 
 class LoginFormModel {
@@ -32,6 +34,16 @@ class LoginWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => LoginBloc(
+        accountRepository: RepositoryProvider.of<AccountRepository>(context),
+        authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+      ),
+      child: _buildContent(context),
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
     return AuthCommonWidget(
       formKey: _formKey,
       message: 'Welcome back!',
