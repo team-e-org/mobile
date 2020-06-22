@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/api/auth_api.dart';
+import 'package:mobile/model/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const TOKEN_KEY = 'token';
