@@ -24,14 +24,13 @@ abstract class AuthenticationEvent extends Equatable {
 class AppInitialized extends AuthenticationEvent {}
 
 class LoggedIn extends AuthenticationEvent {
-  LoggedIn({
-    @required this.token,
-  });
+  LoggedIn({@required this.token, @required this.userId});
 
   final String token;
+  final String userId;
 
   @override
-  List<Object> get props => [token];
+  List<Object> get props => [token, userId];
 }
 
 class LoggedOut extends AuthenticationEvent {}
@@ -63,12 +62,14 @@ class AuthenticationBloc
     if (event is LoggedIn) {
       yield Authenticating();
       await accountRepository.persistToken(event.token);
+      await accountRepository.persistToken(event.userId);
       yield Authenticated();
     }
 
     if (event is LoggedOut) {
       yield UnAuthenticating();
       await accountRepository.deleteToken();
+      await accountRepository.deleteUserId();
       yield Unauthenticated();
     }
   }
