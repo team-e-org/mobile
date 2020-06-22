@@ -1,7 +1,7 @@
 ---
 name: sprint planning
 about: This is an issue template for sprint planning
-title: [Plan]Sprint X (Week X)
+title: Sprint X (Week X)
 labels: plan
 assignees: ''
 
