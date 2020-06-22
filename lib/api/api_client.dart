@@ -2,6 +2,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
+import 'package:mobile/data/account_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'errors/error.dart';
 
@@ -10,17 +12,16 @@ class ApiClient {
 
   final String apiEndpoint;
   final Client _client;
+  final SharedPreferences prefs;
 
-  // TODO トークンをshared_preferenceに保存するようになったら使う
-  //  final AuthenticationPreferences _authenticationPreferences;
-
-  ApiClient(
+  const ApiClient(
     this._client, {
     @required this.apiEndpoint,
+    @required this.prefs,
   });
 
   Future<Response> get(String relativeUrl) async {
-    return await _makeRequestWithErrorHandler(
+    return _makeRequestWithErrorHandler(
       _client.get(
         '$apiEndpoint$relativeUrl',
         headers: await _headers,
@@ -29,7 +30,7 @@ class ApiClient {
   }
 
   Future<Response> post(String relativeUrl, {String body}) async {
-    return await _makeRequestWithErrorHandler(
+    return _makeRequestWithErrorHandler(
       _client.post(
         '$apiEndpoint$relativeUrl',
         body: body,
@@ -39,7 +40,7 @@ class ApiClient {
   }
 
   Future<Response> put(String relativeUrl, {String body}) async {
-    return await _makeRequestWithErrorHandler(
+    return _makeRequestWithErrorHandler(
       _client.put(
         '$apiEndpoint$relativeUrl',
         body: body,
@@ -84,8 +85,7 @@ class ApiClient {
   Future<Map<String, String>> get _headers async {
     Map<String, String> result = {};
 
-    // TODO: 実トークンを使う
-    result[headerXAuthToken] = 'access_token';
+    result[headerXAuthToken] = prefs.getString(TOKEN_KEY);
 
     return result;
   }

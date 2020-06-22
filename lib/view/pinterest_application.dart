@@ -37,7 +37,11 @@ class PinterestApplication extends StatelessWidget {
   Widget build(BuildContext context) {
     final config = readConfig();
     final accountRepo = DefaultAccountRepository(
-      api: DefaultAuthApi(ApiClient(Client(), apiEndpoint: config.apiEndpoint)),
+      api: DefaultAuthApi(ApiClient(
+        Client(),
+        apiEndpoint: config.apiEndpoint,
+        prefs: prefs,
+      )),
       prefs: prefs,
     );
     // final accountRepo = MockAccountRepository();
