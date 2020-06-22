@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logger/logger.dart';
+import 'package:mobile/data/account_repository.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 
@@ -15,8 +16,7 @@ abstract class AccountScreenEvent extends Equatable {
 }
 
 class LoadInitial extends AccountScreenEvent {
-  const LoadInitial(this.userId);
-  final int userId;
+  const LoadInitial();
 }
 
 //////// State ////////
@@ -74,8 +74,13 @@ class ErrorState extends AccountScreenState {
 
 //////// Bloc ////////
 class AccountScreenBloc extends Bloc<AccountScreenEvent, AccountScreenState> {
-  AccountScreenBloc({this.usersRepository, this.boardsRepository});
+  AccountScreenBloc({
+    this.accountRepository,
+    this.usersRepository,
+    this.boardsRepository,
+  });
 
+  final AccountRepository accountRepository;
   final UsersRepository usersRepository;
   final BoardsRepository boardsRepository;
 
@@ -93,10 +98,11 @@ class AccountScreenBloc extends Bloc<AccountScreenEvent, AccountScreenState> {
     if (state is InitialState) {
       yield const Loading(user: null, boards: [], boardPinMap: {});
       try {
-        final user = await usersRepository.getUser(event.userId);
+        final userId = accountRepository.getPersistUserId();
+        final user = await usersRepository.getUser(userId);
         yield Loading(user: user, boards: const [], boardPinMap: const {});
 
-        final boards = await usersRepository.getUserBoards(event.userId);
+        final boards = await usersRepository.getUserBoards(userId);
         yield Loading(user: user, boards: boards, boardPinMap: const {});
 
         final boardPinMap = <int, List<Pin>>{};

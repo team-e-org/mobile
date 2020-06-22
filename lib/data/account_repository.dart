@@ -7,9 +7,9 @@ const TOKEN_KEY = 'token';
 const USERID_KEY = 'userId';
 
 abstract class AccountRepository {
-  Future<String> authenticate(String email, String password);
+  Future<Auth> authenticate(String email, String password);
 
-  Future<String> register(String username, String email, String password);
+  Future<Auth> register(String username, String email, String password);
 
   Future<void> persistToken(String token);
   String getPersistToken();
@@ -38,8 +38,16 @@ class DefaultAccountRepository extends AccountRepository {
   final SharedPreferences _prefs;
 
   @override
-  Future<String> authenticate(String email, String password) =>
+  Future<Auth> authenticate(String email, String password) =>
       _api.signIn(SignInRequestBody(email: email, password: password));
+
+  @override
+  Future<Auth> register(String username, String email, String password) =>
+      _api.signUp(SignUpRequestBody(
+        name: username,
+        email: email,
+        password: password,
+      ));
 
   @override
   Future<bool> hasToken() {
@@ -70,21 +78,13 @@ class DefaultAccountRepository extends AccountRepository {
 
   @override
   Future<void> deleteUserId() => _prefs.remove(USERID_KEY);
-
-  @override
-  Future<String> register(String username, String email, String password) =>
-      _api.signUp(SignUpRequestBody(
-        name: username,
-        email: email,
-        password: password,
-      ));
 }
 
 class MockAccountRepository extends AccountRepository {
   @override
-  Future<String> authenticate(String email, String password) async {
+  Future<Auth> authenticate(String email, String password) async {
     await Future<void>.delayed(const Duration(seconds: 1));
-    return 'login token';
+    return Auth(token: 'login token', userId: 1);
   }
 
   @override
@@ -124,9 +124,8 @@ class MockAccountRepository extends AccountRepository {
   }
 
   @override
-  Future<String> register(
-      String username, String email, String password) async {
+  Future<Auth> register(String username, String email, String password) async {
     await Future<void>.delayed(const Duration(seconds: 1));
-    return 'login token';
+    return Auth(token: 'signin token', userId: 1);
   }
 }

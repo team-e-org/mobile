@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:mobile/bloc/account_screen_bloc.dart';
+import 'package:mobile/data/account_repository.dart';
 import 'package:mobile/model/board_model.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
@@ -16,11 +17,13 @@ class _Choices {
 }
 
 class AccountScreen extends StatelessWidget {
+  AccountRepository accountRepository;
   UsersRepository usersRepository;
   BoardsRepository boardsRepository;
 
   @override
   Widget build(BuildContext context) {
+    accountRepository = RepositoryProvider.of(context);
     usersRepository = RepositoryProvider.of(context);
     boardsRepository = RepositoryProvider.of(context);
 
@@ -31,6 +34,7 @@ class AccountScreen extends StatelessWidget {
           body: SafeArea(
             child: BlocProvider(
               create: (context) => AccountScreenBloc(
+                accountRepository: accountRepository,
                 usersRepository: usersRepository,
                 boardsRepository: boardsRepository,
               ),
@@ -78,7 +82,7 @@ class AccountScreen extends StatelessWidget {
         final blocProvider = BlocProvider.of<AccountScreenBloc>(context);
 
         if (blocProvider.state is InitialState) {
-          blocProvider.add(const LoadInitial(111));
+          blocProvider.add(const LoadInitial());
         }
 
         return Column(

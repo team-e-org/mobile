@@ -47,7 +47,7 @@ class PinterestTextField extends StatelessWidget {
           validator: props.validator,
           onChanged: props.onChanged,
           onSaved: props.onSaved,
-          maxLines: props.maxLines,
+          maxLines: props.obscure ? 1 : props.maxLines,
           minLines: props.minLines,
           keyboardType: props.keyboardType,
           maxLength: props.maxLength,

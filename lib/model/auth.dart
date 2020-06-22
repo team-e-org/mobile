@@ -11,7 +11,8 @@ class Auth {
   });
 
   final String token;
-  final String userId;
+  @JsonKey(name: 'user_id')
+  final int userId;
 
   factory Auth.fromJson(Map<String, dynamic> json) => _$AuthFromJson(json);
   Map<String, dynamic> toJson() => _$AuthToJson(this);
@@ -25,7 +26,8 @@ class AuthResponse {
   });
 
   final String token;
-  final String userId;
+  @JsonKey(name: 'user_id')
+  final int userId;
 
   factory AuthResponse.fromJson(Map<String, dynamic> json) =>
       _$AuthResponseFromJson(json);

@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/data/account_repository.dart';
+import 'package:mobile/model/auth.dart';
 
 abstract class AuthenticationState extends Equatable {
   @override
@@ -24,13 +25,12 @@ abstract class AuthenticationEvent extends Equatable {
 class AppInitialized extends AuthenticationEvent {}
 
 class LoggedIn extends AuthenticationEvent {
-  LoggedIn({@required this.token, @required this.userId});
+  LoggedIn({@required this.auth});
 
-  final String token;
-  final String userId;
+  final Auth auth;
 
   @override
-  List<Object> get props => [token, userId];
+  List<Object> get props => [auth];
 }
 
 class LoggedOut extends AuthenticationEvent {}
@@ -61,8 +61,11 @@ class AuthenticationBloc
 
     if (event is LoggedIn) {
       yield Authenticating();
-      await accountRepository.persistToken(event.token);
-      await accountRepository.persistToken(event.userId);
+      print("aaaaaa");
+      print(event.auth.token);
+      print(event.auth.userId);
+      await accountRepository.persistToken(event.auth.token);
+      await accountRepository.persistUserId(event.auth.userId);
       yield Authenticated();
     }
 
