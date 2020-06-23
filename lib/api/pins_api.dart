@@ -8,7 +8,7 @@ abstract class PinsApi {
 
   Future<Pin> pin({int id});
 
-  Future<Pin> newPin({NewPin pin});
+  Future<void> newPin({NewPin newPin, Board board});
 
   Future<Pin> editPin({int id, EditPin pin});
 
@@ -50,7 +50,7 @@ class DefaultPinsApi extends PinsApi {
   }
 
   @override
-  Future<Pin> newPin({NewPin pin}) {
+  Future<void> newPin({NewPin newPin, Board board}) {
     // multipartリクエストが上手くいかないため保留
     // See: https://github.com/team-e-org/mobile/issues/49
     // TODO: implement newPin

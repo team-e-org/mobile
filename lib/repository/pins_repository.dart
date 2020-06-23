@@ -1,8 +1,11 @@
+import 'package:logger/logger.dart';
 import 'package:mobile/api/pins_api.dart';
 import 'package:mobile/model/models.dart';
 
 abstract class PinsRepository {
   Future<List<Pin>> getHomePagePins({int page});
+
+  Future<void> createPin(NewPin newPin, Board board);
 }
 
 class DefaultPinsRepository extends PinsRepository {
@@ -17,4 +20,9 @@ class DefaultPinsRepository extends PinsRepository {
 
   @override
   Future<List<Pin>> getHomePagePins({int page}) => _api.pins(page: page ?? 1);
+
+  @override
+  Future<void> createPin(NewPin newPin, Board board) async {
+    await _api.newPin(newPin: newPin, board: board);
+  }
 }

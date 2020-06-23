@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/bloc/account_screen_bloc.dart';
+import 'package:mobile/data/account_repository.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
@@ -24,11 +25,13 @@ class SelectBoardScreen extends StatelessWidget {
 
   final SelectBoardScreenArguments args;
 
+  AccountRepository accountRepository;
   UsersRepository usersRepository;
   BoardsRepository boardsRepository;
 
   @override
   Widget build(BuildContext context) {
+    accountRepository = RepositoryProvider.of(context);
     usersRepository = RepositoryProvider.of(context);
     boardsRepository = RepositoryProvider.of(context);
 
@@ -39,6 +42,7 @@ class SelectBoardScreen extends StatelessWidget {
       body: Container(
         child: BlocProvider(
           create: (context) => AccountScreenBloc(
+            accountRepository: accountRepository,
             usersRepository: usersRepository,
             boardsRepository: boardsRepository,
           ),
