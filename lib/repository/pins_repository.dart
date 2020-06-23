@@ -23,6 +23,10 @@ class DefaultPinsRepository extends PinsRepository {
 
   @override
   Future<void> createPin(NewPin newPin, Board board) async {
-    await _api.newPin(newPin: newPin, board: board);
+    try {
+      await _api.newPin(newPin: newPin, board: board);
+    } on Exception {
+      rethrow;
+    }
   }
 }

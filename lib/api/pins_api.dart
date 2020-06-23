@@ -50,10 +50,24 @@ class DefaultPinsApi extends PinsApi {
   }
 
   @override
-  Future<void> newPin({NewPin newPin, Board board}) {
-    // multipartリクエストが上手くいかないため保留
-    // See: https://github.com/team-e-org/mobile/issues/49
-    // TODO: implement newPin
-    throw UnimplementedError();
+  Future<void> newPin({NewPin newPin, Board board}) async {
+    final fields = {
+      'title': newPin.title,
+      'description': newPin.description,
+      'url': newPin.url,
+      'isPrivate': newPin.isPrivate.toString(),
+    };
+    final fileBytes = base64.decode(newPin.image);
+
+    try {
+      await _client.fileUpload(
+        '/boards/${board.id}/pins',
+        fields: fields,
+        fileKey: 'image',
+        fileBytes: fileBytes,
+      );
+    } on Exception {
+      rethrow;
+    }
   }
 }
