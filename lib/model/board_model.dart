@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -42,7 +43,7 @@ class EditBoard {
 }
 
 @JsonSerializable(includeIfNull: false)
-class Board {
+class Board extends Equatable {
   final int id;
   final int userId;
   final String name;
@@ -73,4 +74,14 @@ class Board {
       isArchive: false,
     );
   }
+
+  @override
+  List<Object> get props => [
+        id,
+        userId,
+        name,
+        description,
+        isPrivate,
+        isArchive,
+      ];
 }

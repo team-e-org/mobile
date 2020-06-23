@@ -75,9 +75,9 @@ class ErrorState extends AccountScreenState {
 //////// Bloc ////////
 class AccountScreenBloc extends Bloc<AccountScreenEvent, AccountScreenState> {
   AccountScreenBloc({
-    this.accountRepository,
-    this.usersRepository,
-    this.boardsRepository,
+    @required this.accountRepository,
+    @required this.usersRepository,
+    @required this.boardsRepository,
   });
 
   final AccountRepository accountRepository;

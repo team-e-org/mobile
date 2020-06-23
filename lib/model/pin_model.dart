@@ -1,6 +1,4 @@
-import 'dart:io';
-import 'dart:math';
-
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -46,7 +44,7 @@ class EditPin {
 }
 
 @JsonSerializable(includeIfNull: false)
-class Pin {
+class Pin extends Equatable {
   final int id;
   final String title;
   final String description;
@@ -70,10 +68,8 @@ class Pin {
   Map<String, dynamic> toJson() => _$PinToJson(this);
 
   static Pin fromMock() {
-    final random = Random();
-    final base = 200;
-    final width = base;
-    final height = random.nextInt(2 * base) + base;
+    final width = 200;
+    final height = 400;
 
     return Pin(
       id: 123,
@@ -85,4 +81,15 @@ class Pin {
       isPrivate: false,
     );
   }
+
+  @override
+  List<Object> get props => [
+        id,
+        title,
+        description,
+        url,
+        userId,
+        imageUrl,
+        isPrivate,
+      ];
 }
