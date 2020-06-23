@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:mobile/api/api_client.dart';
 import 'package:mobile/config.dart';
-import 'package:mobile/data/account_repository.dart';
+import 'package:mobile/repository/account_repository.dart';
 import 'package:mobile/data/authentication_preferences.dart';
 import 'package:mobile/repository/pins_repository.dart';
 import 'package:mobile/api/auth_api.dart';

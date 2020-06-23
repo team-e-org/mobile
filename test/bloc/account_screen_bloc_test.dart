@@ -2,7 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mobile/api/errors/error.dart';
 import 'package:mobile/bloc/account_screen_bloc.dart';
-import 'package:mobile/data/account_repository.dart';
+import 'package:mobile/repository/account_repository.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 import 'package:mockito/mockito.dart';
