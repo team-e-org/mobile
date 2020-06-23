@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user_model.g.dart';
@@ -21,7 +22,7 @@ class EditUser {
 }
 
 @JsonSerializable(includeIfNull: false)
-class User {
+class User extends Equatable {
   final int id;
   final String name;
   final String email;
@@ -47,4 +48,7 @@ class User {
           "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80",
     );
   }
+
+  @override
+  List<Object> get props => [id, name, email, icon];
 }
