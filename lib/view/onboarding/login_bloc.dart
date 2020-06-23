@@ -70,8 +70,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       try {
         final auth =
             await accountRepository.authenticate(event.email, event.password);
-        print('Token: ${auth.token}');
-        print('User ID: ${auth.userId}');
         authenticationBloc.add(LoggedIn(auth: auth));
       } on Exception catch (e) {
         Logger().e(e);
