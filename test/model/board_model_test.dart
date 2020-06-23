@@ -9,7 +9,7 @@ void main() {
       expect(actual, equals(expected));
     });
     test('toJson', () {
-      const auth = NewBoard(
+      const nb = NewBoard(
         name: 'my board',
         description: 'board description',
         isPrivate: true,
@@ -19,7 +19,7 @@ void main() {
         'description': 'board description',
         'isPrivate': true,
       };
-      final actual = auth.toJson();
+      final actual = nb.toJson();
       expect(actual, equals(expected));
     });
   });
@@ -31,7 +31,7 @@ void main() {
       expect(actual, equals(expected));
     });
     test('toJson', () {
-      const auth = EditBoard(
+      const eb = EditBoard(
         name: 'my board',
         description: 'board description',
         isPrivate: true,
@@ -43,7 +43,7 @@ void main() {
         'isPrivate': true,
         'isArchive': true,
       };
-      final actual = auth.toJson();
+      final actual = eb.toJson();
       expect(actual, equals(expected));
     });
   });
@@ -55,7 +55,7 @@ void main() {
       expect(actual, equals(expected));
     });
     test('toJson', () {
-      const auth = Board(
+      const b = Board(
         id: 0,
         userId: 0,
         name: 'board',
@@ -72,7 +72,7 @@ void main() {
         'isArchive': false,
       };
 
-      final actual = auth.toJson();
+      final actual = b.toJson();
       expect(actual, equals(expected));
     });
   });

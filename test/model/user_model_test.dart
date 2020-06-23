@@ -31,7 +31,7 @@ void main() {
       expect(actual, equals(expected));
     });
     test('toJson', () {
-      const eu = User(
+      const u = User(
         id: 0,
         name: 'user',
         email: 'abc@example.com',
@@ -43,7 +43,7 @@ void main() {
         'email': 'abc@example.com',
         'icon': 'https://example.com/icon.png',
       };
-      final actual = eu.toJson();
+      final actual = u.toJson();
       expect(actual, equals(expected));
     });
   });

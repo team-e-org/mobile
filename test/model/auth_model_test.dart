@@ -36,23 +36,6 @@ void main() {
     });
   });
 
-  group('AuthResponse model test', () {
-    test('fromJson', () {
-      final expected = AuthResponse.fromMock();
-      final actual = AuthResponse.fromJson(expected.toJson());
-      expect(actual, equals(expected));
-    });
-    test('toJson', () {
-      const ar = AuthResponse(token: 'token', userId: 0);
-      final expected = {
-        'token': 'token',
-        'user_id': 0,
-      };
-      final actual = ar.toJson();
-      expect(actual, equals(expected));
-    });
-  });
-
   group('SignUpRequestBody model test', () {
     test('fromJson', () {
       final expected = SignUpRequestBody.fromMock();
