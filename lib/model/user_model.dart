@@ -4,8 +4,8 @@ import 'package:json_annotation/json_annotation.dart';
 part 'user_model.g.dart';
 
 @JsonSerializable(includeIfNull: false)
-class EditUser {
-  EditUser({
+class EditUser extends Equatable {
+  const EditUser({
     this.name,
     this.email,
     this.icon,
@@ -18,7 +18,20 @@ class EditUser {
   factory EditUser.fromJson(Map<String, dynamic> json) =>
       _$EditUserFromJson(json);
 
+  factory EditUser.fromMock() => const EditUser(
+        name: 'user',
+        email: 'abc@example.com',
+        icon: 'https://example.com/icon.png',
+      );
+
   Map<String, dynamic> toJson() => _$EditUserToJson(this);
+
+  @override
+  List<Object> get props => [
+        name,
+        email,
+        icon,
+      ];
 }
 
 @JsonSerializable(includeIfNull: false)
@@ -28,7 +41,7 @@ class User extends Equatable {
   final String email;
   final String icon;
 
-  User({
+  const User({
     this.id,
     this.name,
     this.email,
@@ -37,18 +50,21 @@ class User extends Equatable {
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
+  factory User.fromMock() => const User(
+        id: 123,
+        name: 'user name',
+        email: 'email@mail.com',
+        icon:
+            'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80',
+      );
+
   Map<String, dynamic> toJson() => _$UserToJson(this);
 
-  static User fromMock() {
-    return User(
-      id: 123,
-      name: "user name",
-      email: "email@mail.com",
-      icon:
-          "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80",
-    );
-  }
-
   @override
-  List<Object> get props => [id, name, email, icon];
+  List<Object> get props => [
+        id,
+        name,
+        email,
+        icon,
+      ];
 }
