@@ -11,9 +11,52 @@ class MockAuthenticationPreferences extends Mock
     implements AuthenticationPreferences {}
 
 void main() {
+  MockHttpClient mockHttpClient;
+  ApiClient apiClient;
+  group('ApiClient test', () {
+    setUp(() {
+      mockHttpClient = MockHttpClient();
+      final mockAuthenticationPreferences = MockAuthenticationPreferences();
+      when(mockAuthenticationPreferences.getAccessToken())
+          .thenAnswer((_) => 'token');
+
+      apiClient = ApiClient(
+        mockHttpClient,
+        prefs: mockAuthenticationPreferences,
+        apiEndpoint: '',
+      );
+    });
+
+    test('get test', () async {
+      when(mockHttpClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((realInvocation) => Future.value(Response('body', 200)));
+      final response = await apiClient.get('200');
+      expect(response.statusCode, equals(200));
+    });
+
+    test('post test', () async {
+      when(mockHttpClient.post(any, headers: anyNamed('headers')))
+          .thenAnswer((realInvocation) => Future.value(Response('body', 201)));
+      final response = await apiClient.post('201');
+      expect(response.statusCode, equals(201));
+    });
+
+    test('put test', () async {
+      when(mockHttpClient.put(any, headers: anyNamed('headers')))
+          .thenAnswer((realInvocation) => Future.value(Response('body', 200)));
+      final response = await apiClient.put('200');
+      expect(response.statusCode, equals(200));
+    });
+
+    test('delete test', () async {
+      when(mockHttpClient.delete(any, headers: anyNamed('headers')))
+          .thenAnswer((realInvocation) => Future.value(Response('body', 204)));
+      final response = await apiClient.delete('204');
+      expect(response.statusCode, equals(204));
+    });
+  });
+
   group('ApiClient error handling', () {
-    MockHttpClient mockHttpClient;
-    ApiClient apiClient;
     setUp(() async {
       mockHttpClient = MockHttpClient();
       final mockAuthenticationPreferences = MockAuthenticationPreferences();
