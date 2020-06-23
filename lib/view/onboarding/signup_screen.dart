@@ -5,7 +5,7 @@ import 'package:mobile/util/validator.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/textfield_common.dart';
 import 'package:mobile/view/components/notification.dart';
-import 'package:mobile/view/onboarding/auth_bloc.dart';
+import 'package:mobile/view/onboarding/auth_navigation_bloc.dart';
 import 'package:mobile/view/onboarding/auth_common_widget.dart';
 import 'package:mobile/view/onboarding/authentication_bloc.dart';
 import 'package:mobile/view/onboarding/login_bloc.dart';

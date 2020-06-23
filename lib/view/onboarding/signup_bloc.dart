@@ -53,8 +53,6 @@ class SignUpBloc extends Bloc<SignUpEvent, LoginState> {
           event.email,
           event.password,
         );
-        print('Token: ${auth.token}');
-        print('User ID: ${auth.userId}');
         authenticationBloc.add(LoggedIn(auth: auth));
       } on Exception catch (e) {
         Logger().e(e);

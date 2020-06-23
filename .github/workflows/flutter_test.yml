@@ -14,5 +14,7 @@ jobs:
         flutter-version: '1.17.3'
     - name: Install dependencies
       run: flutter pub get
+    - name: Generate source files
+      run: flutter packages pub run build_runner build
     - name: Run tests
       run: flutter test
