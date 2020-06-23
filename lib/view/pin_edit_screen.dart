@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:mobile/model/models.dart';
-import 'package:mobile/routes.dart';
 import 'package:mobile/util/validator.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/textfield_common.dart';
-import 'package:mobile/view/select_board_screen.dart';
 
 typedef PinEditScreenCallback = void Function(BuildContext, NewPin);
 
@@ -45,8 +44,8 @@ class PinFormData {
   NewPin toNewPin([File imageFile]) {
     String _image;
     if (imageFile != null) {
-      List<int> imageBytes = imageFile.readAsBytesSync();
-      String base64Image = base64Encode(imageBytes);
+      final imageBytes = imageFile.readAsBytesSync();
+      final base64Image = base64Encode(imageBytes);
       _image = base64Image;
     } else {
       _image = image;
@@ -138,7 +137,7 @@ class _PinEditScreenState extends State<PinEditScreen> {
                 maxLengthEnforced: false,
                 onChanged: (value) => {
                       setState(() {
-                        _formdata.title = value;
+                        _formdata.url = value;
                       })
                     }),
           ),
