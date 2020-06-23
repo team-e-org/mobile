@@ -2,8 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
-import 'package:mobile/data/account_repository.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mobile/data/authentication_preferences.dart';
 
 import 'errors/error.dart';
 
@@ -12,7 +11,7 @@ class ApiClient {
 
   final String apiEndpoint;
   final Client _client;
-  final SharedPreferences prefs;
+  final AuthenticationPreferences prefs;
 
   const ApiClient(
     this._client, {
@@ -85,7 +84,7 @@ class ApiClient {
   Future<Map<String, String>> get _headers async {
     Map<String, String> result = {};
 
-    result[headerXAuthToken] = prefs.getString(TOKEN_KEY);
+    result[headerXAuthToken] = prefs.getAccessToken();
 
     return result;
   }

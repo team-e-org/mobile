@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationPreferences {
+  static Future<AuthenticationPreferences> create() async {
+    final prefs = await SharedPreferences.getInstance();
+    return AuthenticationPreferences(prefs: prefs);
+  }
+
   const AuthenticationPreferences({
     @required this.prefs,
   });
@@ -11,7 +16,7 @@ class AuthenticationPreferences {
 
   final SharedPreferences prefs;
 
-  Future<String> getAccessToken() async {
+  String getAccessToken() {
     return prefs.getString(_accessToken);
   }
 
@@ -19,7 +24,11 @@ class AuthenticationPreferences {
     await prefs.setString(_accessToken, value);
   }
 
-  Future<int> getUserID() async {
+  Future<bool> clearAccessToken() {
+    return prefs.remove(_accessToken);
+  }
+
+  int getUserID() {
     return prefs.getInt(_userID);
   }
 
@@ -27,7 +36,11 @@ class AuthenticationPreferences {
     await prefs.setInt(_userID, value);
   }
 
-  Future clear() async {
+  Future<bool> clearUserID() {
+    return prefs.remove(_userID);
+  }
+
+  Future clearAll() async {
     await prefs.clear();
   }
 }

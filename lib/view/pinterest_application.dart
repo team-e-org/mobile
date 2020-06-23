@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:mobile/api/api_client.dart';
-import 'package:mobile/api/users_api.dart';
 import 'package:mobile/config.dart';
 import 'package:mobile/data/account_repository.dart';
+import 'package:mobile/data/authentication_preferences.dart';
 import 'package:mobile/repository/pins_repository.dart';
 import 'package:mobile/api/auth_api.dart';
 import 'package:mobile/repository/repositories.dart';
@@ -29,7 +29,7 @@ class PinterestApplication extends StatelessWidget {
     this.prefs,
   });
 
-  final SharedPreferences prefs;
+  final AuthenticationPreferences prefs;
 
   @override
   Widget build(BuildContext context) {
