@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/api/auth_api.dart';
+import 'package:mobile/data/authentication_preferences.dart';
 import 'package:mobile/model/auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-const TOKEN_KEY = 'token';
-const USERID_KEY = 'userId';
 
 abstract class AccountRepository {
   Future<Auth> authenticate(String email, String password);
@@ -25,7 +22,7 @@ abstract class AccountRepository {
 class DefaultAccountRepository extends AccountRepository {
   factory DefaultAccountRepository({
     @required AuthApi api,
-    @required SharedPreferences prefs,
+    @required AuthenticationPreferences prefs,
   }) {
     return _instance ?? DefaultAccountRepository._internal(api, prefs);
   }
@@ -35,7 +32,7 @@ class DefaultAccountRepository extends AccountRepository {
   static DefaultAccountRepository _instance;
 
   final AuthApi _api;
-  final SharedPreferences _prefs;
+  final AuthenticationPreferences _prefs;
 
   @override
   Future<Auth> authenticate(String email, String password) =>
@@ -51,33 +48,33 @@ class DefaultAccountRepository extends AccountRepository {
 
   @override
   Future<bool> hasToken() {
-    final token = _prefs.getString(TOKEN_KEY);
+    final token = _prefs.getAccessToken();
     final hasToken = token != null && token.isNotEmpty;
     return Future.value(hasToken);
   }
 
   @override
-  Future<void> persistToken(String token) => _prefs.setString(TOKEN_KEY, token);
+  Future<void> persistToken(String token) => _prefs.setAccessToken(token);
 
   @override
   String getPersistToken() {
-    return _prefs.getString(TOKEN_KEY);
+    return _prefs.getAccessToken();
   }
 
   @override
-  Future<void> deleteToken() => _prefs.remove(TOKEN_KEY);
+  Future<void> deleteToken() => _prefs.clearAccessToken();
 
   @override
   Future<void> persistUserId(int userId) =>
-      _prefs.setString(USERID_KEY, userId.toString());
+      _prefs.setUserID(userId);
 
   @override
   int getPersistUserId() {
-    return int.parse(_prefs.getString(USERID_KEY));
+    return _prefs.getUserID();
   }
 
   @override
-  Future<void> deleteUserId() => _prefs.remove(USERID_KEY);
+  Future<void> deleteUserId() => _prefs.clearUserID();
 }
 
 class MockAccountRepository extends AccountRepository {
