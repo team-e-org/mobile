@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum AuthNavigationEvent {
@@ -5,7 +6,10 @@ enum AuthNavigationEvent {
   signUp,
 }
 
-abstract class AuthNavigationState {}
+abstract class AuthNavigationState extends Equatable {
+  @override
+  List<Object> get props => [];
+}
 
 class SignInState extends AuthNavigationState {}
 
