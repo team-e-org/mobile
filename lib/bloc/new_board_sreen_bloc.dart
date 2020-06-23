@@ -127,7 +127,7 @@ class NewBoardScreenBloc
           isPrivate: state.isPrivate,
           createdBoard: createdBoard,
         );
-      } catch (e) {
+      } on Exception catch (e) {
         yield BoardCreateErrorState(
           boardName: state.boardName,
           isPrivate: state.isPrivate,
