@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:mobile/api/api_client.dart';
+import 'package:mobile/api/boards_api.dart';
+import 'package:mobile/api/pins_api.dart';
+import 'package:mobile/api/users_api.dart';
 import 'package:mobile/config.dart';
 import 'package:mobile/repository/account_repository.dart';
 import 'package:mobile/data/authentication_preferences.dart';
-import 'package:mobile/repository/boards_repository_mock.dart';
 import 'package:mobile/repository/pins_repository.dart';
 import 'package:mobile/api/auth_api.dart';
-import 'package:mobile/repository/pins_repository_mock.dart';
 import 'package:mobile/repository/repositories.dart';
-import 'package:mobile/repository/users_repository_mock.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/view/board_detail_screen.dart';
 import 'package:mobile/view/board_edit_screen.dart';
@@ -24,7 +24,6 @@ import 'package:mobile/view/pin_edit_screen.dart';
 import 'package:mobile/view/pin_select_photo_screen.dart';
 import 'package:mobile/view/root_screen.dart';
 import 'package:mobile/view/select_board_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 class PinterestApplication extends StatelessWidget {
@@ -42,15 +41,12 @@ class PinterestApplication extends StatelessWidget {
       apiEndpoint: config.apiEndpoint,
       prefs: prefs,
     );
-    final accountRepo = DefaultAccountRepository(
-      api: DefaultAuthApi(apiClient),
-      prefs: prefs,
-    );
-    // final accountRepo = MockAccountRepository();
-    final pinsRepo = MockPinsRepository();
-    final boardsRepo = MockBoardsRepository();
-    // final usersRepo = DefaultUsersRepository(DefaultUsersApi(apiClient));
-    final usersRepo = MockUsersRepository();
+
+    final accountRepo =
+        DefaultAccountRepository(api: DefaultAuthApi(apiClient), prefs: prefs);
+    final pinsRepo = DefaultPinsRepository(DefaultPinsApi(apiClient));
+    final boardsRepo = DefaultBoardsRepository(DefaultBoardsApi(apiClient));
+    final usersRepo = DefaultUsersRepository(DefaultUsersApi(apiClient));
 
     return BlocProvider(
       create: (context) => AuthenticationBloc(accountRepository: accountRepo)
