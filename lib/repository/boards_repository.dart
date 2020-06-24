@@ -7,7 +7,7 @@ abstract class BoardsRepository {
   Future<Board> createBoard(NewBoard board);
 }
 
-class DefaultBoardsRepository {
+class DefaultBoardsRepository extends BoardsRepository {
   factory DefaultBoardsRepository(BoardsApi api) {
     return _instance ?? DefaultBoardsRepository._internal(api);
   }

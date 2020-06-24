@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:logger/logger.dart';
 import 'package:mobile/model/board_model.dart';
 import 'package:mobile/model/pin_model.dart';
@@ -19,7 +21,7 @@ class MockPinsRepository extends PinsRepository {
   }
 
   @override
-  Future<void> createPin(NewPin newPin, Board board) async {
+  Future<void> createPin(NewPin newPin, File imageFile, Board board) async {
     Logger()
       ..d('title: ${newPin.title}')
       ..d('description: ${newPin.description}')

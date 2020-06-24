@@ -99,6 +99,8 @@ class AccountScreenBloc extends Bloc<AccountScreenEvent, AccountScreenState> {
       yield const Loading(user: null, boards: [], boardPinMap: {});
       try {
         final userId = accountRepository.getPersistUserId();
+        print(accountRepository.getPersistUserId());
+        print(accountRepository.getPersistToken());
         final user = await usersRepository.getUser(userId);
         yield Loading(user: user, boards: const [], boardPinMap: const {});
 

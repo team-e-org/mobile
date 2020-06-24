@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,13 +17,18 @@ abstract class NewPinScreenEvent extends Equatable {
 }
 
 class SendRequest extends NewPinScreenEvent {
-  const SendRequest({this.newPin, this.board});
+  const SendRequest({
+    @required this.newPin,
+    @required this.imageFile,
+    @required this.board,
+  });
 
   final NewPin newPin;
+  final File imageFile;
   final Board board;
 
   @override
-  List<Object> get props => [newPin, board];
+  List<Object> get props => [newPin, imageFile, board];
 }
 
 // State
@@ -64,7 +70,8 @@ class NewPinScreenBloc extends Bloc<NewPinScreenEvent, NewPinScreenState> {
     if (state is InitialState) {
       yield Sending();
       try {
-        await pinsRepository.createPin(event.newPin, event.board);
+        await pinsRepository.createPin(
+            event.newPin, event.imageFile, event.board);
         yield Finished();
       } on Exception catch (e) {
         Logger().e(e);

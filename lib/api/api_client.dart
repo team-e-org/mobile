@@ -67,7 +67,7 @@ class ApiClient {
     // Reference: https://pub.dev/documentation/http/latest/http/MultipartRequest-class.html
     final uri = Uri.parse('$apiEndpoint$relativeUrl');
     final request = MultipartRequest('POST', uri);
-
+    print(fileBytes);
     request.fields.addAll(fields);
     request.files.add(MultipartFile.fromBytes(fileKey, fileBytes));
     request.headers.addAll(await _headers);

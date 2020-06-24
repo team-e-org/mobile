@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:mobile/api/api_client.dart';
+import 'package:mobile/api/boards_api.dart';
 import 'package:mobile/api/pins_api.dart';
+import 'package:mobile/api/users_api.dart';
 import 'package:mobile/config.dart';
 import 'package:mobile/repository/account_repository.dart';
 import 'package:mobile/data/authentication_preferences.dart';
@@ -45,13 +47,13 @@ class PinterestApplication extends StatelessWidget {
     final accountRepo =
         DefaultAccountRepository(api: DefaultAuthApi(apiClient), prefs: prefs);
     final pinsRepo = DefaultPinsRepository(DefaultPinsApi(apiClient));
-    // final boardsRepo = DefaultBoardsRepository(DefaultBoardsApi(apiClient));
-    // final usersRepo = DefaultUsersRepository(DefaultUsersApi(apiClient));
+    final boardsRepo = DefaultBoardsRepository(DefaultBoardsApi(apiClient));
+    final usersRepo = DefaultUsersRepository(DefaultUsersApi(apiClient));
 
     // final accountRepo = MockAccountRepository();
     // final pinsRepo = MockPinsRepository();
-    final boardsRepo = MockBoardsRepository();
-    final usersRepo = MockUsersRepository();
+    // final boardsRepo = MockBoardsRepository();
+    // final usersRepo = MockUsersRepository();
 
     return BlocProvider(
       create: (context) => AuthenticationBloc(accountRepository: accountRepo)

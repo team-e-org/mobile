@@ -10,7 +10,8 @@ class ApplicationConfig {
 
 final debugConfig = ApplicationConfig(
   apiEndpoint:
-      Platform.isAndroid ? 'http://10.0.2.2:3100' : 'http://localhost:3100',
+      Platform.isAndroid ? 'http://10.0.2.2:5000' : 'http://localhost:5000',
+  // Platform.isAndroid ? 'http://10.0.2.2:3100' : 'http://localhost:3100',
 );
 
 ApplicationConfig readConfig() {

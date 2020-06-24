@@ -11,9 +11,10 @@ import 'package:mobile/view/pin_edit_screen.dart';
 import 'package:mobile/view/select_board_screen.dart';
 
 class NewPinResult {
-  NewPinResult({this.newPin, this.board});
+  NewPinResult({this.newPin, this.imageFile, this.board});
 
   NewPin newPin;
+  File imageFile;
   Board board;
 }
 
@@ -37,25 +38,30 @@ class NewPinScreen extends StatelessWidget {
   }
 
   Future main(BuildContext context) async {
+    var result = NewPinResult();
+
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    final file = File(pickedFile.path);
-    final result = await Navigator.of(context).pushNamed(
+    result.imageFile = File(pickedFile.path);
+
+    await Navigator.of(context).pushNamed(
       Routes.createNewPinEdit,
       arguments: PinEditScreenArguments(
-        file: file,
+        file: result.imageFile,
         onNextPressed: (context, newPin) async {
+          result.newPin = newPin;
+
           // get board which the new pin will be added, from select board screen
-          final board = await Navigator.of(context).pushNamed(
+          await Navigator.of(context).pushNamed(
             Routes.createNewPinSelectBoard,
             arguments: SelectBoardScreenArguments(
               onBoardPressed: (context, board) {
-                Navigator.of(context).pop(board);
+                result.board = board;
+                Navigator.of(context).pop();
               },
             ),
           );
 
-          Navigator.of(context)
-              .pop(NewPinResult(newPin: newPin, board: board as Board));
+          Navigator.of(context).pop();
         },
       ),
     ) as NewPinResult;
@@ -65,6 +71,10 @@ class NewPinScreen extends StatelessWidget {
     // request api
     // TODO(): callbackの追加
     BlocProvider.of<NewPinScreenBloc>(context)
-      ..add(SendRequest(newPin: result.newPin, board: result.board));
+      ..add(SendRequest(
+        newPin: result.newPin,
+        imageFile: result.imageFile,
+        board: result.board,
+      ));
   }
 }
