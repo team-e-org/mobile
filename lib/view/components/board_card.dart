@@ -220,6 +220,13 @@ abstract class BoardCardBase extends StatelessWidget {
   }
 
   Widget _image() {
+    if (pins.isEmpty) {
+      return Container(
+        color: Colors.grey,
+        child: const Center(child: Icon(Icons.photo_library)),
+      );
+    }
+
     return CachedNetworkImage(
       imageUrl: pins[0].imageUrl,
       fit: BoxFit.cover,

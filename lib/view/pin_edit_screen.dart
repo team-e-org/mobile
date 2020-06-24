@@ -3,11 +3,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mobile/model/models.dart';
-import 'package:mobile/routes.dart';
 import 'package:mobile/util/validator.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/textfield_common.dart';
-import 'package:mobile/view/select_board_screen.dart';
 
 typedef PinEditScreenCallback = void Function(BuildContext, NewPin);
 
@@ -29,7 +27,6 @@ class PinEditScreen extends StatefulWidget {
 
 class PinFormData {
   PinFormData({
-    this.image = '',
     this.title = '',
     this.description = '',
     this.url = '',
@@ -42,18 +39,8 @@ class PinFormData {
   String url;
   bool isPrivate;
 
-  NewPin toNewPin([File imageFile]) {
-    String _image;
-    if (imageFile != null) {
-      List<int> imageBytes = imageFile.readAsBytesSync();
-      String base64Image = base64Encode(imageBytes);
-      _image = base64Image;
-    } else {
-      _image = image;
-    }
-
+  NewPin toNewPin() {
     return NewPin(
-      image: _image,
       title: title,
       description: description,
       url: url,
@@ -87,8 +74,8 @@ class _PinEditScreenState extends State<PinEditScreen> {
                 _formField(_formdata),
                 PinterestButton.primary(
                     text: 'Next',
-                    onPressed: () => widget.args.onNextPressed(
-                        context, _formdata.toNewPin(widget.args?.file))),
+                    onPressed: () => widget.args
+                        .onNextPressed(context, _formdata.toNewPin())),
               ],
             ),
           ),
@@ -138,7 +125,7 @@ class _PinEditScreenState extends State<PinEditScreen> {
                 maxLengthEnforced: false,
                 onChanged: (value) => {
                       setState(() {
-                        _formdata.title = value;
+                        _formdata.url = value;
                       })
                     }),
           ),

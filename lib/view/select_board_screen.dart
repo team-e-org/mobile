@@ -3,11 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/bloc/account_screen_bloc.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
-import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/components.dart';
 
 import 'components/board_grid_view.dart';
-import 'onboarding/authentication_bloc.dart';
 
 typedef SelectBoardScreenCallback = void Function(BuildContext, Board);
 
@@ -24,11 +22,13 @@ class SelectBoardScreen extends StatelessWidget {
 
   final SelectBoardScreenArguments args;
 
+  AccountRepository accountRepository;
   UsersRepository usersRepository;
   BoardsRepository boardsRepository;
 
   @override
   Widget build(BuildContext context) {
+    accountRepository = RepositoryProvider.of(context);
     usersRepository = RepositoryProvider.of(context);
     boardsRepository = RepositoryProvider.of(context);
 
@@ -39,6 +39,7 @@ class SelectBoardScreen extends StatelessWidget {
       body: Container(
         child: BlocProvider(
           create: (context) => AccountScreenBloc(
+            accountRepository: accountRepository,
             usersRepository: usersRepository,
             boardsRepository: boardsRepository,
           ),

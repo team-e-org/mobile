@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:mobile/api/api_client.dart';
 import 'package:mobile/model/models.dart';
 
@@ -8,7 +10,14 @@ abstract class PinsApi {
 
   Future<Pin> pin({int id});
 
-  Future<Pin> newPin({NewPin pin});
+  Future<void> newPin({
+    String title,
+    String description,
+    String url,
+    bool isPrivate,
+    Uint8List imageBytes,
+    int boardId,
+  });
 
   Future<Pin> editPin({int id, EditPin pin});
 
@@ -50,10 +59,26 @@ class DefaultPinsApi extends PinsApi {
   }
 
   @override
-  Future<Pin> newPin({NewPin pin}) {
-    // multipartリクエストが上手くいかないため保留
-    // See: https://github.com/team-e-org/mobile/issues/49
-    // TODO: implement newPin
-    throw UnimplementedError();
+  Future<void> newPin({
+    @required String title,
+    @required String description,
+    @required String url,
+    @required bool isPrivate,
+    @required Uint8List imageBytes,
+    @required int boardId,
+  }) async {
+    final fields = {
+      'title': title,
+      'description': description,
+      'url': url,
+      'isPrivate': isPrivate.toString(),
+    };
+
+    await _client.fileUpload(
+      '/boards/$boardId/pins',
+      fields: fields,
+      fileKey: 'image',
+      fileBytes: imageBytes,
+    );
   }
 }

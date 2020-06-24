@@ -1,67 +1,81 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mobile/bloc/new_pin_screen_bloc.dart';
 import 'package:mobile/model/models.dart';
+import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/view/pin_edit_screen.dart';
 import 'package:mobile/view/select_board_screen.dart';
 
 class NewPinResult {
-  NewPinResult({this.newPin, this.board});
+  NewPinResult({this.newPin, this.imageFile, this.board});
 
   NewPin newPin;
+  File imageFile;
   Board board;
 }
 
-class NewPinScreen extends StatefulWidget {
-  @override
-  _NewPinScreenState createState() => _NewPinScreenState();
-}
-
-class _NewPinScreenState extends State<NewPinScreen> {
+class NewPinScreen extends StatelessWidget {
   final ImagePicker picker = ImagePicker();
 
   @override
-  void initState() {
-    super.initState();
-    main();
+  Widget build(BuildContext context) {
+    final _pinsRepository = RepositoryProvider.of<PinsRepository>(context);
+    return BlocProvider(
+      create: (context) => NewPinScreenBloc(pinsRepository: _pinsRepository),
+      child: BlocBuilder<NewPinScreenBloc, NewPinScreenState>(
+        builder: (context, state) {
+          if (state is InitialState) {
+            main(context);
+          }
+          return const Scaffold();
+        },
+      ),
+    );
   }
 
-  Future main() async {
+  Future main(BuildContext context) async {
+    var result = NewPinResult();
+
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      final file = File(pickedFile.path);
-      final result = await Navigator.of(context).pushNamed(
+      result.imageFile = File(pickedFile.path);
+
+      await Navigator.of(context).pushNamed(
         Routes.createNewPinEdit,
         arguments: PinEditScreenArguments(
-          file: file,
+          file: result.imageFile,
           onNextPressed: (context, newPin) async {
+            result.newPin = newPin;
+
             // get board which the new pin will be added, from select board screen
-            final board = await Navigator.of(context).pushNamed(
+            await Navigator.of(context).pushNamed(
               Routes.createNewPinSelectBoard,
               arguments: SelectBoardScreenArguments(
                 onBoardPressed: (context, board) {
-                  Navigator.of(context).pop(board);
+                  result.board = board;
+                  Navigator.of(context).pop();
                 },
               ),
             );
 
-            Navigator.of(context)
-                .pop(NewPinResult(newPin: newPin, board: board as Board));
+            Navigator.of(context).pop();
           },
         ),
-      );
-
-      // request api
+      ) as NewPinResult;
     }
+    Navigator.of(context).pop();
 
-    // pop
-    Navigator.of(context).popUntil(ModalRoute.withName(Routes.root));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold();
+    // request api
+    // TODO(): callbackの追加
+    BlocProvider.of<NewPinScreenBloc>(context)
+      ..add(SendRequest(
+        newPin: result.newPin,
+        imageFile: result.imageFile,
+        board: result.board,
+      ));
   }
 }
