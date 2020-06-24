@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/bloc/account_screen_bloc.dart';
-import 'package:mobile/data/account_repository.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
-import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/components.dart';
 
 import 'components/board_grid_view.dart';
-import 'onboarding/authentication_bloc.dart';
 
 typedef SelectBoardScreenCallback = void Function(BuildContext, Board);
 
