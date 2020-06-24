@@ -26,6 +26,27 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+
+    flavorDimensions "flavor-type"
+
+    productFlavors {
+        dev {
+            dimension "flavor-type"
+            applicationId "com.teame.pinko.mobile.dev"
+            resValue "string", "app_name", "pinko-dev"
+        }
+        staging {
+            dimension "flavor-type"
+            applicationId "com.teame.pinko.mobile.staging"
+            resValue "string", "app_name", "pinko-staging"
+        }
+        production {
+            dimension "flavor-type"
+            applicationId "com.teame.pinko.mobile"
+            resValue "string", "app_name", "pinko"
+        }
+    }
+
     compileSdkVersion 28
 
     sourceSets {
@@ -61,3 +82,4 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
+
