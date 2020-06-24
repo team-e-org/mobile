@@ -29,7 +29,10 @@ class _RootScreenState extends State<RootScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: rootScreenDestinations[_currentIndex].body,
+      body: IndexedStack(
+        index: _currentIndex,
+        children: rootScreenDestinations.map((e) => e.body).toList(),
+      ),
       bottomNavigationBar: _buildBottomNavigationBar(context),
     );
   }
