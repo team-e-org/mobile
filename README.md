@@ -6,12 +6,6 @@
 ## Sprint
 
 📌 [GitHub Projects](https://github.com/team-e-org/mobile/projects/1)
-=======
-## splash screen の生成
-
-```bash
-$ flutter packages pub run flutter_native_splash:create
-```
 
 # mobile
 
@@ -19,7 +13,7 @@ $ flutter packages pub run flutter_native_splash:create
 |----------|------|-----------------------|
 | Sprint 1 | N/A  | 2020/06/09-2020/06/12 |
 | Sprint 2 | [#71](https://github.com/team-e-org/mobile/issues/71)  | 2020/06/15-2020/06/19 |
-| Sprint 3 | N/A  | 2020/06/22-2020/06/26 |
+| Sprint 3 | [#146](https://github.com/team-e-org/mobile/issues/146)  | 2020/06/22-2020/06/26 |
 | Sprint 4 | N/A  | 2020/06/29-2020/07/03 |
 
 
@@ -29,8 +23,20 @@ $ flutter packages pub run flutter_native_splash:create
 
 ## お役立ち情報 🍵
 
+### splash screen の生成
+
+```bash
+$ flutter packages pub run flutter_native_splash:create
+```
+
 ### fronJson, toJson するためのコード生成
 
 ```bash
 $ flutter packages pub run build_runner build
+```
+
+### flavorizrの設定の適用
+
+```bash
+$ flutter pub run flutter_flavorizr
 ```
