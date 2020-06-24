@@ -12,7 +12,7 @@ abstract class PinsApi {
 
   Future<Pin> editPin({int id, EditPin pin});
 
-  Future<bool> deletePin(int id);
+  Future<bool> deletePin({int id});
 }
 
 class DefaultPinsApi extends PinsApi {
@@ -21,15 +21,15 @@ class DefaultPinsApi extends PinsApi {
   final ApiClient _client;
 
   @override
-  Future<bool> deletePin(int id) async {
-    final response = await _client.delete("/pins/$id");
+  Future<bool> deletePin({int id}) async {
+    final response = await _client.delete('/pins/$id');
     return response.statusCode == 204;
   }
 
   @override
   Future<Pin> editPin({int id, EditPin pin}) async {
     final response = await _client.put(
-      "/pins/$id",
+      '/pins/$id',
       body: json.encode(pin),
     );
     return Pin.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
@@ -37,13 +37,13 @@ class DefaultPinsApi extends PinsApi {
 
   @override
   Future<Pin> pin({int id}) async {
-    final response = await _client.get("/pins/$id");
+    final response = await _client.get('/pins/$id');
     return Pin.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   }
 
   @override
   Future<List<Pin>> pins({int page = 1}) async {
-    final response = await _client.get("/pins?page=$page");
+    final response = await _client.get('/pins?page=$page');
     return (jsonDecode(response.body) as List)
         .map((dynamic it) => Pin.fromJson(it as Map<String, dynamic>))
         .toList();

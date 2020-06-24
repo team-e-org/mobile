@@ -2,8 +2,9 @@ import 'package:mobile/api/users_api.dart';
 import 'package:mobile/model/models.dart';
 
 abstract class UsersRepository {
-  Future<User> getUser(int id) async {}
-  Future<List<Board>> getUserBoards(int id) async {}
+  Future<User> getUser(int id);
+
+  Future<List<Board>> getUserBoards(int id);
 }
 
 class DefaultUsersRepository extends UsersRepository {
@@ -16,30 +17,9 @@ class DefaultUsersRepository extends UsersRepository {
   static DefaultUsersRepository _instance;
   UsersApi _api;
 
-  Future<User> getUser(int id) async {
-    return _api.user(id: id);
-  }
+  @override
+  Future<User> getUser(int id) => _api.user(id: id);
 
-  Future<List<Board>> getUserBoards(int id) async {
-    return _api.userBoards(id: id);
-  }
-}
-
-class MockUsersRepository extends UsersRepository {
-  factory MockUsersRepository() {
-    return _instance ?? MockUsersRepository._internal();
-  }
-
-  MockUsersRepository._internal();
-
-  static MockUsersRepository _instance;
-
-  Future<User> getUser(int id) async {
-    return User.fromMock();
-  }
-
-  Future<List<Board>> getUserBoards(int id) async {
-    final boards = List.filled(5, 1).map((_) => Board.fromMock()).toList();
-    return Future.value(boards);
-  }
+  @override
+  Future<List<Board>> getUserBoards(int id) => _api.userBoards(id: id);
 }

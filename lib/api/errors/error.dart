@@ -4,51 +4,52 @@ mixin DefaultError implements Exception {
 
 class NetworkError implements DefaultError {
   @override
-  String getMessage() => "No internet connection";
+  String getMessage() => 'No internet connection';
 }
 
 class ForbiddenServerError implements DefaultError {
   @override
-  String getMessage() => "(403) You dont have access to this content.";
+  String getMessage() => '(403) You dont have access to this content.';
 }
 
 class NotFoundError implements DefaultError {
-  final String url;
   NotFoundError(this.url);
 
+  final String url;
+
   @override
-  String getMessage() => "(404) not found\n$url";
+  String getMessage() => '(404) not found\n$url';
 }
 
 class UnauthorizedError implements DefaultError {
   @override
-  String getMessage() => "(401) Unathorized connection";
+  String getMessage() => '(401) Unathorized connection';
 }
 
-class UnprocessableEntity implements DefaultError {
+class UnprocessableEntityError implements DefaultError {
   @override
-  String getMessage() => "(422) Unprocessable Entity";
+  String getMessage() => '(422) Unprocessable Entity';
 }
 
 class UnknownClientError implements DefaultError {
+  UnknownClientError(this._error);
+
   @override
   String getMessage() {
-    return "Unknown client error\n$_error";
+    return 'Unknown client error\n$_error';
   }
 
   final dynamic _error;
-
-  UnknownClientError(this._error);
 }
 
 class UnknownServerError implements DefaultError {
+  UnknownServerError(this._error, this.statusCode);
+
   @override
   String getMessage() {
-    return "Unknown server error ($statusCode)\n$_error";
+    return 'Unknown server error ($statusCode)\n$_error';
   }
 
   final dynamic _error;
   final int statusCode;
-
-  UnknownServerError(this._error, this.statusCode);
 }

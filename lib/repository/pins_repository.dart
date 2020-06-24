@@ -15,22 +15,6 @@ class DefaultPinsRepository extends PinsRepository {
   static DefaultPinsRepository _instance;
   PinsApi _api;
 
-  Future<List<Pin>> getHomePagePins({int page}) async {
-    return _api.pins(page: page ?? 1);
-  }
-}
-
-class MockPinsRepository extends PinsRepository {
-  factory MockPinsRepository() {
-    return _instance ?? MockPinsRepository._internal();
-  }
-
-  MockPinsRepository._internal();
-
-  static MockPinsRepository _instance;
-
-  Future<List<Pin>> getHomePagePins({int page}) async {
-    final pins = List.filled(10, 1).map((_) => Pin.fromMock()).toList();
-    return Future.value(pins);
-  }
+  @override
+  Future<List<Pin>> getHomePagePins({int page}) => _api.pins(page: page ?? 1);
 }

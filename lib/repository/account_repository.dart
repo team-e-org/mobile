@@ -9,11 +9,15 @@ abstract class AccountRepository {
   Future<Auth> register(String username, String email, String password);
 
   Future<void> persistToken(String token);
+
   String getPersistToken();
+
   Future<void> deleteToken();
 
   Future<void> persistUserId(int userId);
+
   int getPersistUserId();
+
   Future<void> deleteUserId();
 
   Future<bool> hasToken();
@@ -57,72 +61,17 @@ class DefaultAccountRepository extends AccountRepository {
   Future<void> persistToken(String token) => _prefs.setAccessToken(token);
 
   @override
-  String getPersistToken() {
-    return _prefs.getAccessToken();
-  }
+  String getPersistToken() => _prefs.getAccessToken();
 
   @override
   Future<void> deleteToken() => _prefs.clearAccessToken();
 
   @override
-  Future<void> persistUserId(int userId) =>
-      _prefs.setUserID(userId);
+  Future<void> persistUserId(int userId) => _prefs.setUserID(userId);
 
   @override
-  int getPersistUserId() {
-    return _prefs.getUserID();
-  }
+  int getPersistUserId() => _prefs.getUserID();
 
   @override
   Future<void> deleteUserId() => _prefs.clearUserID();
-}
-
-class MockAccountRepository extends AccountRepository {
-  @override
-  Future<Auth> authenticate(String email, String password) async {
-    await Future<void>.delayed(const Duration(seconds: 1));
-    return Auth(token: 'login token', userId: 1);
-  }
-
-  @override
-  Future<void> deleteToken() async {
-    await Future<void>.delayed(const Duration(seconds: 1));
-  }
-
-  @override
-  Future<bool> hasToken() async {
-    await Future<void>.delayed(const Duration(seconds: 1));
-    return false;
-  }
-
-  @override
-  Future<void> persistToken(String token) async {
-    await Future<void>.delayed(const Duration(seconds: 1));
-  }
-
-  @override
-  String getPersistToken() {
-    return 'x-auth-token';
-  }
-
-  @override
-  Future<void> persistUserId(int userId) async {
-    await Future<void>.delayed(const Duration(seconds: 1));
-  }
-
-  @override
-  int getPersistUserId() {
-    return 1;
-  }
-
-  @override
-  Future<void> deleteUserId() async {
-    await Future<void>.delayed(const Duration(seconds: 1));
-  }
-
-  @override
-  Future<Auth> register(String username, String email, String password) async {
-    await Future<void>.delayed(const Duration(seconds: 1));
-    return Auth(token: 'signin token', userId: 1);
-  }
 }

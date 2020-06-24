@@ -7,25 +7,26 @@ import 'package:mobile/data/authentication_preferences.dart';
 import 'errors/error.dart';
 
 class ApiClient {
-  static const headerXAuthToken = 'x-auth-token';
-
-  final String apiEndpoint;
-  final Client _client;
-  final AuthenticationPreferences prefs;
-
   const ApiClient(
     this._client, {
     @required this.apiEndpoint,
     @required this.prefs,
   });
 
+  static const headerXAuthToken = 'x-auth-token';
+
+  final String apiEndpoint;
+  final Client _client;
+  final AuthenticationPreferences prefs;
+
   Future<Response> get(String relativeUrl) async {
-    return _makeRequestWithErrorHandler(
-      _client.get(
-        '$apiEndpoint$relativeUrl',
-        headers: await _headers,
-      ),
+    final headers = await _headers;
+    final getFuture = _client.get(
+      '$apiEndpoint$relativeUrl',
+      headers: headers,
     );
+
+    return _makeRequestWithErrorHandler(getFuture);
   }
 
   Future<Response> post(String relativeUrl, {String body}) async {
@@ -49,7 +50,7 @@ class ApiClient {
   }
 
   Future<Response> delete(String relativeUrl) async {
-    return await _makeRequestWithErrorHandler(
+    return _makeRequestWithErrorHandler(
       _client.delete(
         '$apiEndpoint$relativeUrl',
         headers: await _headers,
@@ -82,24 +83,20 @@ class ApiClient {
   }
 
   Future<Map<String, String>> get _headers async {
-    Map<String, String> result = {};
-
+    final result = <String, String>{};
     result[headerXAuthToken] = prefs.getAccessToken();
-
     return result;
   }
 
   Future<Map<String, String>> get _headersContentTypeJson async {
-    Map<String, String> result = await _headers;
-
+    final result = await _headers;
     result['Content-Type'] = 'application/json';
-
     return result;
   }
 
   static Future<Response> _makeRequestWithErrorHandler(
       Future<Response> requestFunction) async {
-    final Response response = await requestFunction;
+    final response = await requestFunction;
     if (response.statusCode >= 400) {
       throw _handleError(response.statusCode, response.body,
           response.request?.url?.toString());
@@ -120,7 +117,7 @@ class ApiClient {
     } else if (statusCode == 404) {
       return NotFoundError(url);
     } else if (statusCode == 422) {
-      return UnprocessableEntity();
+      return UnprocessableEntityError();
     } else if (statusCode >= 500 && statusCode <= 599) {
       return UnknownServerError(errorResponse, statusCode);
     } else {
