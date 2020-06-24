@@ -44,6 +44,14 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
 
+    if (state is ErrorState) {
+      return Container(
+        child: const Center(
+          child: Text('画像の読み込みに失敗しました'),
+        ),
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.all(8),
       child: PinGridView(
