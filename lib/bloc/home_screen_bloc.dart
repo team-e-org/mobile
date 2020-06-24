@@ -21,13 +21,15 @@ abstract class HomeScreenState extends Equatable {
   const HomeScreenState({
     @required this.page,
     @required this.pins,
+    this.exception,
   });
 
   final int page;
   final List<Pin> pins;
+  final Exception exception;
 
   @override
-  List<Object> get props => [page, pins];
+  List<Object> get props => [page, pins, exception];
 }
 
 class InitialState extends HomeScreenState {
@@ -49,6 +51,15 @@ class Loading extends HomeScreenState {
     @required int page,
     @required List<Pin> pins,
   }) : super(page: page, pins: pins);
+}
+
+class ErrorState extends HomeScreenState {
+  @override
+  const ErrorState({
+    int page = 0,
+    List<Pin> pins = const [],
+    @required Exception exception,
+  }) : super(page: page, pins: pins, exception: exception);
 }
 
 //////// Bloc ////////
@@ -75,9 +86,9 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
             await _pinsRepository.getHomePagePins(page: state.page + 1);
         final _pins = List<Pin>.from(state.pins)..addAll(_additionalPins);
         yield DefaultState(page: state.page + 1, pins: _pins);
-      } catch (e) {
+      } on Exception catch (e) {
         Logger().e(e);
-        yield DefaultState(page: state.page, pins: state.pins);
+        yield ErrorState(page: state.page, pins: state.pins, exception: e);
       }
     }
     return;
