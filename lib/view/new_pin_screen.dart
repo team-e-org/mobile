@@ -30,29 +30,31 @@ class _NewPinScreenState extends State<NewPinScreen> {
 
   Future main() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    final file = File(pickedFile.path);
-    final result = await Navigator.of(context).pushNamed(
-      Routes.createNewPinEdit,
-      arguments: PinEditScreenArguments(
-        file: file,
-        onNextPressed: (context, newPin) async {
-          // get board which the new pin will be added, from select board screen
-          final board = await Navigator.of(context).pushNamed(
-            Routes.createNewPinSelectBoard,
-            arguments: SelectBoardScreenArguments(
-              onBoardPressed: (context, board) {
-                Navigator.of(context).pop(board);
-              },
-            ),
-          );
+    if (pickedFile != null) {
+      final file = File(pickedFile.path);
+      final result = await Navigator.of(context).pushNamed(
+        Routes.createNewPinEdit,
+        arguments: PinEditScreenArguments(
+          file: file,
+          onNextPressed: (context, newPin) async {
+            // get board which the new pin will be added, from select board screen
+            final board = await Navigator.of(context).pushNamed(
+              Routes.createNewPinSelectBoard,
+              arguments: SelectBoardScreenArguments(
+                onBoardPressed: (context, board) {
+                  Navigator.of(context).pop(board);
+                },
+              ),
+            );
 
-          Navigator.of(context)
-              .pop(NewPinResult(newPin: newPin, board: board as Board));
-        },
-      ),
-    );
+            Navigator.of(context)
+                .pop(NewPinResult(newPin: newPin, board: board as Board));
+          },
+        ),
+      );
 
-    // request api
+      // request api
+    }
 
     // pop
     Navigator.of(context).popUntil(ModalRoute.withName(Routes.root));
