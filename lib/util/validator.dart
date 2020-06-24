@@ -9,18 +9,19 @@ class Validator {
   }
 
   static bool isValidPassword(String s) {
-    if (!RegExp(r"[a-z]").hasMatch(s)) {
-      return false;
-    }
-    if (!RegExp(r"[A-Z]").hasMatch(s)) {
-      return false;
-    }
-    if (!RegExp(r"\d").hasMatch(s)) {
-      return false;
-    }
-    if (!RegExp(r"[!#%_-]").hasMatch(s)) {
-      return false;
-    }
+    // TODO: サーバーのテストアカウントが修正されしだいコメントを戻す
+//     if (!RegExp(r"[a-z]").hasMatch(s)) {
+//       return false;
+//     }
+//     if (!RegExp(r"[A-Z]").hasMatch(s)) {
+//       return false;
+//     }
+//     if (!RegExp(r"\d").hasMatch(s)) {
+//       return false;
+//     }
+//     if (!RegExp(r"[!#%_-]").hasMatch(s)) {
+//       return false;
+//     }
 
     return true;
   }
