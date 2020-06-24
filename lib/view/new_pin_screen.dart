@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/routes.dart';
+import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/pin_edit_screen.dart';
 import 'package:mobile/view/select_board_screen.dart';
 
@@ -25,12 +26,10 @@ class _NewPinScreenState extends State<NewPinScreen> {
   @override
   void initState() {
     super.initState();
-    main();
   }
 
-  Future main() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    final file = File(pickedFile.path);
+  Future main(File imageFile) async {
+    final file = File(imageFile.path);
     final result = await Navigator.of(context).pushNamed(
       Routes.createNewPinEdit,
       arguments: PinEditScreenArguments(
@@ -60,6 +59,35 @@ class _NewPinScreenState extends State<NewPinScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            PinterestButton.primary(
+                text: 'Camera', onPressed: _onCameraPressed),
+            const SizedBox(width: 24),
+            PinterestButton.primary(
+                text: 'Library', onPressed: _onLibraryPressed)
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _onCameraPressed() async {
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    if (pickedFile == null) {
+      return;
+    }
+    await main(File(pickedFile.path));
+  }
+
+  void _onLibraryPressed() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    if (pickedFile == null) {
+      return;
+    }
+    await main(File(pickedFile.path));
   }
 }
