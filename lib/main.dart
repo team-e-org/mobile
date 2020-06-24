@@ -5,7 +5,7 @@ import 'package:mobile/bloc/simple_bloc_delegate.dart';
 import 'package:mobile/data/authentication_preferences.dart';
 import 'package:mobile/view/pinterest_application.dart';
 
-void main() async {
+void mainCommon() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   Logger.level = Level.verbose;
