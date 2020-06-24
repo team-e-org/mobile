@@ -7,6 +7,7 @@ import 'package:mobile/model/board_model.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
+import 'package:mobile/view/board_detail_screen.dart';
 import 'package:mobile/view/components/board_grid_view.dart';
 import 'package:mobile/view/components/components.dart';
 import 'package:mobile/view/components/user_icon.dart';
@@ -97,7 +98,7 @@ class AccountScreen extends StatelessWidget {
                 boards: state.boards,
                 boardPinMap: state.boardPinMap,
                 layout: BoardGridViewLayout.compact,
-                onTap: (context, board) {},
+                onTap: _onBoardTap,
               ),
             ),
           ],
@@ -134,6 +135,8 @@ class AccountScreen extends StatelessWidget {
     if (board == null) {
       return;
     }
+    Navigator.of(context).pushNamed(Routes.boardDetail,
+        arguments: BoardDetailScreenArguments(board: board));
     // TODO(dh9489): 画面遷移
   }
 }
