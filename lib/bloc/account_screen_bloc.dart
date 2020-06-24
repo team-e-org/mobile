@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:logger/logger.dart';
 import 'package:mobile/repository/account_repository.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
@@ -99,8 +98,6 @@ class AccountScreenBloc extends Bloc<AccountScreenEvent, AccountScreenState> {
       yield const Loading(user: null, boards: [], boardPinMap: {});
       try {
         final userId = accountRepository.getPersistUserId();
-        print(accountRepository.getPersistUserId());
-        print(accountRepository.getPersistToken());
         final user = await usersRepository.getUser(userId);
         yield Loading(user: user, boards: const [], boardPinMap: const {});
 

@@ -74,15 +74,11 @@ class DefaultPinsApi extends PinsApi {
       'isPrivate': isPrivate.toString(),
     };
 
-    try {
-      await _client.fileUpload(
-        '/boards/$boardId/pins',
-        fields: fields,
-        fileKey: 'image',
-        fileBytes: imageBytes,
-      );
-    } on Exception {
-      rethrow;
-    }
+    await _client.fileUpload(
+      '/boards/$boardId/pins',
+      fields: fields,
+      fileKey: 'image',
+      fileBytes: imageBytes,
+    );
   }
 }

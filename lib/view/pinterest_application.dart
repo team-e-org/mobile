@@ -8,11 +8,9 @@ import 'package:mobile/api/users_api.dart';
 import 'package:mobile/config.dart';
 import 'package:mobile/repository/account_repository.dart';
 import 'package:mobile/data/authentication_preferences.dart';
-import 'package:mobile/repository/boards_repository_mock.dart';
 import 'package:mobile/repository/pins_repository.dart';
 import 'package:mobile/api/auth_api.dart';
 import 'package:mobile/repository/repositories.dart';
-import 'package:mobile/repository/users_repository_mock.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/view/board_detail_screen.dart';
 import 'package:mobile/view/board_edit_screen.dart';
@@ -49,11 +47,6 @@ class PinterestApplication extends StatelessWidget {
     final pinsRepo = DefaultPinsRepository(DefaultPinsApi(apiClient));
     final boardsRepo = DefaultBoardsRepository(DefaultBoardsApi(apiClient));
     final usersRepo = DefaultUsersRepository(DefaultUsersApi(apiClient));
-
-    // final accountRepo = MockAccountRepository();
-    // final pinsRepo = MockPinsRepository();
-    // final boardsRepo = MockBoardsRepository();
-    // final usersRepo = MockUsersRepository();
 
     return BlocProvider(
       create: (context) => AuthenticationBloc(accountRepository: accountRepo)

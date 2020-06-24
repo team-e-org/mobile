@@ -8,6 +8,8 @@ class ApplicationConfig {
   final String apiEndpoint;
 }
 
+// TODO: サーバーの接続先はflavor等で対応予定
+// See: https://github.com/team-e-org/mobile/issues/183
 final debugConfig = ApplicationConfig(
   apiEndpoint:
       Platform.isAndroid ? 'http://10.0.2.2:5000' : 'http://localhost:5000',
@@ -15,6 +17,5 @@ final debugConfig = ApplicationConfig(
 );
 
 ApplicationConfig readConfig() {
-  // TODO: 本番環境用のconfigを入れる
   return debugConfig;
 }
