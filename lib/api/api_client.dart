@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:mobile/data/authentication_preferences.dart';
 
 import 'errors/error.dart';
@@ -69,7 +70,12 @@ class ApiClient {
     final request = MultipartRequest('POST', uri);
     print(fileBytes);
     request.fields.addAll(fields);
-    request.files.add(MultipartFile.fromBytes(fileKey, fileBytes));
+    request.files.add(MultipartFile.fromBytes(
+      fileKey,
+      fileBytes,
+      filename: 'image.png', // FIXME: ファイルタイプをチェックするようにする
+      contentType: MediaType.parse('image/png'),
+    ));
     request.headers.addAll(await _headers);
 
     final response = await request.send();
