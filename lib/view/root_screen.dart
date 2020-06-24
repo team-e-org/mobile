@@ -29,7 +29,10 @@ class _RootScreenState extends State<RootScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: rootScreenDestinations[_currentIndex].body,
+      body: IndexedStack(
+        index: _currentIndex,
+        children: rootScreenDestinations.map((e) => e.body).toList(),
+      ),
       bottomNavigationBar: _buildBottomNavigationBar(context),
     );
   }
@@ -39,8 +42,8 @@ class _RootScreenState extends State<RootScreen> {
       elevation: 4,
       child: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Theme.of(context).accentColor,
-        unselectedItemColor: Colors.grey,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey[500],
         currentIndex: _currentIndex,
         items: rootScreenDestinations
             .map(

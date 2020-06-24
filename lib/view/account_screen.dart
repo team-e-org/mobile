@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:mobile/bloc/account_screen_bloc.dart';
 import 'package:mobile/repository/account_repository.dart';
 import 'package:mobile/model/board_model.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
+import 'package:mobile/view/board_detail_screen.dart';
 import 'package:mobile/view/components/board_grid_view.dart';
-import 'package:mobile/view/components/components.dart';
 import 'package:mobile/view/components/user_icon.dart';
 import 'package:mobile/view/onboarding/authentication_bloc.dart';
 
@@ -97,7 +96,7 @@ class AccountScreen extends StatelessWidget {
                 boards: state.boards,
                 boardPinMap: state.boardPinMap,
                 layout: BoardGridViewLayout.compact,
-                onTap: (context, board) {},
+                onTap: _onBoardTap,
               ),
             ),
           ],
@@ -118,11 +117,11 @@ class AccountScreen extends StatelessWidget {
             UserIcon(
               imageUrl: user == null ? '' : user.icon,
               radius: 32,
-              margin: EdgeInsets.all(8),
+              margin: const EdgeInsets.all(8),
             ),
             Text(
               user == null ? '' : user.name,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -134,6 +133,8 @@ class AccountScreen extends StatelessWidget {
     if (board == null) {
       return;
     }
+    Navigator.of(context).pushNamed(Routes.boardDetail,
+        arguments: BoardDetailScreenArguments(board: board));
     // TODO(dh9489): 画面遷移
   }
 }
