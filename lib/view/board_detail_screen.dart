@@ -4,11 +4,9 @@ import 'package:mobile/bloc/board_detail_screen_bloc.dart';
 import 'package:mobile/model/board_model.dart';
 import 'package:mobile/model/pin_model.dart';
 import 'package:mobile/repository/repositories.dart';
-import 'package:mobile/view/mock/mock_screen_common.dart';
+import 'package:mobile/routes.dart';
+import 'package:mobile/view/components/reloadable_pin_grid_view.dart';
 import 'package:mobile/view/pin_detail_screen.dart';
-
-import '../routes.dart';
-import 'components/pin_grid_view.dart';
 
 class BoardDetailScreenArguments {
   BoardDetailScreenArguments({
@@ -53,21 +51,14 @@ class BoardDetailScreen extends StatelessWidget {
     if (state is InitialState) {
       blocProvider.add(LoadPinsPage());
     }
-    final controller = ScrollController();
-    controller.addListener(() {
-      if (controller.position.maxScrollExtent <= controller.position.pixels) {
-        blocProvider.add(LoadPinsPage());
-      }
-    });
 
-    print(state.pins.length);
-
-    return Container(
-      child: PinGridView(
-        pins: state.pins,
-        onTap: _onPinTap,
-        controller: controller,
-      ),
+    return ReloadablePinGridView(
+      isLoading: state is Loading,
+      pins: state.pins,
+      onPinTap: _onPinTap,
+      onScrollOut: () => {blocProvider.add(LoadPinsPage())},
+      isError: state is ErrorState,
+      onReload: () => {blocProvider.add(LoadPinsPage())},
     );
   }
 

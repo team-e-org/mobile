@@ -20,9 +20,7 @@ class PinCard extends StatelessWidget {
         onTap: onTap,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: pin.title.isEmpty
-              ? [_pinImage()]
-              : [_pinImage(), const SizedBox(height: 4), _pinTitle()],
+          children: [_pinImage(), const SizedBox(height: 4), _pinTitle()],
         ),
       ),
     );
@@ -53,7 +51,7 @@ class PinCard extends StatelessWidget {
 
   Widget _pinTitle() {
     return PinterestTypography.body2(
-      pin.title,
+      pin.title ?? ' ',
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
     );

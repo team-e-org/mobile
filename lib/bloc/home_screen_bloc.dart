@@ -79,7 +79,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
   }
 
   Stream<HomeScreenState> mapLoadPinsPageToState(LoadPinsPage event) async* {
-    if (state is InitialState || state is DefaultState) {
+    if (!(state is Loading)) {
       yield Loading(page: state.page, pins: state.pins);
       try {
         final _additionalPins =

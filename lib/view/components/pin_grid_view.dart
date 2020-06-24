@@ -10,11 +10,16 @@ class PinGridView extends StatelessWidget {
     this.pins = const [],
     this.onTap,
     this.controller,
+    this.shrinkWrap = false,
+    this.primary = false,
+    this.physics,
   });
 
   final List<Pin> pins;
   final PinGridViewCallback onTap;
   final ScrollController controller;
+  final bool shrinkWrap, primary;
+  final ScrollPhysics physics;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +31,9 @@ class PinGridView extends StatelessWidget {
       itemBuilder: _itemBuilder,
       staggeredTileBuilder: _staggeredTileBuilder,
       controller: controller,
+      shrinkWrap: shrinkWrap,
+      primary: primary,
+      physics: physics,
     );
   }
 
