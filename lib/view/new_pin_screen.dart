@@ -41,31 +41,32 @@ class NewPinScreen extends StatelessWidget {
     var result = NewPinResult();
 
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    result.imageFile = File(pickedFile.path);
+    if (pickedFile != null) {
+      result.imageFile = File(pickedFile.path);
 
-    await Navigator.of(context).pushNamed(
-      Routes.createNewPinEdit,
-      arguments: PinEditScreenArguments(
-        file: result.imageFile,
-        onNextPressed: (context, newPin) async {
-          result.newPin = newPin;
+      await Navigator.of(context).pushNamed(
+        Routes.createNewPinEdit,
+        arguments: PinEditScreenArguments(
+          file: result.imageFile,
+          onNextPressed: (context, newPin) async {
+            result.newPin = newPin;
 
-          // get board which the new pin will be added, from select board screen
-          await Navigator.of(context).pushNamed(
-            Routes.createNewPinSelectBoard,
-            arguments: SelectBoardScreenArguments(
-              onBoardPressed: (context, board) {
-                result.board = board;
-                Navigator.of(context).pop();
-              },
-            ),
-          );
+            // get board which the new pin will be added, from select board screen
+            await Navigator.of(context).pushNamed(
+              Routes.createNewPinSelectBoard,
+              arguments: SelectBoardScreenArguments(
+                onBoardPressed: (context, board) {
+                  result.board = board;
+                  Navigator.of(context).pop();
+                },
+              ),
+            );
 
-          Navigator.of(context).pop();
-        },
-      ),
-    ) as NewPinResult;
-
+            Navigator.of(context).pop();
+          },
+        ),
+      ) as NewPinResult;
+    }
     Navigator.of(context).pop();
 
     // request api
