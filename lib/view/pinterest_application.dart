@@ -80,6 +80,16 @@ class PinterestApplication extends StatelessWidget {
       child: MaterialApp(
         title: 'Pinterest',
         theme: ThemeData(
+          appBarTheme: AppBarTheme(
+            color: Colors.grey[200],
+            textTheme: TextTheme(
+              headline6: TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+              ),
+            ),
+          ),
+          accentColor: Colors.red,
           buttonColor: Colors.red,
         ),
         onGenerateRoute: (RouteSettings settings) {
