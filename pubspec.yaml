@@ -46,7 +46,7 @@ flutter:
 
 flutter_native_splash:
   image: "assets/logo/logo.png"
-  color: "dddddd"
+  color: "eeeeee"
 
 # See doc: https://pub.dev/packages/flutter_flavorizr
 flavorizr:
