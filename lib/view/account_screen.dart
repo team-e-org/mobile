@@ -111,10 +111,11 @@ class AccountScreen extends StatelessWidget {
                 isError: state is ErrorState,
                 onReload: () {
                   BlocProvider.of<AccountScreenBloc>(context)
-                      .add(const LoadInitial());
+                      .add(const Refresh());
                 },
                 onRefresh: () async {
-                  BlocProvider.of<AccountScreenBloc>(context).add(Refresh());
+                  BlocProvider.of<AccountScreenBloc>(context)
+                      .add(const Refresh());
                 },
               ),
             ),
