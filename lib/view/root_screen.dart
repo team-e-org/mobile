@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/flavors.dart';
 import 'package:mobile/view/account_screen.dart';
 import 'package:mobile/view/home_screen.dart';
 import 'package:mobile/view/playground_screen.dart';
@@ -14,9 +15,12 @@ class RootScreenDestination {
 
 final List<RootScreenDestination> rootScreenDestinations = [
   RootScreenDestination(0, 'Home', HomeScreen(), Icons.home),
-  RootScreenDestination(1, 'Playground', PlaygroundScreen(), Icons.airplay),
-  RootScreenDestination(2, 'Account', AccountScreen(), Icons.account_circle),
-];
+  RootScreenDestination(1, 'Account', AccountScreen(), Icons.account_circle),
+  F.appFlavor == Flavor.DEV
+      ? RootScreenDestination(
+          2, 'Playground', PlaygroundScreen(), Icons.airplay)
+      : null,
+].where((item) => item != null).toList();
 
 class RootScreen extends StatefulWidget {
   @override
