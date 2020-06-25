@@ -15,7 +15,6 @@ class BoardGridView extends StatefulWidget {
     this.shrinkWrap = false,
     this.primary = false,
     this.physics,
-    this.onRefresh,
   });
 
   final List<Board> boards;
@@ -24,12 +23,9 @@ class BoardGridView extends StatefulWidget {
   final BoardGridViewCallback onTap;
   final bool shrinkWrap, primary;
   final ScrollPhysics physics;
-  final RefreshCallback onRefresh;
 
   @override
-  _BoardGridViewState createState() => _BoardGridViewState(
-        onRefresh: onRefresh,
-      );
+  _BoardGridViewState createState() => _BoardGridViewState();
 }
 
 enum BoardGridViewLayout {
@@ -39,13 +35,7 @@ enum BoardGridViewLayout {
 }
 
 class _BoardGridViewState extends State<BoardGridView> {
-  _BoardGridViewState({
-    this.onRefresh,
-  });
-
-  final RefreshCallback onRefresh;
-
-  Widget _styleLarge(BuildContext context) {
+  StaggeredGridView _styleLarge(BuildContext context) {
     return StaggeredGridView.countBuilder(
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 2),
       crossAxisCount: 1,
@@ -68,7 +58,7 @@ class _BoardGridViewState extends State<BoardGridView> {
     );
   }
 
-  Widget _styleCompact(BuildContext context) {
+  StaggeredGridView _styleCompact(BuildContext context) {
     return StaggeredGridView.countBuilder(
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 2),
       crossAxisCount: 2,
@@ -91,7 +81,7 @@ class _BoardGridViewState extends State<BoardGridView> {
     );
   }
 
-  Widget _styleSlim(BuildContext context) {
+  StaggeredGridView _styleSlim(BuildContext context) {
     return StaggeredGridView.countBuilder(
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 2),
       crossAxisCount: 1,
