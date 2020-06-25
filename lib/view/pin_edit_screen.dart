@@ -91,7 +91,12 @@ class _PinEditScreenState extends State<PinEditScreen> {
             props: PinterestTextFieldProps(
                 label: 'Title',
                 hintText: 'ここにタイトルを書く',
-                validator: Validator.isValidPinTitle,
+                validator: (value) {
+                  if (!Validator.isValidPinTitle(value)) {
+                    return 'Invalid pin title';
+                  }
+                  return null;
+                },
                 maxLength: 30,
                 maxLengthEnforced: false,
                 onChanged: (value) => {
@@ -104,7 +109,12 @@ class _PinEditScreenState extends State<PinEditScreen> {
             props: PinterestTextFieldProps(
               label: 'Description',
               hintText: 'ここに説明を書く',
-              validator: Validator.isValidPinDescription,
+              validator: (value) {
+                if (!Validator.isValidPinDescription(value)) {
+                  return 'Invalid pin description';
+                }
+                return null;
+              },
               keyboardType: TextInputType.multiline,
               minLines: 1,
               maxLines: 8,
@@ -121,7 +131,12 @@ class _PinEditScreenState extends State<PinEditScreen> {
             props: PinterestTextFieldProps(
                 label: 'URL',
                 hintText: 'ここにURLを書く',
-                validator: Validator.isValidPinUrl,
+                validator: (value) {
+                  if (!Validator.isValidPinUrl(value)) {
+                    return 'Invalid url';
+                  }
+                  return null;
+                },
                 maxLengthEnforced: false,
                 onChanged: (value) => {
                       setState(() {
