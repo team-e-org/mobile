@@ -51,6 +51,7 @@ class PinFormData {
 
 class _PinEditScreenState extends State<PinEditScreen> {
   final PinFormData _formdata = PinFormData();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -74,8 +75,12 @@ class _PinEditScreenState extends State<PinEditScreen> {
                 _formField(_formdata),
                 PinterestButton.primary(
                     text: 'Next',
-                    onPressed: () => widget.args
-                        .onNextPressed(context, _formdata.toNewPin())),
+                    onPressed: () {
+                      if (_formKey.currentState.validate()) {
+                        widget.args
+                            .onNextPressed(context, _formdata.toNewPin());
+                      }
+                    }),
               ],
             ),
           ),
@@ -87,62 +92,54 @@ class _PinEditScreenState extends State<PinEditScreen> {
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: Column(
         children: [
-          PinterestTextField(
-            props: PinterestTextFieldProps(
-                label: 'Title',
-                hintText: 'ここにタイトルを書く',
-                validator: (value) {
-                  if (!Validator.isValidPinTitle(value)) {
-                    return 'Invalid pin title';
-                  }
-                  return null;
-                },
-                maxLength: 30,
-                maxLengthEnforced: false,
-                onChanged: (value) => {
+          Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                PinterestTextField(
+                  props: PinterestTextFieldProps(
+                      label: 'Title',
+                      hintText: 'ここにタイトルを書く',
+                      validator: _pinTitleValidator,
+                      maxLength: 30,
+                      maxLengthEnforced: false,
+                      onChanged: (value) => {
+                            setState(() {
+                              _formdata.title = value;
+                            })
+                          }),
+                ),
+                PinterestTextField(
+                  props: PinterestTextFieldProps(
+                    label: 'Description',
+                    hintText: 'ここに説明を書く',
+                    validator: _pinDescriptionValidator,
+                    keyboardType: TextInputType.multiline,
+                    minLines: 1,
+                    maxLines: 8,
+                    maxLength: 280,
+                    maxLengthEnforced: false,
+                    onChanged: (value) => {
                       setState(() {
-                        _formdata.title = value;
+                        _formdata.description = value;
                       })
-                    }),
-          ),
-          PinterestTextField(
-            props: PinterestTextFieldProps(
-              label: 'Description',
-              hintText: 'ここに説明を書く',
-              validator: (value) {
-                if (!Validator.isValidPinDescription(value)) {
-                  return 'Invalid pin description';
-                }
-                return null;
-              },
-              keyboardType: TextInputType.multiline,
-              minLines: 1,
-              maxLines: 8,
-              maxLength: 280,
-              maxLengthEnforced: false,
-              onChanged: (value) => {
-                setState(() {
-                  _formdata.description = value;
-                })
-              },
+                    },
+                  ),
+                ),
+                PinterestTextField(
+                  props: PinterestTextFieldProps(
+                      label: 'URL',
+                      hintText: 'ここにURLを書く',
+                      validator: _pinUrlValidator,
+                      maxLengthEnforced: false,
+                      onChanged: (value) => {
+                            setState(() {
+                              _formdata.url = value;
+                            })
+                          }),
+                )
+              ],
             ),
-          ),
-          PinterestTextField(
-            props: PinterestTextFieldProps(
-                label: 'URL',
-                hintText: 'ここにURLを書く',
-                validator: (value) {
-                  if (!Validator.isValidPinUrl(value)) {
-                    return 'Invalid url';
-                  }
-                  return null;
-                },
-                maxLengthEnforced: false,
-                onChanged: (value) => {
-                      setState(() {
-                        _formdata.url = value;
-                      })
-                    }),
           ),
           Container(
             height: 50,
@@ -166,5 +163,26 @@ class _PinEditScreenState extends State<PinEditScreen> {
         ],
       ),
     );
+  }
+
+  String _pinTitleValidator(String value) {
+    if (!Validator.isValidPinTitle(value)) {
+      return 'Invalid pin title';
+    }
+    return null;
+  }
+
+  String _pinDescriptionValidator(String value) {
+    if (!Validator.isValidPinDescription(value)) {
+      return 'Invalid pin description';
+    }
+    return null;
+  }
+
+  String _pinUrlValidator(String value) {
+    if (value != null && value.isNotEmpty && !Validator.isValidPinUrl(value)) {
+      return 'Invalid url';
+    }
+    return null;
   }
 }
