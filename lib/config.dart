@@ -1,21 +1,33 @@
-import 'dart:io';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:mobile/flavors.dart';
 
 class ApplicationConfig {
-  ApplicationConfig({
+  const ApplicationConfig({
     this.apiEndpoint,
   });
 
   final String apiEndpoint;
 }
 
-// TODO: サーバーの接続先はflavor等で対応予定
-// See: https://github.com/team-e-org/mobile/issues/183
-final debugConfig = ApplicationConfig(
-  apiEndpoint:
-      Platform.isAndroid ? 'http://10.0.2.2:5000' : 'http://localhost:5000',
-  // Platform.isAndroid ? 'http://10.0.2.2:3100' : 'http://localhost:3100',
-);
+Future<void> loadDotEnv() async {
+  final envPathMap = {
+    Flavor.DEV: '.env/dev',
+    Flavor.STAGING: './env/staging',
+    Flavor.PRODUCTION: './env/production',
+  };
 
-ApplicationConfig readConfig() {
-  return debugConfig;
+  final envPath = envPathMap[F.appFlavor];
+  await DotEnv().load(envPath);
+}
+
+Future<ApplicationConfig> readConfig() async {
+  await loadDotEnv();
+  final apiEndpoint = DotEnv().env['API_ENDPOINT'];
+  if (apiEndpoint == null || apiEndpoint.isEmpty) {
+    throw Exception('API_ENDPOINT is missing');
+  }
+
+  return ApplicationConfig(
+    apiEndpoint: apiEndpoint,
+  );
 }

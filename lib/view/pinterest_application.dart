@@ -28,14 +28,15 @@ import 'package:overlay_support/overlay_support.dart';
 
 class PinterestApplication extends StatelessWidget {
   const PinterestApplication({
-    this.prefs,
+    @required this.config,
+    @required this.prefs,
   });
 
+  final ApplicationConfig config;
   final AuthenticationPreferences prefs;
 
   @override
   Widget build(BuildContext context) {
-    final config = readConfig();
     final apiClient = ApiClient(
       Client(),
       apiEndpoint: config.apiEndpoint,
