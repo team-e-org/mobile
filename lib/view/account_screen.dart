@@ -37,7 +37,7 @@ class AccountScreen extends StatelessWidget {
                 accountRepository: accountRepository,
                 usersRepository: usersRepository,
                 boardsRepository: boardsRepository,
-              ),
+              )..add(const LoadInitial()),
               child: _buildContent(context),
             ),
           ),
@@ -78,12 +78,6 @@ class AccountScreen extends StatelessWidget {
   Widget _buildContent(BuildContext context) {
     return BlocBuilder<AccountScreenBloc, AccountScreenState>(
       builder: (context, state) {
-        final blocProvider = BlocProvider.of<AccountScreenBloc>(context);
-
-        if (blocProvider.state is InitialState) {
-          blocProvider.add(const LoadInitial());
-        }
-
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
