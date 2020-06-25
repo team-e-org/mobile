@@ -11,26 +11,24 @@ abstract class PinsRepository {
 }
 
 class DefaultPinsRepository extends PinsRepository {
-  factory DefaultPinsRepository({PinsApi pinsApi, BoardsApi boardsApi}) {
-    return _instance ?? DefaultPinsRepository._internal(pinsApi, boardsApi);
-  }
+  DefaultPinsRepository({
+    this.pinsApi,
+    this.boardsApi,
+  });
 
-  DefaultPinsRepository._internal(this._pinsApi, this._boardsApi);
-
-  static DefaultPinsRepository _instance;
-  PinsApi _pinsApi;
-  BoardsApi _boardsApi;
+  PinsApi pinsApi;
+  BoardsApi boardsApi;
 
   @override
   Future<List<Pin>> getHomePagePins({int page}) =>
-      _pinsApi.pins(page: page ?? 1);
+      pinsApi.pins(page: page ?? 1);
   Future<List<Pin>> getBoardPins({int boardId, int page}) =>
-      _boardsApi.boardPins(id: boardId, page: page ?? 1);
+      boardsApi.boardPins(id: boardId, page: page ?? 1);
 
   @override
   Future<void> createPin(NewPin newPin, File imageFile, Board board) async {
     try {
-      await _pinsApi.newPin(
+      await pinsApi.newPin(
         title: newPin.title,
         description: newPin.description,
         url: newPin.url,
