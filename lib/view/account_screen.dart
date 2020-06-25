@@ -8,6 +8,7 @@ import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/view/board_detail_screen.dart';
 import 'package:mobile/view/components/board_grid_view.dart';
+import 'package:mobile/view/components/notification.dart';
 import 'package:mobile/view/components/reloadable_board_grid_view.dart';
 import 'package:mobile/view/components/user_icon.dart';
 import 'package:mobile/view/onboarding/authentication_bloc.dart';
@@ -29,26 +30,40 @@ class AccountScreen extends StatelessWidget {
 
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, stateAuth) {
-        return Scaffold(
-          appBar: _buildAppBar(context),
-          body: SafeArea(
-            child: BlocProvider(
-              create: (context) => AccountScreenBloc(
-                accountRepository: accountRepository,
-                usersRepository: usersRepository,
-                boardsRepository: boardsRepository,
-              ),
+        return BlocProvider(
+          create: (context) => AccountScreenBloc(
+            accountRepository: accountRepository,
+            usersRepository: usersRepository,
+            boardsRepository: boardsRepository,
+          )..add(const LoadInitial()),
+          child: Scaffold(
+            appBar: _buildAppBar(context),
+            body: SafeArea(
               child: _buildContent(context),
             ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.of(context).pushNamed(Routes.createNew);
-            },
+            floatingActionButton: _buildFAB(context),
           ),
         );
       },
+    );
+  }
+
+  Widget _buildFAB(BuildContext context) {
+    return BlocBuilder<AccountScreenBloc, AccountScreenState>(
+      builder: (context, state) => FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () async {
+          final result =
+              await Navigator.of(context).pushNamed(Routes.createNew);
+          if (result is Board) {
+            PinterestNotification.show(
+              title: 'New board created',
+              subtitle: result.name,
+            );
+            BlocProvider.of<AccountScreenBloc>(context).add(Refresh());
+          }
+        },
+      ),
     );
   }
 
@@ -78,12 +93,6 @@ class AccountScreen extends StatelessWidget {
   Widget _buildContent(BuildContext context) {
     return BlocBuilder<AccountScreenBloc, AccountScreenState>(
       builder: (context, state) {
-        final blocProvider = BlocProvider.of<AccountScreenBloc>(context);
-
-        if (blocProvider.state is InitialState) {
-          blocProvider.add(const LoadInitial());
-        }
-
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -100,7 +109,14 @@ class AccountScreen extends StatelessWidget {
                 boardPinMap: state.boardPinMap,
                 onBoardTap: _onBoardTap,
                 isError: state is ErrorState,
-                onReload: () => {blocProvider.add(const LoadInitial())},
+                onReload: () {
+                  BlocProvider.of<AccountScreenBloc>(context)
+                      .add(const Refresh());
+                },
+                onRefresh: () async {
+                  BlocProvider.of<AccountScreenBloc>(context)
+                      .add(const Refresh());
+                },
               ),
             ),
           ],

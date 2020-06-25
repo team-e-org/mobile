@@ -13,6 +13,7 @@ class ReloadableBoardGridView extends StatelessWidget {
     this.onScrollOut,
     this.isError = false,
     this.onReload,
+    this.onRefresh,
   });
 
   final bool isLoading;
@@ -24,6 +25,7 @@ class ReloadableBoardGridView extends StatelessWidget {
   final VoidCallback onScrollOut;
   final bool isError;
   final VoidCallback onReload;
+  final RefreshCallback onRefresh;
 
   Widget _loadingWidget() {
     return Container(
@@ -86,22 +88,25 @@ class ReloadableBoardGridView extends StatelessWidget {
 
     return Container(
         padding: const EdgeInsets.all(8),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              BoardGridView(
-                boards: boards,
-                boardPinMap: boardPinMap,
-                onTap: onBoardTap,
-                shrinkWrap: true,
-                primary: true,
-                physics: const NeverScrollableScrollPhysics(),
-                layout: layout,
-              ),
-              tailWidget ?? Container()
-            ],
+        child: RefreshIndicator(
+          onRefresh: onRefresh,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                BoardGridView(
+                  boards: boards,
+                  boardPinMap: boardPinMap,
+                  onTap: onBoardTap,
+                  shrinkWrap: true,
+                  primary: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  layout: layout,
+                ),
+                tailWidget ?? Container()
+              ],
+            ),
+            controller: controller,
           ),
-          controller: controller,
         ));
   }
 }

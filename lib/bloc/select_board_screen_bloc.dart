@@ -18,6 +18,10 @@ class LoadInitial extends SelectBoardScreenEvent {
   const LoadInitial();
 }
 
+class Refresh extends SelectBoardScreenEvent {
+  const Refresh();
+}
+
 //////// State ////////
 abstract class SelectBoardScreenState extends Equatable {
   const SelectBoardScreenState({
@@ -86,6 +90,10 @@ class SelectBoardScreenBloc
     if (event is LoadInitial) {
       yield* mapLoadInitialToState(event);
     }
+
+    if (event is Refresh) {
+      yield* mapRefreshToState(event);
+    }
   }
 
   Stream<SelectBoardScreenState> mapLoadInitialToState(
@@ -114,6 +122,28 @@ class SelectBoardScreenBloc
         );
       }
     }
-    return;
+  }
+
+  Stream<SelectBoardScreenState> mapRefreshToState(Refresh event) async* {
+    yield Loading(boards: state.boards, boardPinMap: state.boardPinMap);
+    try {
+      final userId = accountRepository.getPersistUserId();
+      final boards = await usersRepository.getUserBoards(userId);
+      yield Loading(boards: boards, boardPinMap: state.boardPinMap);
+
+      final boardPinMap = <int, List<Pin>>{};
+      for (var i = 0; i < boards.length; i++) {
+        final pins =
+            await boardsRepository.getBoardPins(id: boards[i].id, page: 1);
+        boardPinMap.putIfAbsent(boards[i].id, () => pins);
+      }
+      yield DefaultState(boards: boards, boardPinMap: boardPinMap);
+    } on Exception catch (e) {
+      yield ErrorState(
+        boards: state.boards,
+        boardPinMap: state.boardPinMap,
+        error: e,
+      );
+    }
   }
 }
