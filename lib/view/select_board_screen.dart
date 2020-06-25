@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile/bloc/account_screen_bloc.dart';
+import 'package:mobile/bloc/select_board_screen_bloc.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/view/components/components.dart';
@@ -38,7 +38,7 @@ class SelectBoardScreen extends StatelessWidget {
       ),
       body: Container(
         child: BlocProvider(
-          create: (context) => AccountScreenBloc(
+          create: (context) => SelectBoardScreenBloc(
             accountRepository: accountRepository,
             usersRepository: usersRepository,
             boardsRepository: boardsRepository,
@@ -50,9 +50,9 @@ class SelectBoardScreen extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) {
-    return BlocBuilder<AccountScreenBloc, AccountScreenState>(
+    return BlocBuilder<SelectBoardScreenBloc, SelectBoardScreenState>(
       builder: (context, state) {
-        final blocProvider = BlocProvider.of<AccountScreenBloc>(context);
+        final blocProvider = BlocProvider.of<SelectBoardScreenBloc>(context);
 
         print(state);
         if (blocProvider.state is InitialState) {
