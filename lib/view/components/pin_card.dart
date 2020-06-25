@@ -20,9 +20,9 @@ class PinCard extends StatelessWidget {
         onTap: onTap,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: pin.title.isEmpty
-              ? [_pinImage()]
-              : [_pinImage(), const SizedBox(height: 4), _pinTitle()],
+          children: pin.title != null
+              ? [_pinImage(), const SizedBox(height: 4), _pinTitle()]
+              : [_pinImage()],
         ),
       ),
     );

@@ -21,13 +21,15 @@ abstract class BoardDetailScreenState extends Equatable {
   const BoardDetailScreenState({
     @required this.page,
     @required this.pins,
+    this.exception,
   });
 
   final int page;
   final List<Pin> pins;
+  final Exception exception;
 
   @override
-  List<Object> get props => [page, pins];
+  List<Object> get props => [page, pins, exception];
 }
 
 class InitialState extends BoardDetailScreenState {
@@ -49,6 +51,15 @@ class Loading extends BoardDetailScreenState {
     @required int page,
     @required List<Pin> pins,
   }) : super(page: page, pins: pins);
+}
+
+class ErrorState extends BoardDetailScreenState {
+  @override
+  const ErrorState({
+    @required int page,
+    @required List<Pin> pins,
+    @required Exception exception,
+  }) : super(page: page, pins: pins, exception: exception);
 }
 
 //////// Bloc ////////
@@ -75,7 +86,7 @@ class BoardDetailScreenBloc
 
   Stream<BoardDetailScreenState> mapLoadPinsPageToState(
       LoadPinsPage event) async* {
-    if (state is InitialState || state is DefaultState) {
+    if (state is! Loading) {
       yield Loading(page: state.page, pins: state.pins);
       try {
         final _additionalPins = await pinsRepository.getBoardPins(
@@ -84,7 +95,7 @@ class BoardDetailScreenBloc
         yield DefaultState(page: state.page + 1, pins: _pins);
       } on Exception catch (e) {
         Logger().e(e);
-        yield DefaultState(page: state.page, pins: state.pins);
+        yield ErrorState(page: state.page, pins: state.pins, exception: e);
       }
     }
     return;

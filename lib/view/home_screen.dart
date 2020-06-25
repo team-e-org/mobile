@@ -5,6 +5,7 @@ import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/components.dart';
+import 'package:mobile/view/components/reloadable_pin_grid_view.dart';
 
 import 'pin_detail_screen.dart';
 
@@ -37,28 +38,17 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _contentBuilder(BuildContext context, HomeScreenState state) {
     final blocProvider = BlocProvider.of<HomeScreenBloc>(context);
 
-    final controller = ScrollController();
-    controller.addListener(() {
-      if (controller.position.maxScrollExtent <= controller.position.pixels) {
-        blocProvider.add(LoadPinsPage());
-      }
-    });
-
-    if (state is ErrorState) {
-      return Container(
-        child: const Center(
-          child: Text('画像の読み込みに失敗しました'),
-        ),
-      );
+    if (state is InitialState) {
+      blocProvider.add(LoadPinsPage());
     }
 
-    return Container(
-      padding: const EdgeInsets.all(8),
-      child: PinGridView(
-        pins: state.pins,
-        onTap: _onPinTap,
-        controller: controller,
-      ),
+    return ReloadablePinGridView(
+      isLoading: state is Loading,
+      pins: state.pins,
+      onPinTap: _onPinTap,
+      onScrollOut: () => {blocProvider.add(LoadPinsPage())},
+      isError: state is ErrorState,
+      onReload: () => {blocProvider.add(LoadPinsPage())},
     );
   }
 
