@@ -12,8 +12,8 @@ class ApplicationConfig {
 Future<void> loadDotEnv() async {
   final envPathMap = {
     Flavor.DEV: '.env/dev',
-    Flavor.STAGING: './env/staging',
-    Flavor.PRODUCTION: './env/production',
+    Flavor.STAGING: '.env/staging',
+    Flavor.PRODUCTION: '.env/production',
   };
 
   final envPath = envPathMap[F.appFlavor];
