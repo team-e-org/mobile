@@ -59,7 +59,6 @@ class ReloadablePinGridView extends StatelessWidget {
     final controller = ScrollController();
     controller.addListener(() {
       if (controller.position.maxScrollExtent <= controller.position.pixels) {
-        print('scroll out');
         onScrollOut();
       }
     });

@@ -86,7 +86,7 @@ class BoardDetailScreenBloc
 
   Stream<BoardDetailScreenState> mapLoadPinsPageToState(
       LoadPinsPage event) async* {
-    if (!(state is Loading)) {
+    if (state is! Loading) {
       yield Loading(page: state.page, pins: state.pins);
       try {
         final _additionalPins = await pinsRepository.getBoardPins(
