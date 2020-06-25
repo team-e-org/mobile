@@ -75,7 +75,7 @@ class NewPinScreen extends StatelessWidget {
 
     var result = NewPinResult(imageFile: imageFile);
 
-    await Navigator.of(context).pushNamed(
+    final res = await Navigator.of(context).pushNamed(
       Routes.createNewPinEdit,
       arguments: PinEditScreenArguments(
         file: result.imageFile,
@@ -83,29 +83,34 @@ class NewPinScreen extends StatelessWidget {
           result.newPin = newPin;
 
           // get board which the new pin will be added, from select board screen
-          await Navigator.of(context).pushNamed(
+          final res = await Navigator.of(context).pushNamed(
             Routes.createNewPinSelectBoard,
             arguments: SelectBoardScreenArguments(
               onBoardPressed: (context, board) {
                 result.board = board;
-                Navigator.of(context).pop();
+
+                Navigator.of(context).pop(true);
               },
             ),
           );
 
-          Navigator.of(context).pop();
+          if (res != null && res as bool) {
+            Navigator.of(context).pop(true);
+          }
         },
       ),
     );
 
-    Navigator.of(context).pop();
+    if (res != null && res as bool) {
+      Navigator.of(context).pop();
 
-    // request api
-    // TODO(): callbackの追加
-    BlocProvider.of<NewPinScreenBloc>(context).add(SendRequest(
-      newPin: result.newPin,
-      imageFile: result.imageFile,
-      board: result.board,
-    ));
+      // request api
+      // TODO(): callbackの追加
+      BlocProvider.of<NewPinScreenBloc>(context).add(SendRequest(
+        newPin: result.newPin,
+        imageFile: result.imageFile,
+        board: result.board,
+      ));
+    }
   }
 }
