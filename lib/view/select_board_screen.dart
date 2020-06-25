@@ -4,6 +4,7 @@ import 'package:mobile/bloc/select_board_screen_bloc.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/view/components/components.dart';
+import 'package:mobile/view/components/reloadable_board_grid_view.dart';
 
 import 'components/board_grid_view.dart';
 
@@ -54,7 +55,6 @@ class SelectBoardScreen extends StatelessWidget {
       builder: (context, state) {
         final blocProvider = BlocProvider.of<SelectBoardScreenBloc>(context);
 
-        print(state);
         if (blocProvider.state is InitialState) {
           blocProvider.add(const LoadInitial());
         }
@@ -62,18 +62,18 @@ class SelectBoardScreen extends StatelessWidget {
         return SingleChildScrollView(
           child: Column(
             children: [
-              ActionCardSlim(
-                text: "Add Board",
+              const ActionCardSlim(
+                text: 'Add Board',
                 icon: Icon(Icons.add),
               ),
-              BoardGridView(
+              ReloadableBoardGridView(
+                layout: BoardGridViewLayout.slim,
+                isLoading: state is Loading,
                 boards: state.boards,
                 boardPinMap: state.boardPinMap,
-                layout: BoardGridViewLayout.slim,
-                shrinkWrap: true,
-                primary: true,
-                physics: NeverScrollableScrollPhysics(),
-                onTap: args.onBoardPressed,
+                onBoardTap: args.onBoardPressed,
+                isError: state is ErrorState,
+                onReload: () => {blocProvider.add(const LoadInitial())},
               ),
             ],
           ),

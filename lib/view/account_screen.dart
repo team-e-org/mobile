@@ -8,6 +8,7 @@ import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/view/board_detail_screen.dart';
 import 'package:mobile/view/components/board_grid_view.dart';
+import 'package:mobile/view/components/reloadable_board_grid_view.dart';
 import 'package:mobile/view/components/user_icon.dart';
 import 'package:mobile/view/onboarding/authentication_bloc.dart';
 
@@ -92,11 +93,14 @@ class AccountScreen extends StatelessWidget {
             ),
             Expanded(
               flex: 3,
-              child: BoardGridView(
+              child: ReloadableBoardGridView(
+                layout: BoardGridViewLayout.large,
+                isLoading: state is Loading,
                 boards: state.boards,
                 boardPinMap: state.boardPinMap,
-                layout: BoardGridViewLayout.compact,
-                onTap: _onBoardTap,
+                onBoardTap: _onBoardTap,
+                isError: state is ErrorState,
+                onReload: () => {blocProvider.add(const LoadInitial())},
               ),
             ),
           ],

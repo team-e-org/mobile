@@ -121,7 +121,9 @@ class BoardCardSlim extends BoardCardBase {
           children: [
             _imageContainer(),
             const SizedBox(width: 10),
-            _infoContainer(),
+            Expanded(
+              child: _infoContainer(),
+            )
           ],
         ),
       ),
@@ -304,12 +306,6 @@ abstract class BoardCardBase extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
           style: titleStyle,
-        ),
-        Text(
-          pins.length.toString() + ' pins',
-          overflow: TextOverflow.clip,
-          maxLines: 1,
-          style: subtitleStyle,
         ),
       ],
     );
