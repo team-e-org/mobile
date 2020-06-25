@@ -29,6 +29,9 @@ class NewPinScreen extends StatelessWidget {
       child: BlocBuilder<NewPinScreenBloc, NewPinScreenState>(
         builder: (context, state) {
           return Scaffold(
+            appBar: AppBar(
+              title: const Text('Create Pin'),
+            ),
             body: Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
