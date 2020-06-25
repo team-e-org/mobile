@@ -100,7 +100,7 @@ class AccountScreen extends StatelessWidget {
                       .add(const LoadInitial());
                 },
                 onRefresh: () async {
-                  PinterestNotification.showNotImplemented();
+                  BlocProvider.of<AccountScreenBloc>(context).add(Refresh());
                 },
               ),
             ),
