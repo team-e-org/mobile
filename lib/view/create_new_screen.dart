@@ -26,14 +26,8 @@ class CreateNewScreen extends StatelessWidget {
                 text: 'Board',
                 onPressed: () async {
                   final result = await Navigator.of(context)
-                      .pushReplacementNamed(Routes.createNewBoard);
-
-                  if (result is Board) {
-                    PinterestNotification.show(
-                      title: 'New board created',
-                      subtitle: result.name,
-                    );
-                  }
+                      .pushNamed(Routes.createNewBoard);
+                  Navigator.pop(context, result);
                 },
               ),
               const SizedBox(width: 20),

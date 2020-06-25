@@ -30,26 +30,40 @@ class AccountScreen extends StatelessWidget {
 
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, stateAuth) {
-        return Scaffold(
-          appBar: _buildAppBar(context),
-          body: SafeArea(
-            child: BlocProvider(
-              create: (context) => AccountScreenBloc(
-                accountRepository: accountRepository,
-                usersRepository: usersRepository,
-                boardsRepository: boardsRepository,
-              )..add(const LoadInitial()),
+        return BlocProvider(
+          create: (context) => AccountScreenBloc(
+            accountRepository: accountRepository,
+            usersRepository: usersRepository,
+            boardsRepository: boardsRepository,
+          )..add(const LoadInitial()),
+          child: Scaffold(
+            appBar: _buildAppBar(context),
+            body: SafeArea(
               child: _buildContent(context),
             ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.of(context).pushNamed(Routes.createNew);
-            },
+            floatingActionButton: _buildFAB(context),
           ),
         );
       },
+    );
+  }
+
+  Widget _buildFAB(BuildContext context) {
+    return BlocBuilder<AccountScreenBloc, AccountScreenState>(
+      builder: (context, state) => FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () async {
+          final result =
+              await Navigator.of(context).pushNamed(Routes.createNew);
+          if (result is Board) {
+            PinterestNotification.show(
+              title: 'New board created',
+              subtitle: result.name,
+            );
+            BlocProvider.of<AccountScreenBloc>(context).add(Refresh());
+          }
+        },
+      ),
     );
   }
 
