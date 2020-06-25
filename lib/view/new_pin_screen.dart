@@ -23,6 +23,10 @@ class NewPinResult {
 class NewPinScreen extends StatelessWidget {
   final ImagePicker picker = ImagePicker();
 
+  NewPinResult result = NewPinResult();
+  NewPinScreenBloc bloc;
+
+  @override
   Widget build(BuildContext context) {
     final _pinsRepository = RepositoryProvider.of<PinsRepository>(context);
 
@@ -54,28 +58,29 @@ class NewPinScreen extends StatelessWidget {
     );
   }
 
-  void _onCameraPressed(BuildContext context) async {
+  Future _onCameraPressed(BuildContext context) async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
     if (pickedFile == null) {
       return;
     }
-    await main(context, File(pickedFile.path));
+    await startSequence(context, File(pickedFile.path));
   }
 
-  void _onLibraryPressed(BuildContext context) async {
+  Future _onLibraryPressed(BuildContext context) async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     if (pickedFile == null) {
       return;
     }
-    await main(context, File(pickedFile.path));
+    await startSequence(context, File(pickedFile.path));
   }
 
-  Future main(BuildContext context, File imageFile) async {
+  Future startSequence(BuildContext context, File imageFile) async {
     if (imageFile == null) {
       return;
     }
 
-    var result = NewPinResult(imageFile: imageFile);
+    result.imageFile = imageFile;
+    bloc = BlocProvider.of<NewPinScreenBloc>(context);
 
     final res = await Navigator.of(context).pushNamed(
       Routes.createNewPinEdit,
@@ -91,7 +96,13 @@ class NewPinScreen extends StatelessWidget {
               onBoardPressed: (context, board) {
                 result.board = board;
 
-                Navigator.of(context).pop(true);
+                bloc.add(SendRequest(
+                  newPin: result.newPin,
+                  imageFile: result.imageFile,
+                  board: result.board,
+                  onSuccess: () => _onSuccess(context),
+                  onError: () => _onError(context),
+                ));
               },
             ),
           );
@@ -104,22 +115,13 @@ class NewPinScreen extends StatelessWidget {
     );
 
     if (res != null && res as bool) {
-      // request api
-      // TODO(): callbackの追加
-      BlocProvider.of<NewPinScreenBloc>(context).add(SendRequest(
-        newPin: result.newPin,
-        imageFile: result.imageFile,
-        board: result.board,
-        onSuccess: () => _onSuccess(context),
-        onError: () => _onError(context),
-      ));
-
       Navigator.of(context).pop();
     }
   }
 
   void _onSuccess(BuildContext context) {
     PinterestNotification.show(title: '新しいピンを作成しました');
+    Navigator.of(context).pop(true);
   }
 
   void _onError(BuildContext context) {
