@@ -83,6 +83,7 @@ class NewBoardScreen extends StatelessWidget {
             label: 'Board name',
             hintText: 'Add',
             validator: _boardNameValidator,
+            maxLength: 30,
             onChanged: (value) {
               BlocProvider.of<NewBoardScreenBloc>(context)
                   .add(BoardNameChanged(value: value));
