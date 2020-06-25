@@ -15,6 +15,7 @@ class BoardGridView extends StatefulWidget {
     this.shrinkWrap = false,
     this.primary = false,
     this.physics,
+    this.onRefresh,
   });
 
   final List<Board> boards;
@@ -23,9 +24,12 @@ class BoardGridView extends StatefulWidget {
   final BoardGridViewCallback onTap;
   final bool shrinkWrap, primary;
   final ScrollPhysics physics;
+  final RefreshCallback onRefresh;
 
   @override
-  _BoardGridViewState createState() => _BoardGridViewState();
+  _BoardGridViewState createState() => _BoardGridViewState(
+        onRefresh: onRefresh,
+      );
 }
 
 enum BoardGridViewLayout {
@@ -35,72 +39,87 @@ enum BoardGridViewLayout {
 }
 
 class _BoardGridViewState extends State<BoardGridView> {
-  StaggeredGridView _styleLarge(BuildContext context) {
-    return StaggeredGridView.countBuilder(
-      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 2),
-      crossAxisCount: 1,
-      mainAxisSpacing: 4,
-      crossAxisSpacing: 4,
-      shrinkWrap: widget.shrinkWrap,
-      primary: widget.primary,
-      physics: widget.physics,
-      staggeredTileBuilder: (index) {
-        return const StaggeredTile.fit(1);
-      },
-      itemCount: widget.boards.length,
-      itemBuilder: (context, index) {
-        return BoardCardLarge(
-          board: widget.boards[index],
-          pins: widget.boardPinMap[widget.boards[index].id],
-          onTap: () => widget.onTap(context, widget.boards[index]),
-        );
-      },
+  _BoardGridViewState({
+    this.onRefresh,
+  });
+
+  final RefreshCallback onRefresh;
+
+  Widget _styleLarge(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: StaggeredGridView.countBuilder(
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 2),
+        crossAxisCount: 1,
+        mainAxisSpacing: 4,
+        crossAxisSpacing: 4,
+        shrinkWrap: widget.shrinkWrap,
+        primary: widget.primary,
+        physics: widget.physics,
+        staggeredTileBuilder: (index) {
+          return const StaggeredTile.fit(1);
+        },
+        itemCount: widget.boards.length,
+        itemBuilder: (context, index) {
+          return BoardCardLarge(
+            board: widget.boards[index],
+            pins: widget.boardPinMap[widget.boards[index].id],
+            onTap: () => widget.onTap(context, widget.boards[index]),
+          );
+        },
+      ),
     );
   }
 
-  StaggeredGridView _styleCompact(BuildContext context) {
-    return StaggeredGridView.countBuilder(
-      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 2),
-      crossAxisCount: 2,
-      mainAxisSpacing: 4,
-      crossAxisSpacing: 4,
-      shrinkWrap: widget.shrinkWrap,
-      primary: widget.primary,
-      physics: widget.physics,
-      staggeredTileBuilder: (index) {
-        return const StaggeredTile.fit(1);
-      },
-      itemCount: widget.boards.length,
-      itemBuilder: (context, index) {
-        return BoardCardCompact(
-          board: widget.boards[index],
-          pins: widget.boardPinMap[widget.boards[index].id],
-          onTap: () => widget.onTap(context, widget.boards[index]),
-        );
-      },
+  Widget _styleCompact(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: StaggeredGridView.countBuilder(
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 2),
+        crossAxisCount: 2,
+        mainAxisSpacing: 4,
+        crossAxisSpacing: 4,
+        shrinkWrap: widget.shrinkWrap,
+        primary: widget.primary,
+        physics: widget.physics,
+        staggeredTileBuilder: (index) {
+          return const StaggeredTile.fit(1);
+        },
+        itemCount: widget.boards.length,
+        itemBuilder: (context, index) {
+          return BoardCardCompact(
+            board: widget.boards[index],
+            pins: widget.boardPinMap[widget.boards[index].id],
+            onTap: () => widget.onTap(context, widget.boards[index]),
+          );
+        },
+      ),
     );
   }
 
-  StaggeredGridView _styleSlim(BuildContext context) {
-    return StaggeredGridView.countBuilder(
-      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 2),
-      crossAxisCount: 1,
-      mainAxisSpacing: 4,
-      crossAxisSpacing: 4,
-      shrinkWrap: widget.shrinkWrap,
-      primary: widget.primary,
-      physics: widget.physics,
-      staggeredTileBuilder: (index) {
-        return const StaggeredTile.fit(1);
-      },
-      itemCount: widget.boards.length,
-      itemBuilder: (context, index) {
-        return BoardCardSlim(
-          board: widget.boards[index],
-          pins: widget.boardPinMap[widget.boards[index].id],
-          onTap: () => widget.onTap(context, widget.boards[index]),
-        );
-      },
+  Widget _styleSlim(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: StaggeredGridView.countBuilder(
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 2),
+        crossAxisCount: 1,
+        mainAxisSpacing: 4,
+        crossAxisSpacing: 4,
+        shrinkWrap: widget.shrinkWrap,
+        primary: widget.primary,
+        physics: widget.physics,
+        staggeredTileBuilder: (index) {
+          return const StaggeredTile.fit(1);
+        },
+        itemCount: widget.boards.length,
+        itemBuilder: (context, index) {
+          return BoardCardSlim(
+            board: widget.boards[index],
+            pins: widget.boardPinMap[widget.boards[index].id],
+            onTap: () => widget.onTap(context, widget.boards[index]),
+          );
+        },
+      ),
     );
   }
 

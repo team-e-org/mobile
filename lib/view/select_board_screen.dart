@@ -5,7 +5,7 @@ import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/view/components/components.dart';
 import 'package:mobile/view/components/reloadable_board_grid_view.dart';
-
+import 'package:mobile/view/components/notification.dart';
 import 'components/board_grid_view.dart';
 
 typedef SelectBoardScreenCallback = void Function(BuildContext, Board);
@@ -74,6 +74,9 @@ class SelectBoardScreen extends StatelessWidget {
                 onBoardTap: args.onBoardPressed,
                 isError: state is ErrorState,
                 onReload: () => {blocProvider.add(const LoadInitial())},
+                onRefresh: () async {
+                  PinterestNotification.showNotImplemented();
+                },
               ),
             ],
           ),
