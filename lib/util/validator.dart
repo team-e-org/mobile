@@ -25,6 +25,10 @@ class Validator {
     return true;
   }
 
+  static bool isValidBoardName(String s) {
+    return s != null && s.length < 100;
+  }
+
   static bool isValidPinTitle(String s) {
     return s != null && s.length < 100;
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/bloc/new_board_sreen_bloc.dart';
 import 'package:mobile/repository/boards_repository.dart';
+import 'package:mobile/util/validator.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/textfield_common.dart';
 import 'package:mobile/view/components/notification.dart';
@@ -77,6 +78,12 @@ class NewBoardScreen extends StatelessWidget {
       props: PinterestTextFieldProps(
           label: 'Board name',
           hintText: 'Add',
+          validator: (value) {
+            if (!Validator.isValidBoardName(value)) {
+              return 'Invalid board name';
+            }
+            return null;
+          },
           onChanged: (value) {
             BlocProvider.of<NewBoardScreenBloc>(context)
                 .add(BoardNameChanged(value: value));
