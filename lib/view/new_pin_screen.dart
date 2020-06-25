@@ -8,6 +8,7 @@ import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/common/button_common.dart';
+import 'package:mobile/view/components/notification.dart';
 import 'package:mobile/view/pin_edit_screen.dart';
 import 'package:mobile/view/select_board_screen.dart';
 
@@ -24,6 +25,7 @@ class NewPinScreen extends StatelessWidget {
 
   Widget build(BuildContext context) {
     final _pinsRepository = RepositoryProvider.of<PinsRepository>(context);
+
     return BlocProvider(
       create: (context) => NewPinScreenBloc(pinsRepository: _pinsRepository),
       child: BlocBuilder<NewPinScreenBloc, NewPinScreenState>(
@@ -102,15 +104,25 @@ class NewPinScreen extends StatelessWidget {
     );
 
     if (res != null && res as bool) {
-      Navigator.of(context).pop();
-
       // request api
       // TODO(): callbackの追加
       BlocProvider.of<NewPinScreenBloc>(context).add(SendRequest(
         newPin: result.newPin,
         imageFile: result.imageFile,
         board: result.board,
+        onSuccess: () => _onSuccess(context),
+        onError: () => _onError(context),
       ));
+
+      Navigator.of(context).pop();
     }
+  }
+
+  void _onSuccess(BuildContext context) {
+    PinterestNotification.show(title: '新しいピンを作成しました');
+  }
+
+  void _onError(BuildContext context) {
+    PinterestNotification.showError(title: 'ピンの作成に失敗しました');
   }
 }
