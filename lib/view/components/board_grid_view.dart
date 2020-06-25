@@ -8,8 +8,8 @@ typedef BoardGridViewCallback = void Function(
 
 class BoardGridView extends StatefulWidget {
   const BoardGridView({
-    this.boards,
-    this.boardPinMap,
+    this.boards = const [],
+    this.boardPinMap = const {},
     this.layout = BoardGridViewLayout.large,
     this.onTap,
     this.shrinkWrap = false,
