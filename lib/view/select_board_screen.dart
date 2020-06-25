@@ -43,7 +43,7 @@ class SelectBoardScreen extends StatelessWidget {
             accountRepository: accountRepository,
             usersRepository: usersRepository,
             boardsRepository: boardsRepository,
-          ),
+          )..add(const LoadInitial()),
           child: _buildContent(context),
         ),
       ),
@@ -53,33 +53,30 @@ class SelectBoardScreen extends StatelessWidget {
   Widget _buildContent(BuildContext context) {
     return BlocBuilder<SelectBoardScreenBloc, SelectBoardScreenState>(
       builder: (context, state) {
-        final blocProvider = BlocProvider.of<SelectBoardScreenBloc>(context);
-
-        if (blocProvider.state is InitialState) {
-          blocProvider.add(const LoadInitial());
-        }
-
-        return SingleChildScrollView(
-          child: Column(
-            children: [
-              const ActionCardSlim(
-                text: 'Add Board',
-                icon: Icon(Icons.add),
-              ),
-              ReloadableBoardGridView(
+        final bloc = BlocProvider.of<SelectBoardScreenBloc>(context);
+        return Column(
+          children: [
+            const ActionCardSlim(
+              text: 'Add Board',
+              icon: Icon(Icons.add),
+            ),
+            Expanded(
+              child: ReloadableBoardGridView(
                 layout: BoardGridViewLayout.slim,
                 isLoading: state is Loading,
                 boards: state.boards,
                 boardPinMap: state.boardPinMap,
                 onBoardTap: args.onBoardPressed,
                 isError: state is ErrorState,
-                onReload: () => {blocProvider.add(const LoadInitial())},
+                onReload: () {
+                  bloc.add(const Refresh());
+                },
                 onRefresh: () async {
-                  PinterestNotification.showNotImplemented();
+                  bloc.add(const Refresh());
                 },
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
