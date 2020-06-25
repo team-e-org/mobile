@@ -91,12 +91,7 @@ class _PinEditScreenState extends State<PinEditScreen> {
             props: PinterestTextFieldProps(
                 label: 'Title',
                 hintText: 'ここにタイトルを書く',
-                validator: (value) {
-                  if (!Validator.isValidPinTitle(value)) {
-                    return 'Invalid pin title';
-                  }
-                  return null;
-                },
+                validator: _pinTitleValidator,
                 maxLength: 30,
                 maxLengthEnforced: false,
                 onChanged: (value) => {
@@ -109,12 +104,7 @@ class _PinEditScreenState extends State<PinEditScreen> {
             props: PinterestTextFieldProps(
               label: 'Description',
               hintText: 'ここに説明を書く',
-              validator: (value) {
-                if (!Validator.isValidPinDescription(value)) {
-                  return 'Invalid pin description';
-                }
-                return null;
-              },
+              validator: _pinDescriptionValidator,
               keyboardType: TextInputType.multiline,
               minLines: 1,
               maxLines: 8,
@@ -131,12 +121,7 @@ class _PinEditScreenState extends State<PinEditScreen> {
             props: PinterestTextFieldProps(
                 label: 'URL',
                 hintText: 'ここにURLを書く',
-                validator: (value) {
-                  if (!Validator.isValidPinUrl(value)) {
-                    return 'Invalid url';
-                  }
-                  return null;
-                },
+                validator: _pinUrlValidator,
                 maxLengthEnforced: false,
                 onChanged: (value) => {
                       setState(() {
@@ -166,5 +151,26 @@ class _PinEditScreenState extends State<PinEditScreen> {
         ],
       ),
     );
+  }
+
+  String _pinTitleValidator(String value) {
+    if (!Validator.isValidPinTitle(value)) {
+      return 'Invalid pin title';
+    }
+    return null;
+  }
+
+  String _pinDescriptionValidator(String value) {
+    if (!Validator.isValidPinDescription(value)) {
+      return 'Invalid pin description';
+    }
+    return null;
+  }
+
+  String _pinUrlValidator(String value) {
+    if (!Validator.isValidPinUrl(value)) {
+      return 'Invalid url';
+    }
+    return null;
   }
 }
