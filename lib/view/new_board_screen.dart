@@ -36,12 +36,28 @@ class NewBoardScreen extends StatelessWidget {
       builder: (context, state) => Scaffold(
         appBar: _buildAppBar(context, state),
         body: Container(
-          padding: EdgeInsets.all(16),
           child: Column(
-            children: <Widget>[
-              _buildBoardNameTextField(context),
-              SizedBox(height: 20),
-              _buildPrivateBoardSwitch(context),
+            children: [
+              Container(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  children: <Widget>[
+                    _buildBoardNameTextField(context),
+                    SizedBox(height: 20),
+                    _buildPrivateBoardSwitch(context),
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                child: PinterestButton.primary(
+                  text: 'Create',
+                  loading: state is BoardCreatingState,
+                  onPressed: state.boardName.isEmpty
+                      ? null
+                      : () => _onCreateButtonPressed(context),
+                ),
+              ),
             ],
           ),
         ),
@@ -60,18 +76,6 @@ class NewBoardScreen extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      actions: <Widget>[
-        Container(
-          padding: const EdgeInsets.all(8),
-          child: PinterestButton.primary(
-            text: 'Create',
-            loading: state is BoardCreatingState,
-            onPressed: state.boardName.isEmpty
-                ? null
-                : () => _onCreateButtonPressed(context),
-          ),
-        ),
-      ],
     );
   }
 
