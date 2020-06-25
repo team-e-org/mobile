@@ -8,6 +8,8 @@ import 'package:mobile/view/components/common/textfield_common.dart';
 import 'package:mobile/view/components/notification.dart';
 
 class NewBoardScreen extends StatelessWidget {
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<NewBoardScreenBloc>(
@@ -74,20 +76,18 @@ class NewBoardScreen extends StatelessWidget {
   }
 
   Widget _buildBoardNameTextField(BuildContext context) {
-    return PinterestTextField(
-      props: PinterestTextFieldProps(
-          label: 'Board name',
-          hintText: 'Add',
-          validator: (value) {
-            if (!Validator.isValidBoardName(value)) {
-              return 'Invalid board name';
-            }
-            return null;
-          },
-          onChanged: (value) {
-            BlocProvider.of<NewBoardScreenBloc>(context)
-                .add(BoardNameChanged(value: value));
-          }),
+    return Form(
+      key: _formKey,
+      child: PinterestTextField(
+        props: PinterestTextFieldProps(
+            label: 'Board name',
+            hintText: 'Add',
+            validator: _boardNameValidator,
+            onChanged: (value) {
+              BlocProvider.of<NewBoardScreenBloc>(context)
+                  .add(BoardNameChanged(value: value));
+            }),
+      ),
     );
   }
 
@@ -108,6 +108,15 @@ class NewBoardScreen extends StatelessWidget {
   }
 
   void _onCreateButtonPressed(BuildContext context) {
-    BlocProvider.of<NewBoardScreenBloc>(context).add(CreateBoardRequested());
+    if (_formKey.currentState.validate()) {
+      BlocProvider.of<NewBoardScreenBloc>(context).add(CreateBoardRequested());
+    }
+  }
+
+  String _boardNameValidator(String value) {
+    if (!Validator.isValidBoardName(value)) {
+      return 'Invalid board name';
+    }
+    return null;
   }
 }
