@@ -21,39 +21,49 @@ class ReloadablePinGridView extends StatelessWidget {
   final bool isError;
   final VoidCallback onReload;
 
+  Widget _loadingWidget() {
+    return Container(
+      height: 160,
+      child: const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+
+  Widget _errorWidget() {
+    return Container(
+      child: Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text('画像の読み込みに失敗しました'),
+          PinterestButton.primary(text: 'Reload', onPressed: onReload)
+        ],
+      )),
+    );
+  }
+
+  Widget _notFoundWidget() {
+    return Container(
+      child: Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          Text('画像が見つかりませんでした'),
+        ],
+      )),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (pins.isEmpty) {
       if (isLoading) {
-        return Container(
-          child: const Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
+        return _loadingWidget();
+      } else if (isError) {
+        return _errorWidget();
       }
-
-      if (isError) {
-        return Container(
-          child: Center(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('画像の読み込みに失敗しました'),
-              PinterestButton.primary(text: 'Reload', onPressed: onReload)
-            ],
-          )),
-        );
-      }
-
-      return Container(
-        child: Center(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Text('画像が見つかりませんでした'),
-          ],
-        )),
-      );
+      return _notFoundWidget();
     }
 
     final controller = ScrollController();
@@ -65,22 +75,9 @@ class ReloadablePinGridView extends StatelessWidget {
 
     Widget tailWidget;
     if (isLoading) {
-      tailWidget = Container(
-        height: 120,
-        child: const Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      tailWidget = _loadingWidget();
     } else if (isError) {
-      tailWidget = Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('画像の読み込みに失敗しました'),
-            PinterestButton.primary(text: 'Reload', onPressed: onReload)
-          ],
-        ),
-      );
+      tailWidget = _errorWidget();
     }
 
     return Container(
