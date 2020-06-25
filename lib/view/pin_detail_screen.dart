@@ -99,13 +99,18 @@ class PinDetailScreen extends StatelessWidget {
   }
 
   Widget _buildPinInfo({String title, String description}) {
-    return Column(
-      children: <Widget>[
-        PinterestTypography.body1(title),
-        SizedBox(height: 8),
-        PinterestTypography.body2(description),
-      ],
-    );
+    // TODO(): ここもっといい書き方あるはず
+    if (title != null || description != null) {
+      return Column(
+        children: <Widget>[
+          title != null ? PinterestTypography.body1(title) : null,
+          title != null && description != null ? SizedBox(height: 8) : null,
+          description != null ? PinterestTypography.body2(description) : null,
+        ],
+      );
+    } else {
+      return Container();
+    }
   }
 
   Widget _buildActions() {
