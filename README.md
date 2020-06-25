@@ -29,6 +29,23 @@ $ flutter packages pub run flutter_native_splash:create
 
 ## お役立ち情報 🍵
 
+### envファイルの設定
+
+ビルド環境によって使用するenvファイルを切り替えています。
+
+| build environment | env path        |
+|-------------------|-----------------|
+| dev               | .env/dev        |
+| staging           | .env/staging    |
+| production        | .env/production |
+
+envに設定すべき項目
+
+| name         | type   | description      |
+|--------------|--------|------------------|
+| API_ENDPOINT | string | the api endpoint |
+
+
 ### fronJson, toJson するためのコード生成
 
 ```bash
