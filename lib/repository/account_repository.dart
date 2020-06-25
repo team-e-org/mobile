@@ -24,27 +24,21 @@ abstract class AccountRepository {
 }
 
 class DefaultAccountRepository extends AccountRepository {
-  factory DefaultAccountRepository({
-    @required AuthApi api,
-    @required AuthenticationPreferences prefs,
-  }) {
-    return _instance ?? DefaultAccountRepository._internal(api, prefs);
-  }
+  DefaultAccountRepository({
+    @required this.api,
+    @required this.prefs,
+  });
 
-  DefaultAccountRepository._internal(this._api, this._prefs);
-
-  static DefaultAccountRepository _instance;
-
-  final AuthApi _api;
-  final AuthenticationPreferences _prefs;
+  final AuthApi api;
+  final AuthenticationPreferences prefs;
 
   @override
   Future<Auth> authenticate(String email, String password) =>
-      _api.signIn(SignInRequestBody(email: email, password: password));
+      api.signIn(SignInRequestBody(email: email, password: password));
 
   @override
   Future<Auth> register(String username, String email, String password) =>
-      _api.signUp(SignUpRequestBody(
+      api.signUp(SignUpRequestBody(
         name: username,
         email: email,
         password: password,
@@ -52,26 +46,26 @@ class DefaultAccountRepository extends AccountRepository {
 
   @override
   Future<bool> hasToken() {
-    final token = _prefs.getAccessToken();
+    final token = prefs.getAccessToken();
     final hasToken = token != null && token.isNotEmpty;
     return Future.value(hasToken);
   }
 
   @override
-  Future<void> persistToken(String token) => _prefs.setAccessToken(token);
+  Future<void> persistToken(String token) => prefs.setAccessToken(token);
 
   @override
-  String getPersistToken() => _prefs.getAccessToken();
+  String getPersistToken() => prefs.getAccessToken();
 
   @override
-  Future<void> deleteToken() => _prefs.clearAccessToken();
+  Future<void> deleteToken() => prefs.clearAccessToken();
 
   @override
-  Future<void> persistUserId(int userId) => _prefs.setUserID(userId);
+  Future<void> persistUserId(int userId) => prefs.setUserID(userId);
 
   @override
-  int getPersistUserId() => _prefs.getUserID();
+  int getPersistUserId() => prefs.getUserID();
 
   @override
-  Future<void> deleteUserId() => _prefs.clearUserID();
+  Future<void> deleteUserId() => prefs.clearUserID();
 }

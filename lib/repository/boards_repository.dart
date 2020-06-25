@@ -8,17 +8,12 @@ abstract class BoardsRepository {
 }
 
 class DefaultBoardsRepository extends BoardsRepository {
-  factory DefaultBoardsRepository(BoardsApi api) {
-    return _instance ?? DefaultBoardsRepository._internal(api);
-  }
+  DefaultBoardsRepository(this.api);
 
-  DefaultBoardsRepository._internal(this._api);
-
-  static DefaultBoardsRepository _instance;
-  BoardsApi _api;
+  BoardsApi api;
 
   Future<List<Pin>> getBoardPins({int id, int page}) =>
-      _api.boardPins(id: id, page: page);
+      api.boardPins(id: id, page: page);
 
-  Future<Board> createBoard(NewBoard board) => _api.newBoard(board: board);
+  Future<Board> createBoard(NewBoard board) => api.newBoard(board: board);
 }

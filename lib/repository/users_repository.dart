@@ -8,18 +8,13 @@ abstract class UsersRepository {
 }
 
 class DefaultUsersRepository extends UsersRepository {
-  factory DefaultUsersRepository(UsersApi api) {
-    return _instance ?? DefaultUsersRepository._internal(api);
-  }
+  DefaultUsersRepository(this.api);
 
-  DefaultUsersRepository._internal(this._api);
-
-  static DefaultUsersRepository _instance;
-  UsersApi _api;
+  UsersApi api;
 
   @override
-  Future<User> getUser(int id) => _api.user(id: id);
+  Future<User> getUser(int id) => api.user(id: id);
 
   @override
-  Future<List<Board>> getUserBoards(int id) => _api.userBoards(id: id);
+  Future<List<Board>> getUserBoards(int id) => api.userBoards(id: id);
 }
