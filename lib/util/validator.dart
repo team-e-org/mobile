@@ -25,19 +25,19 @@ class Validator {
     return true;
   }
 
-  static String isValidPinTitle(String s) {
-    // TODO(dh9489): url防ぐとかなんやらかんやら
-    return null;
+  static bool isValidPinTitle(String s) {
+    return s != null && s.length < 100;
   }
 
-  static String isValidPinDescription(String s) {
-    // TODO(dh9489): url防ぐとかなんやらかんやら
-    return null;
+  static bool isValidPinDescription(String s) {
+    return s != null && s.length <= 1000;
   }
 
-  static String isValidPinUrl(String s) {
-    // TODO(dh9489): url防ぐとかなんやらかんやら
-    return null;
+  static bool isValidPinUrl(String s) {
+    const urlPattern =
+        r'https?://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?';
+    final result = RegExp(urlPattern, caseSensitive: false);
+    return result.hasMatch(s);
   }
 
   static Future<bool> isValidImageUrl(String s) async {
