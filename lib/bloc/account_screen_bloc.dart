@@ -18,7 +18,9 @@ class LoadInitial extends AccountScreenEvent {
   const LoadInitial();
 }
 
-class Refresh extends AccountScreenEvent {}
+class Refresh extends AccountScreenEvent {
+  const Refresh();
+}
 
 //////// State ////////
 abstract class AccountScreenState extends Equatable {
