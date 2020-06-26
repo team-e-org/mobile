@@ -84,7 +84,6 @@ class PinCard extends StatelessWidget {
           PinterestNotification.showNotImplemented();
         },
         iconSize: 16,
-        splashRadius: 4,
       ),
     );
   }
