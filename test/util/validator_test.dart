@@ -24,11 +24,11 @@ void main() {
 
     test('isValidPassword test', () {
       const cases = <TestCase>[
-        TestCase('no lower alphabet', '#A9', false),
-        TestCase('no upper alphabet', '#a9', false),
-        TestCase('no digit', '#Aa', false),
-        TestCase('no sign', 'Aa9', false),
-        TestCase('valid password', '#Aa9', true),
+        TestCase('too short', 'Aa9876543', false),
+        TestCase('no lower alphabet', 'A987654321', false),
+        TestCase('no upper alphabet', 'a987654321', false),
+        TestCase('no digit', 'Aabcdefghi', false),
+        TestCase('valid password', 'Aa98765432', true),
       ];
 
       for (final c in cases) {
@@ -63,7 +63,6 @@ void main() {
         expect(Validator.isValidPinTitle(c.value), equals(c.expect));
       }
     });
-
 
     test('isValidPinDescription test', () {
       final cases = <TestCase>[
