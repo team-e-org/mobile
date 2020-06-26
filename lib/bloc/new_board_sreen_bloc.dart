@@ -32,7 +32,12 @@ abstract class NewBoardScreenBlocState extends Equatable {
   List<Object> get props => [];
 }
 
-class DefaultState extends NewBoardScreenBlocState {}
+class DefaultState extends NewBoardScreenBlocState {
+  DefaultState({
+    NewBoard newBoard,
+    Board createdBoard,
+  }) : super(newBoard: newBoard, createdBoard: createdBoard);
+}
 
 class BoardCreatingState extends NewBoardScreenBlocState {
   BoardCreatingState({

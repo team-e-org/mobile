@@ -96,12 +96,6 @@ class _BoardEditPageState extends State<BoardEditPage> {
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
       title: Text(widget.title),
-      // leading: Container(
-      //   child: IconButton(
-      //     icon: Icon(Icons.close),
-      //     onPressed: () => Navigator.of(context).pop(),
-      //   ),
-      // ),
     );
   }
 
