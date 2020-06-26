@@ -22,8 +22,8 @@ void main() {
 
     test('new board test', () async {
       final expected = Board.fromMock();
-      when(apiClient.post(any, body: anyNamed('body'))).thenAnswer(
-          (_) => Future.value(Response(jsonEncode(expected.toJson()), 200)));
+      when(apiClient.post(any, body: anyNamed('body'))).thenAnswer((_) =>
+          Future.value(ApiResponse(jsonEncode(expected.toJson()), 200)));
 
       final actual = await boardsApi.newBoard(board: NewBoard.fromMock());
 
@@ -32,7 +32,7 @@ void main() {
 
     test('delete board test', () async {
       when(apiClient.delete(any))
-          .thenAnswer((_) => Future.value(Response('', 204)));
+          .thenAnswer((_) => Future.value(ApiResponse('', 204)));
 
       final success = await boardsApi.deleteBoard(id: 1);
       expect(success, equals(true));
@@ -40,8 +40,8 @@ void main() {
 
     test('edit board test', () async {
       final expected = Board.fromMock();
-      when(apiClient.put(any, body: anyNamed('body'))).thenAnswer(
-          (_) => Future.value(Response(jsonEncode(expected.toJson()), 200)));
+      when(apiClient.put(any, body: anyNamed('body'))).thenAnswer((_) =>
+          Future.value(ApiResponse(jsonEncode(expected.toJson()), 200)));
 
       final actual = await boardsApi.editBoard(
         id: 1,
@@ -53,8 +53,8 @@ void main() {
 
     test('board pins test', () async {
       final expected = List.filled(10, Pin.fromMock());
-      when(apiClient.get(any))
-          .thenAnswer((_) => Future.value(Response(jsonEncode(expected), 200)));
+      when(apiClient.get(any)).thenAnswer(
+          (_) => Future.value(ApiResponse(jsonEncode(expected), 200)));
 
       final actual = await boardsApi.boardPins(id: 1);
 
