@@ -136,7 +136,6 @@ class PinDetailScreen extends StatelessWidget {
       PinterestButton.primary(
         text: 'Save',
         onPressed: () {
-          // TODO
           PinterestNotification.showNotImplemented();
         },
       ),
