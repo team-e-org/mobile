@@ -38,6 +38,7 @@ dev_dependencies:
   json_serializable: ^3.3.0
   flutter_native_splash: ^0.1.9
   flutter_flavorizr: ^1.0.3
+  file: ^5.2.1
 
 flutter:
 
