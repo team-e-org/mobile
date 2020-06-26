@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/typography_common.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mobile/view/components/notification.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PinDetailScreenArguments {
   const PinDetailScreenArguments({this.pin});
@@ -52,7 +54,7 @@ class PinDetailScreen extends StatelessWidget {
             description: pin.description,
           ),
           SizedBox(height: 32),
-          _buildActions(),
+          _buildActions(context),
         ],
       ),
     );
@@ -99,40 +101,59 @@ class PinDetailScreen extends StatelessWidget {
   }
 
   Widget _buildPinInfo({String title, String description}) {
-    // TODO(): ここもっといい書き方あるはず
-    if (title != null || description != null) {
-      return Column(
-        children: <Widget>[
-          title != null ? PinterestTypography.body1(title) : null,
-          title != null && description != null ? SizedBox(height: 8) : null,
-          description != null ? PinterestTypography.body2(description) : null,
-        ],
-      );
-    } else {
+    if (title == null && String == null) {
       return Container();
     }
+
+    final list = <Widget>[];
+
+    if (title != null) {
+      list.add(PinterestTypography.body1(title));
+    }
+    if (title != null && description != null) {
+      list.add(const SizedBox(height: 8));
+    }
+    if (description != null) {
+      list.add(PinterestTypography.body2(description));
+    }
+
+    return Column(children: list);
   }
 
-  Widget _buildActions() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
+  Widget _buildActions(BuildContext context) {
+    final list = <Widget>[];
+
+    if (args.pin.url != null && args.pin.url.isNotEmpty) {
+      list.addAll([
         PinterestButton.secondary(
           text: 'Access',
-          onPressed: () {
-            // TODO
-            PinterestNotification.showNotImplemented();
-          },
+          onPressed: () => _onAccessPressed(context),
         ),
-        SizedBox(width: 20),
-        PinterestButton.primary(
-          text: 'Save',
-          onPressed: () {
-            // TODO
-            PinterestNotification.showNotImplemented();
-          },
-        ),
-      ],
+        const SizedBox(width: 20),
+      ]);
+    }
+    list.add(
+      PinterestButton.primary(
+        text: 'Save',
+        onPressed: () {
+          // TODO
+          PinterestNotification.showNotImplemented();
+        },
+      ),
     );
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: list,
+    );
+  }
+
+  Future _onAccessPressed(BuildContext context) async {
+    Logger().d('Open URL: ${args.pin.url}');
+    if (await canLaunch(args.pin.url)) {
+      await launch(args.pin.url);
+    } else {
+      PinterestNotification.showError(title: '無効なURLです');
+    }
   }
 }
