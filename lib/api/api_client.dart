@@ -1,3 +1,4 @@
+import 'dart:convert' show utf8;
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
@@ -6,6 +7,23 @@ import 'package:http_parser/http_parser.dart';
 import 'package:mobile/data/authentication_preferences.dart';
 
 import 'errors/error.dart';
+
+class ApiResponse {
+  ApiResponse({
+    this.statusCode,
+    this.body,
+  });
+
+  factory ApiResponse.fromResponse(Response r) {
+    return ApiResponse(
+      statusCode: r.statusCode,
+      body: utf8.decode(r.bodyBytes),
+    );
+  }
+
+  final int statusCode;
+  final String body;
+}
 
 class ApiClient {
   const ApiClient(
@@ -20,7 +38,7 @@ class ApiClient {
   final Client _client;
   final AuthenticationPreferences prefs;
 
-  Future<Response> get(String relativeUrl) async {
+  Future<ApiResponse> get(String relativeUrl) async {
     final headers = await _headers;
     final getFuture = _client.get(
       '$apiEndpoint$relativeUrl',
@@ -30,7 +48,7 @@ class ApiClient {
     return _makeRequestWithErrorHandler(getFuture);
   }
 
-  Future<Response> post(String relativeUrl, {String body}) async {
+  Future<ApiResponse> post(String relativeUrl, {String body}) async {
     return _makeRequestWithErrorHandler(
       _client.post(
         '$apiEndpoint$relativeUrl',
@@ -40,7 +58,7 @@ class ApiClient {
     );
   }
 
-  Future<Response> put(String relativeUrl, {String body}) async {
+  Future<ApiResponse> put(String relativeUrl, {String body}) async {
     return _makeRequestWithErrorHandler(
       _client.put(
         '$apiEndpoint$relativeUrl',
@@ -50,7 +68,7 @@ class ApiClient {
     );
   }
 
-  Future<Response> delete(String relativeUrl) async {
+  Future<ApiResponse> delete(String relativeUrl) async {
     return _makeRequestWithErrorHandler(
       _client.delete(
         '$apiEndpoint$relativeUrl',
@@ -99,15 +117,15 @@ class ApiClient {
     return result;
   }
 
-  static Future<Response> _makeRequestWithErrorHandler(
+  static Future<ApiResponse> _makeRequestWithErrorHandler(
       Future<Response> requestFunction) async {
     final response = await requestFunction;
     if (response.statusCode >= 400) {
-      throw _handleError(response.statusCode, response.body,
+      throw _handleError(response.statusCode, utf8.decode(response.bodyBytes),
           response.request?.url?.toString());
     }
 
-    return response;
+    return ApiResponse.fromResponse(response);
   }
 
   static DefaultError _handleError(
