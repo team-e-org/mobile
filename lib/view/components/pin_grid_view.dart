@@ -44,8 +44,7 @@ class PinGridView extends StatelessWidget {
     );
   }
 
-  // TODO(dh9489): 高さをPinCardの高さに変更する
   StaggeredTile _staggeredTileBuilder(int index) {
-    return StaggeredTile.fit(2);
+    return const StaggeredTile.fit(2);
   }
 }

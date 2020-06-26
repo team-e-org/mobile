@@ -155,6 +155,5 @@ class AccountScreen extends StatelessWidget {
     }
     Navigator.of(context).pushNamed(Routes.boardDetail,
         arguments: BoardDetailScreenArguments(board: board));
-    // TODO(dh9489): 画面遷移
   }
 }
