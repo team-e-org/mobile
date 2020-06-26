@@ -6,6 +6,12 @@ class Validator {
   }
 
   static bool isValidPassword(String s) {
+    if (s == null) {
+      return false;
+    }
+    if (s.length < 10) {
+      return false;
+    }
     if (!RegExp(r'[a-z]').hasMatch(s)) {
       return false;
     }
@@ -13,9 +19,6 @@ class Validator {
       return false;
     }
     if (!RegExp(r'\d').hasMatch(s)) {
-      return false;
-    }
-    if (!RegExp(r'[!#%_-]').hasMatch(s)) {
       return false;
     }
 
