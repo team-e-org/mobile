@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/bloc/home_screen_bloc.dart';
+import 'package:mobile/bloc/pins_bloc.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
-import 'package:mobile/view/components/components.dart';
 import 'package:mobile/view/components/reloadable_pin_grid_view.dart';
 
 import 'pin_detail_screen.dart';
@@ -22,33 +22,29 @@ class _HomeScreenState extends State<HomeScreen> {
     final pinsRepository = RepositoryProvider.of<PinsRepository>(context);
 
     return BlocProvider(
-      create: (context) => HomeScreenBloc(pinsRepository)..add(LoadPinsPage()),
+      create: (context) =>
+          HomeScreenBloc(pinsRepository)..add(PinsBlocEvent.loadNext),
       child: _buildContent(context),
     );
   }
 
   Widget _buildContent(BuildContext context) {
     return SafeArea(
-      child: BlocBuilder<HomeScreenBloc, HomeScreenState>(
+      child: BlocBuilder<HomeScreenBloc, PinsBlocState>(
         builder: _contentBuilder,
       ),
     );
   }
 
-  Widget _contentBuilder(BuildContext context, HomeScreenState state) {
-    final blocProvider = BlocProvider.of<HomeScreenBloc>(context);
-
-    if (state is InitialState) {
-      blocProvider.add(LoadPinsPage());
-    }
-
+  Widget _contentBuilder(BuildContext context, PinsBlocState state) {
+    final bloc = BlocProvider.of<HomeScreenBloc>(context);
     return ReloadablePinGridView(
       isLoading: state is Loading,
       pins: state.pins,
       onPinTap: _onPinTap,
-      onScrollOut: () => {blocProvider.add(LoadPinsPage())},
+      onScrollOut: () => {bloc.add(PinsBlocEvent.loadNext)},
       isError: state is ErrorState,
-      onReload: () => {blocProvider.add(LoadPinsPage())},
+      onReload: () => {bloc.add(PinsBlocEvent.loadNext)},
     );
   }
 

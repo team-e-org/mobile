@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/bloc/board_detail_screen_bloc.dart';
+import 'package:mobile/bloc/pins_bloc.dart';
 import 'package:mobile/model/board_model.dart';
 import 'package:mobile/model/pin_model.dart';
 import 'package:mobile/repository/repositories.dart';
@@ -26,8 +27,8 @@ class BoardDetailScreen extends StatelessWidget {
     final pinsRepository = RepositoryProvider.of<PinsRepository>(context);
 
     return BlocProvider(
-      create: (context) => BoardDetailScreenBloc(
-          pinsRepository: pinsRepository, board: args.board),
+      create: (context) => BoardDetailScreenBloc(pinsRepository, args.board)
+        ..add(PinsBlocEvent.loadNext),
       child: _buildContent(context),
     );
   }
@@ -38,27 +39,23 @@ class BoardDetailScreen extends StatelessWidget {
         title: Text(args.board.name),
       ),
       body: SafeArea(
-        child: BlocBuilder<BoardDetailScreenBloc, BoardDetailScreenState>(
+        child: BlocBuilder<BoardDetailScreenBloc, PinsBlocState>(
           builder: _contentBuilder,
         ),
       ),
     );
   }
 
-  Widget _contentBuilder(BuildContext context, BoardDetailScreenState state) {
-    final blocProvider = BlocProvider.of<BoardDetailScreenBloc>(context);
-
-    if (state is InitialState) {
-      blocProvider.add(LoadPinsPage());
-    }
+  Widget _contentBuilder(BuildContext context, PinsBlocState state) {
+    final bloc = BlocProvider.of<BoardDetailScreenBloc>(context);
 
     return ReloadablePinGridView(
       isLoading: state is Loading,
       pins: state.pins,
       onPinTap: _onPinTap,
-      onScrollOut: () => {blocProvider.add(LoadPinsPage())},
+      onScrollOut: () => {bloc.add(PinsBlocEvent.loadNext)},
       isError: state is ErrorState,
-      onReload: () => {blocProvider.add(LoadPinsPage())},
+      onReload: () => {bloc.add(PinsBlocEvent.loadNext)},
     );
   }
 
