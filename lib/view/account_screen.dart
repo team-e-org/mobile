@@ -56,10 +56,6 @@ class AccountScreen extends StatelessWidget {
           final result =
               await Navigator.of(context).pushNamed(Routes.createNew);
           if (result is Board) {
-            PinterestNotification.show(
-              title: 'New board created',
-              subtitle: result.name,
-            );
             BlocProvider.of<AccountScreenBloc>(context).add(Refresh());
           }
         },

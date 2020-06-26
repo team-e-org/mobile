@@ -11,67 +11,54 @@ abstract class NewBoardScreenBlocEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class BoardNameChanged extends NewBoardScreenBlocEvent {
-  BoardNameChanged({
-    @required this.value,
+class CreateBoardRequest extends NewBoardScreenBlocEvent {
+  CreateBoardRequest({
+    @required this.newBoard,
   });
 
-  final String value;
+  final NewBoard newBoard;
 
   @override
-  List<Object> get props => [value];
+  List<Object> get props => [newBoard];
 }
 
-class IsPrivateChanged extends NewBoardScreenBlocEvent {}
-
-class CreateBoardRequested extends NewBoardScreenBlocEvent {}
-
 abstract class NewBoardScreenBlocState extends Equatable {
-  NewBoardScreenBlocState({
-    this.boardName,
-    this.isPrivate,
-  });
+  NewBoardScreenBlocState({this.newBoard, this.createdBoard});
 
-  final String boardName;
-  final bool isPrivate;
+  NewBoard newBoard;
+  Board createdBoard;
 
   @override
-  List<Object> get props => [
-        boardName,
-        isPrivate,
-      ];
+  List<Object> get props => [];
 }
 
 class DefaultState extends NewBoardScreenBlocState {
   DefaultState({
-    @required String boardName,
-    @required bool isPrivate,
-  }) : super(boardName: boardName, isPrivate: isPrivate);
+    NewBoard newBoard,
+    Board createdBoard,
+  }) : super(newBoard: newBoard, createdBoard: createdBoard);
 }
 
 class BoardCreatingState extends NewBoardScreenBlocState {
   BoardCreatingState({
-    @required String boardName,
-    @required bool isPrivate,
-  }) : super(boardName: boardName, isPrivate: isPrivate);
+    NewBoard newBoard,
+    Board createdBoard,
+  }) : super(newBoard: newBoard, createdBoard: createdBoard);
 }
 
-class BoardCreateSuccessState extends DefaultState {
+class BoardCreateSuccessState extends NewBoardScreenBlocState {
   BoardCreateSuccessState({
-    @required String boardName,
-    @required bool isPrivate,
-    @required this.createdBoard,
-  }) : super(boardName: boardName, isPrivate: isPrivate);
-
-  final Board createdBoard;
+    NewBoard newBoard,
+    Board createdBoard,
+  }) : super(newBoard: newBoard, createdBoard: createdBoard);
 }
 
-class BoardCreateErrorState extends DefaultState {
+class BoardCreateErrorState extends NewBoardScreenBlocState {
   BoardCreateErrorState({
-    @required String boardName,
-    @required bool isPrivate,
+    NewBoard newBoard,
+    Board createdBoard,
     @required this.errorMessage,
-  }) : super(boardName: boardName, isPrivate: isPrivate);
+  }) : super(newBoard: newBoard, createdBoard: createdBoard);
 
   final String errorMessage;
 }
@@ -85,55 +72,34 @@ class NewBoardScreenBloc
   final BoardsRepository boardRepo;
 
   @override
-  NewBoardScreenBlocState get initialState => DefaultState(
-        boardName: '',
-        isPrivate: false,
-      );
+  NewBoardScreenBlocState get initialState => DefaultState();
 
   @override
   Stream<NewBoardScreenBlocState> mapEventToState(
       NewBoardScreenBlocEvent event) async* {
-    if (event is BoardNameChanged) {
-      yield DefaultState(
-        boardName: event.value,
-        isPrivate: state.isPrivate,
-      );
+    if (event is CreateBoardRequest) {
+      yield* mapToCreateBoardRequestState(event);
     }
+  }
 
-    if (event is IsPrivateChanged) {
-      yield DefaultState(
-        boardName: state.boardName,
-        isPrivate: !state.isPrivate,
+  Stream<NewBoardScreenBlocState> mapToCreateBoardRequestState(
+      CreateBoardRequest event) async* {
+    yield BoardCreatingState(newBoard: event.newBoard);
+
+    Logger().d('board: ${event.newBoard}');
+
+    try {
+      final createdBoard = await boardRepo.createBoard(event.newBoard);
+      yield BoardCreateSuccessState(
+        newBoard: event.newBoard,
+        createdBoard: createdBoard,
       );
-    }
-
-    if (event is CreateBoardRequested) {
-      yield BoardCreatingState(
-        boardName: state.boardName,
-        isPrivate: state.isPrivate,
+    } on Exception catch (e) {
+      Logger().e(e);
+      yield BoardCreateErrorState(
+        newBoard: event.newBoard,
+        errorMessage: e.toString(),
       );
-
-      final newBoard = NewBoard(
-        name: state.boardName,
-        isPrivate: state.isPrivate,
-      );
-
-      Logger().d('board: $newBoard');
-
-      try {
-        final createdBoard = await boardRepo.createBoard(newBoard);
-        yield BoardCreateSuccessState(
-          boardName: state.boardName,
-          isPrivate: state.isPrivate,
-          createdBoard: createdBoard,
-        );
-      } on Exception catch (e) {
-        yield BoardCreateErrorState(
-          boardName: state.boardName,
-          isPrivate: state.isPrivate,
-          errorMessage: e.toString(),
-        );
-      }
     }
   }
 }

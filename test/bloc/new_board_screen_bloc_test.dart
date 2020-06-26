@@ -21,49 +21,10 @@ void main() {
     });
 
     test('Initial state is DefaultState', () {
-      final expected = DefaultState(boardName: '', isPrivate: false);
+      final expected = DefaultState();
       expect(bloc.initialState, equals(expected));
       expect(bloc.state, equals(expected));
     });
-
-    blocTest<NewBoardScreenBloc, NewBoardScreenBlocEvent,
-        NewBoardScreenBlocState>(
-      'isPrivate should be updated',
-      build: () async => bloc,
-      act: (bloc) async {
-        bloc..add(IsPrivateChanged())..add(IsPrivateChanged());
-      },
-      expect: <NewBoardScreenBlocState>[
-        DefaultState(boardName: '', isPrivate: true),
-        DefaultState(boardName: '', isPrivate: false),
-      ],
-    );
-
-    blocTest<NewBoardScreenBloc, NewBoardScreenBlocEvent,
-        NewBoardScreenBlocState>(
-      'boardName should be updated',
-      build: () async => bloc,
-      act: (bloc) async {
-        bloc.add(BoardNameChanged(value: 'my board'));
-      },
-      expect: <NewBoardScreenBlocState>[
-        DefaultState(boardName: 'my board', isPrivate: false),
-      ],
-    );
-
-    blocTest<NewBoardScreenBloc, NewBoardScreenBlocEvent,
-        NewBoardScreenBlocState>(
-      'when creating new board failed, should be error state',
-      build: () async => bloc,
-      act: (bloc) async {
-        when(boardRepository.createBoard(any)).thenThrow(NetworkError());
-        bloc.add(CreateBoardRequested());
-      },
-      expect: <dynamic>[
-        isA<BoardCreatingState>(),
-        isA<BoardCreateErrorState>(),
-      ],
-    );
 
     blocTest<NewBoardScreenBloc, NewBoardScreenBlocEvent,
         NewBoardScreenBlocState>(
@@ -72,7 +33,8 @@ void main() {
       act: (bloc) async {
         when(boardRepository.createBoard(any))
             .thenAnswer((_) => Future.value(Board.fromMock()));
-        bloc.add(CreateBoardRequested());
+        bloc.add(CreateBoardRequest(
+            newBoard: NewBoard(name: 'test', isPrivate: false)));
       },
       expect: <dynamic>[
         isA<BoardCreatingState>(),
