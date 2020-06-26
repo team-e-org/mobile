@@ -121,22 +121,30 @@ class PinDetailScreen extends StatelessWidget {
   }
 
   Widget _buildActions(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
+    final list = <Widget>[];
+
+    if (args.pin.url != null && args.pin.url.isNotEmpty) {
+      list.addAll([
         PinterestButton.secondary(
           text: 'Access',
           onPressed: () => _onAccessPressed(context),
         ),
         const SizedBox(width: 20),
-        PinterestButton.primary(
-          text: 'Save',
-          onPressed: () {
-            // TODO
-            PinterestNotification.showNotImplemented();
-          },
-        ),
-      ],
+      ]);
+    }
+    list.add(
+      PinterestButton.primary(
+        text: 'Save',
+        onPressed: () {
+          // TODO
+          PinterestNotification.showNotImplemented();
+        },
+      ),
+    );
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: list,
     );
   }
 
