@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart';
 import 'package:mobile/api/api_client.dart';
 import 'package:mobile/api/pins_api.dart';
 import 'package:mobile/model/pin_model.dart';
@@ -21,8 +20,8 @@ void main() {
 
     test('get pins test', () async {
       final expected = List.filled(10, Pin.fromMock());
-      when(apiClient.get(any))
-          .thenAnswer((_) => Future.value(Response(jsonEncode(expected), 200)));
+      when(apiClient.get(any)).thenAnswer(
+          (_) => Future.value(ApiResponse(jsonEncode(expected), 200)));
 
       final actual = await pinsApi.pins();
 
@@ -31,8 +30,8 @@ void main() {
 
     test('get a pin test', () async {
       final expected = Pin.fromMock();
-      when(apiClient.get(any))
-          .thenAnswer((_) => Future.value(Response(jsonEncode(expected), 200)));
+      when(apiClient.get(any)).thenAnswer(
+          (_) => Future.value(ApiResponse(jsonEncode(expected), 200)));
 
       final actual = await pinsApi.pin();
 
@@ -41,8 +40,8 @@ void main() {
 
     test('edit pin test', () async {
       final expected = Pin.fromMock();
-      when(apiClient.put(any, body: anyNamed('body')))
-          .thenAnswer((_) => Future.value(Response(jsonEncode(expected), 200)));
+      when(apiClient.put(any, body: anyNamed('body'))).thenAnswer(
+          (_) => Future.value(ApiResponse(jsonEncode(expected), 200)));
 
       final actual = await pinsApi.editPin(id: 0, pin: EditPin.fromMock());
 
@@ -51,7 +50,7 @@ void main() {
 
     test('delete pin test', () async {
       when(apiClient.delete(any))
-          .thenAnswer((_) => Future.value(Response('', 204)));
+          .thenAnswer((_) => Future.value(ApiResponse('', 204)));
 
       final actual = await pinsApi.deletePin(id: 0);
 
