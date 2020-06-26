@@ -1,14 +1,17 @@
-import 'package:http/http.dart' as http;
-import 'package:logger/logger.dart';
-
 class Validator {
   static bool isValidEmail(String s) {
-    final regex = new RegExp(
+    final regex = RegExp(
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
     return regex.hasMatch(s);
   }
 
   static bool isValidPassword(String s) {
+    if (s == null) {
+      return false;
+    }
+    if (s.length < 10) {
+      return false;
+    }
     if (!RegExp(r'[a-z]').hasMatch(s)) {
       return false;
     }
@@ -16,9 +19,6 @@ class Validator {
       return false;
     }
     if (!RegExp(r'\d').hasMatch(s)) {
-      return false;
-    }
-    if (!RegExp(r'[!#%_-]').hasMatch(s)) {
       return false;
     }
 
@@ -42,15 +42,5 @@ class Validator {
         r'https?://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?';
     final result = RegExp(urlPattern, caseSensitive: false);
     return result.hasMatch(s);
-  }
-
-  static Future<bool> isValidImageUrl(String s) async {
-    try {
-      final res = await http.head(s);
-      return res.statusCode == 200;
-    } on Exception catch (e) {
-      Logger().w(e);
-      return false;
-    }
   }
 }
