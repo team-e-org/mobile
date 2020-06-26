@@ -9,6 +9,7 @@ class ReloadablePinGridView extends StatelessWidget {
     this.pins = const [],
     this.onPinTap,
     this.onScrollOut,
+    this.enableScrollOut = true,
     this.isError = false,
     this.onReload,
   });
@@ -18,6 +19,7 @@ class ReloadablePinGridView extends StatelessWidget {
   final List<Pin> pins;
   final PinGridViewCallback onPinTap;
   final VoidCallback onScrollOut;
+  final bool enableScrollOut;
   final bool isError;
   final VoidCallback onReload;
 
@@ -65,13 +67,14 @@ class ReloadablePinGridView extends StatelessWidget {
       }
       return _notFoundWidget();
     }
-
     final controller = ScrollController();
-    controller.addListener(() {
-      if (controller.position.maxScrollExtent <= controller.position.pixels) {
-        onScrollOut();
-      }
-    });
+    if (enableScrollOut) {
+      controller.addListener(() {
+        if (controller.position.maxScrollExtent <= controller.position.pixels) {
+          onScrollOut();
+        }
+      });
+    }
 
     Widget tailWidget;
     if (isLoading) {

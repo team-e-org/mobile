@@ -43,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
       pins: state.pins,
       onPinTap: _onPinTap,
       onScrollOut: () => {bloc.add(PinsBlocEvent.loadNext)},
+      enableScrollOut: !state.isEndOfPins,
       isError: state is ErrorState,
       onReload: () => {bloc.add(PinsBlocEvent.loadNext)},
     );
