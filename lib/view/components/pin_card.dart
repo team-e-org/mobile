@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/view/components/common/typography_common.dart';
+import 'package:mobile/view/components/notification.dart';
 
 class PinCard extends StatelessWidget {
   const PinCard({
@@ -18,13 +19,19 @@ class PinCard extends StatelessWidget {
     return Container(
       child: GestureDetector(
         onTap: onTap,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: pin.title != null
-              ? [_pinImage(), const SizedBox(height: 4), _pinTitle()]
-              : [_pinImage()],
-        ),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          _pinImageContainer(),
+          const SizedBox(height: 4),
+          _pinInfo(),
+        ]),
       ),
+    );
+  }
+
+  Widget _pinImageContainer() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: _pinImage(),
     );
   }
 
@@ -51,11 +58,42 @@ class PinCard extends StatelessWidget {
     );
   }
 
+  Widget _pinInfo() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        children: [
+          Expanded(child: _pinTitle()),
+          _optionButton(),
+        ],
+      ),
+    );
+  }
+
+  Widget _optionButton() {
+    return Container(
+      width: 16,
+      height: 16,
+      child: IconButton(
+        padding: const EdgeInsets.all(0),
+        icon: Icon(
+          Icons.more_horiz,
+          size: 16,
+        ),
+        onPressed: () {
+          PinterestNotification.showNotImplemented();
+        },
+        iconSize: 16,
+        splashRadius: 4,
+      ),
+    );
+  }
+
   Widget _pinTitle() {
     return PinterestTypography.body2(
-      pin.title,
+      pin.title ?? '',
       overflow: TextOverflow.ellipsis,
-      maxLines: 1,
+      maxLines: 2,
     );
   }
 }
