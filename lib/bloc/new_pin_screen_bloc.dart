@@ -21,11 +21,15 @@ class SendRequest extends NewPinScreenEvent {
     @required this.newPin,
     @required this.imageFile,
     @required this.board,
+    this.onSuccess,
+    this.onError,
   });
 
   final NewPin newPin;
   final File imageFile;
   final Board board;
+  final VoidCallback onSuccess;
+  final VoidCallback onError;
 
   @override
   List<Object> get props => [newPin, imageFile, board];
@@ -73,9 +77,13 @@ class NewPinScreenBloc extends Bloc<NewPinScreenEvent, NewPinScreenState> {
         await pinsRepository.createPin(
             event.newPin, event.imageFile, event.board);
         yield Finished();
+
+        event.onSuccess();
       } on Exception catch (e) {
         Logger().e(e);
         yield ErrorState();
+
+        event.onError();
       }
     }
   }

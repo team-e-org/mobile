@@ -8,6 +8,7 @@ import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/common/button_common.dart';
+import 'package:mobile/view/components/notification.dart';
 import 'package:mobile/view/pin_edit_screen.dart';
 import 'package:mobile/view/select_board_screen.dart';
 
@@ -22,8 +23,13 @@ class NewPinResult {
 class NewPinScreen extends StatelessWidget {
   final ImagePicker picker = ImagePicker();
 
+  NewPinResult result = NewPinResult();
+  NewPinScreenBloc bloc;
+
+  @override
   Widget build(BuildContext context) {
     final _pinsRepository = RepositoryProvider.of<PinsRepository>(context);
+
     return BlocProvider(
       create: (context) => NewPinScreenBloc(pinsRepository: _pinsRepository),
       child: BlocBuilder<NewPinScreenBloc, NewPinScreenState>(
@@ -52,28 +58,29 @@ class NewPinScreen extends StatelessWidget {
     );
   }
 
-  void _onCameraPressed(BuildContext context) async {
+  Future _onCameraPressed(BuildContext context) async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
     if (pickedFile == null) {
       return;
     }
-    await main(context, File(pickedFile.path));
+    await startSequence(context, File(pickedFile.path));
   }
 
-  void _onLibraryPressed(BuildContext context) async {
+  Future _onLibraryPressed(BuildContext context) async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     if (pickedFile == null) {
       return;
     }
-    await main(context, File(pickedFile.path));
+    await startSequence(context, File(pickedFile.path));
   }
 
-  Future main(BuildContext context, File imageFile) async {
+  Future startSequence(BuildContext context, File imageFile) async {
     if (imageFile == null) {
       return;
     }
 
-    var result = NewPinResult(imageFile: imageFile);
+    result.imageFile = imageFile;
+    bloc = BlocProvider.of<NewPinScreenBloc>(context);
 
     final res = await Navigator.of(context).pushNamed(
       Routes.createNewPinEdit,
@@ -89,7 +96,13 @@ class NewPinScreen extends StatelessWidget {
               onBoardPressed: (context, board) {
                 result.board = board;
 
-                Navigator.of(context).pop(true);
+                bloc.add(SendRequest(
+                  newPin: result.newPin,
+                  imageFile: result.imageFile,
+                  board: result.board,
+                  onSuccess: () => _onSuccess(context),
+                  onError: () => _onError(context),
+                ));
               },
             ),
           );
@@ -103,14 +116,15 @@ class NewPinScreen extends StatelessWidget {
 
     if (res != null && res as bool) {
       Navigator.of(context).pop();
-
-      // request api
-      // TODO(): callbackの追加
-      BlocProvider.of<NewPinScreenBloc>(context).add(SendRequest(
-        newPin: result.newPin,
-        imageFile: result.imageFile,
-        board: result.board,
-      ));
     }
+  }
+
+  void _onSuccess(BuildContext context) {
+    PinterestNotification.show(title: '新しいピンを作成しました');
+    Navigator.of(context).pop(true);
+  }
+
+  void _onError(BuildContext context) {
+    PinterestNotification.showError(title: 'ピンの作成に失敗しました');
   }
 }
