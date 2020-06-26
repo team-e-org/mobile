@@ -21,8 +21,8 @@ void main() {
 
     test('sign in test', () async {
       const expected = Auth(token: 'token', userId: 0);
-      when(apiClient.post(any, body: anyNamed('body'))).thenAnswer(
-          (_) => Future.value(Response(jsonEncode(expected.toJson()), 200)));
+      when(apiClient.post(any, body: anyNamed('body'))).thenAnswer((_) =>
+          Future.value(ApiResponse(jsonEncode(expected.toJson()), 200)));
 
       final actual = await authApi.signIn(SignInRequestBody.fromMock());
 
@@ -31,8 +31,8 @@ void main() {
 
     test('sign up test', () async {
       const expected = Auth(token: 'token', userId: 0);
-      when(apiClient.post(any, body: anyNamed('body'))).thenAnswer(
-          (_) => Future.value(Response(jsonEncode(expected.toJson()), 200)));
+      when(apiClient.post(any, body: anyNamed('body'))).thenAnswer((_) =>
+          Future.value(ApiResponse(jsonEncode(expected.toJson()), 200)));
 
       final actual = await authApi.signUp(SignUpRequestBody.fromMock());
 

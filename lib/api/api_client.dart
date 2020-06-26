@@ -9,15 +9,12 @@ import 'package:mobile/data/authentication_preferences.dart';
 import 'errors/error.dart';
 
 class ApiResponse {
-  ApiResponse({
-    this.statusCode,
-    this.body,
-  });
+  const ApiResponse(this.body, this.statusCode);
 
   factory ApiResponse.fromResponse(Response r) {
     return ApiResponse(
-      statusCode: r.statusCode,
-      body: utf8.decode(r.bodyBytes),
+      utf8.decode(r.bodyBytes),
+      r.statusCode,
     );
   }
 
