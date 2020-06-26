@@ -71,19 +71,23 @@ class NewPinScreenBloc extends Bloc<NewPinScreenEvent, NewPinScreenState> {
   }
 
   Stream<NewPinScreenState> mapSendRequestToState(SendRequest event) async* {
-    if (state is InitialState) {
+    if (state is! Sending) {
       yield Sending();
       try {
         await pinsRepository.createPin(
             event.newPin, event.imageFile, event.board);
         yield Finished();
 
-        event.onSuccess();
+        if (event.onSuccess != null) {
+          event.onSuccess();
+        }
       } on Exception catch (e) {
         Logger().e(e);
         yield ErrorState();
 
-        event.onError();
+        if (event.onError != null) {
+          event.onError();
+        }
       }
     }
   }
