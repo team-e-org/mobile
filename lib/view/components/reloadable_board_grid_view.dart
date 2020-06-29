@@ -75,7 +75,9 @@ class ReloadableBoardGridView extends StatelessWidget {
     final controller = ScrollController();
     controller.addListener(() {
       if (controller.position.maxScrollExtent <= controller.position.pixels) {
-        onScrollOut();
+        if (onScrollOut != null) {
+          onScrollOut();
+        }
       }
     });
 
