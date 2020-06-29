@@ -14,6 +14,9 @@ class ReloadableBoardGridView extends StatelessWidget {
     this.isError = false,
     this.onReload,
     this.onRefresh,
+    this.shrinkWrap = true,
+    this.primary = true,
+    this.physics = const NeverScrollableScrollPhysics(),
   });
 
   final bool isLoading;
@@ -26,6 +29,9 @@ class ReloadableBoardGridView extends StatelessWidget {
   final bool isError;
   final VoidCallback onReload;
   final RefreshCallback onRefresh;
+  final bool shrinkWrap;
+  final bool primary;
+  final ScrollPhysics physics;
 
   Widget _loadingWidget() {
     return Container(
@@ -99,9 +105,9 @@ class ReloadableBoardGridView extends StatelessWidget {
                   boards: boards,
                   boardPinMap: boardPinMap,
                   onTap: onBoardTap,
-                  shrinkWrap: true,
-                  primary: true,
-                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: shrinkWrap,
+                  primary: primary,
+                  physics: physics,
                   layout: layout,
                 ),
                 tailWidget ?? Container()

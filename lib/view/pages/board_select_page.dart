@@ -7,14 +7,14 @@ import 'package:mobile/view/components/reloadable_board_grid_view.dart';
 
 class BoardSelectPage extends StatelessWidget {
   BoardSelectPage({
-    this.boards,
-    this.isLoading,
-    this.boardPinMap,
+    this.boards = const [],
+    this.isLoading = true,
+    this.boardPinMap = const {},
     this.onSelected,
-    this.isError,
+    this.isError = false,
     this.onReload,
     this.onRefresh,
-    this.enableAddBoard,
+    this.enableAddBoard = true,
   });
 
   List<Board> boards;
@@ -32,21 +32,19 @@ class BoardSelectPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Select board'),
       ),
-      body: Container(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             enableAddBoard ? _addBoardCard(context) : null,
-            Expanded(
-              child: ReloadableBoardGridView(
-                layout: BoardGridViewLayout.slim,
-                isLoading: isLoading,
-                boards: boards,
-                boardPinMap: boardPinMap,
-                onBoardTap: onSelected,
-                isError: isError,
-                onReload: onReload,
-                onRefresh: onRefresh,
-              ),
+            ReloadableBoardGridView(
+              layout: BoardGridViewLayout.slim,
+              isLoading: isLoading,
+              boards: boards,
+              boardPinMap: boardPinMap,
+              onBoardTap: onSelected,
+              isError: isError,
+              onReload: onReload,
+              onRefresh: onRefresh,
             ),
           ]..remove(null),
         ),
@@ -55,18 +53,15 @@ class BoardSelectPage extends StatelessWidget {
   }
 
   Widget _addBoardCard(BuildContext context) {
-    @override
-    Widget build(BuildContext context) {
-      return ActionCardSlim(
-        text: 'Add Board',
-        icon: Icon(Icons.add),
-        onTap: () async {
-          await Navigator.of(context).pushNamed(Routes.createNewBoard);
-          if (onReload != null) {
-            onReload();
-          }
-        },
-      );
-    }
+    return ActionCardSlim(
+      text: 'Add Board',
+      icon: Icon(Icons.add),
+      onTap: () async {
+        await Navigator.of(context).pushNamed(Routes.createNewBoard);
+        if (onReload != null) {
+          onReload();
+        }
+      },
+    );
   }
 }

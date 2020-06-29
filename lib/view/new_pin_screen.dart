@@ -8,10 +8,7 @@ import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/common/button_common.dart';
-import 'package:mobile/view/components/notification.dart';
 import 'package:mobile/view/new_pin_edit_screen.dart';
-import 'package:mobile/view/pin_edit_screen.dart';
-import 'package:mobile/view/select_board_screen.dart';
 
 class NewPinResult {
   NewPinResult({this.newPin, this.imageFile, this.board});
