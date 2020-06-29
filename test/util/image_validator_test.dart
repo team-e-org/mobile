@@ -22,12 +22,6 @@ void main() {
     setUp(() {
       validator = ImageValidator(
         maxSizeInBytes: 10 * 1024 * 1024,
-        acceptedMimeTypes: [
-          'image/jpeg',
-          'image/jpg',
-          'image/png',
-          'image/heic',
-        ],
       );
     });
 

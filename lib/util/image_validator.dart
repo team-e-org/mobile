@@ -6,7 +6,12 @@ import 'package:mime/mime.dart' as m;
 class ImageValidator {
   ImageValidator({
     @required this.maxSizeInBytes,
-    @required this.acceptedMimeTypes,
+    this.acceptedMimeTypes = const [
+      'image/jpeg',
+      'image/jpg',
+      'image/png',
+      'image/heic',
+    ],
   }) {
     resolver = m.MimeTypeResolver()
       ..addExtension('heic', 'image/heic')
