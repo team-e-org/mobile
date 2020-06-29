@@ -38,23 +38,29 @@ class PinCard extends StatelessWidget {
   Widget _pinImage() {
     return CachedNetworkImage(
       imageUrl: pin.imageUrl,
-      placeholder: (context, url) => Container(
-        height: 200,
-        color: Colors.grey[100],
-        child: Center(
+      placeholder: (context, url) {
+        return _placeholder(
           child: CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(Colors.grey[300]),
           ),
-        ),
-      ),
-      errorWidget: (context, url, dynamic error) {
-        Logger().e(error);
-        return Container(
-          child: const Text(
-            'Sorry, failed to load image.',
-          ),
         );
       },
+      errorWidget: (context, url, dynamic error) {
+        Logger().e(error);
+        return _placeholder(
+            child: const Icon(
+          Icons.error_outline,
+          color: Colors.black,
+        ));
+      },
+    );
+  }
+
+  Widget _placeholder({Widget child}) {
+    return Container(
+      height: 200,
+      color: Colors.grey[100],
+      child: Center(child: child),
     );
   }
 
