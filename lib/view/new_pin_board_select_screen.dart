@@ -53,8 +53,6 @@ class NewPinBoardSelectScreen extends StatelessWidget {
           } else if (state is CreatePinFinished) {
             PinterestNotification.show(title: 'ピンを作成しました');
             Navigator.of(context).pop();
-            Navigator.of(context).pop();
-            Navigator.of(context).pop();
           }
         },
         builder: _contentBuilder,

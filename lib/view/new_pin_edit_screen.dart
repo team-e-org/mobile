@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/routes.dart';
+import 'package:mobile/view/new_pin_board_select_screen.dart';
 import 'package:mobile/view/pages/pin_edit_page.dart';
-import 'package:mobile/view/select_board_screen.dart';
 
 class NewPinEditScreenArguments {
   NewPinEditScreenArguments({this.file});
@@ -26,10 +26,15 @@ class NewPinEditScreen extends StatelessWidget {
     );
   }
 
-  void _onSubmit(BuildContext context, NewPin newPin) {
-    Navigator.of(context).pushNamed(
+  void _onSubmit(BuildContext context, NewPin newPin) async {
+    await Navigator.of(context).pushNamed(
       Routes.createNewPinSelectBoard,
-      arguments: SelectBoardScreenArguments(),
+      arguments: NewPinBoardSelectScreenArguments(
+        file: args.file,
+        newPin: newPin,
+      ),
     );
+
+    Navigator.of(context).pop();
   }
 }
