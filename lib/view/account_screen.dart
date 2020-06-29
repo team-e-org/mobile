@@ -53,11 +53,8 @@ class AccountScreen extends StatelessWidget {
       builder: (context, state) => FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () async {
-          final result =
-              await Navigator.of(context).pushNamed(Routes.createNew);
-          if (result is Board) {
-            BlocProvider.of<AccountScreenBloc>(context).add(Refresh());
-          }
+          await Navigator.of(context).pushNamed(Routes.createNew);
+          BlocProvider.of<AccountScreenBloc>(context).add(const Refresh());
         },
       ),
     );
