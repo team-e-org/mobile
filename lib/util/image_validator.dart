@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:mime/mime.dart' as m;
+import 'package:mime/mime.dart';
 
 class ImageValidator {
   ImageValidator({
@@ -13,7 +13,7 @@ class ImageValidator {
       'image/heic',
     ],
   }) {
-    resolver = m.MimeTypeResolver()
+    resolver = MimeTypeResolver()
       ..addExtension('heic', 'image/heic')
       // heic header: ftyp
       // https://github.com/strukturag/libheif/issues/83
@@ -31,7 +31,7 @@ class ImageValidator {
 
   final int maxSizeInBytes;
   final List<String> acceptedMimeTypes;
-  m.MimeTypeResolver resolver;
+  MimeTypeResolver resolver;
 
   Future<bool> validate(File image) async {
     final byteLength = await image.length();
