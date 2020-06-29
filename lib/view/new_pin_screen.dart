@@ -43,6 +43,14 @@ class NewPinScreen extends StatelessWidget {
     if (state is ImageConfirmed) {
       await startSequence(context, state.image);
     }
+
+    if (state is Finished) {
+      _onSuccess(context);
+    }
+
+    if (state is ErrorState) {
+      _onError(context);
+    }
   }
 
   Widget _builder(BuildContext context, NewPinScreenState state) {
@@ -104,8 +112,6 @@ class NewPinScreen extends StatelessWidget {
                   newPin: result.newPin,
                   imageFile: result.imageFile,
                   board: result.board,
-                  onSuccess: () => _onSuccess(context),
-                  onError: () => _onError(context),
                 ));
               },
             ),
