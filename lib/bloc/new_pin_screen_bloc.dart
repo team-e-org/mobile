@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/model/pin_model.dart';
@@ -16,20 +17,27 @@ abstract class NewPinScreenEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class ImageSelected extends NewPinScreenEvent {
+  const ImageSelected({
+    this.image,
+  });
+
+  final PickedFile image;
+
+  @override
+  List<Object> get props => [image?.path];
+}
+
 class SendRequest extends NewPinScreenEvent {
   const SendRequest({
     @required this.newPin,
     @required this.imageFile,
     @required this.board,
-    this.onSuccess,
-    this.onError,
   });
 
   final NewPin newPin;
   final File imageFile;
   final Board board;
-  final VoidCallback onSuccess;
-  final VoidCallback onError;
 
   @override
   List<Object> get props => [newPin, imageFile, board];
@@ -45,6 +53,19 @@ abstract class NewPinScreenState extends Equatable {
 }
 
 class InitialState extends NewPinScreenState {}
+
+class ImageUnaccepted extends NewPinScreenState {}
+
+class ImageAccepted extends NewPinScreenState {
+  const ImageAccepted({
+    @required this.image,
+  });
+
+  final File image;
+
+  @override
+  List<Object> get props => [image.path];
+}
 
 class Sending extends NewPinScreenState {}
 
@@ -65,8 +86,22 @@ class NewPinScreenBloc extends Bloc<NewPinScreenEvent, NewPinScreenState> {
 
   @override
   Stream<NewPinScreenState> mapEventToState(NewPinScreenEvent event) async* {
+    if (event is ImageSelected) {
+      yield* mapImageSelectedToState(event);
+    }
     if (event is SendRequest) {
       yield* mapSendRequestToState(event);
+    }
+  }
+
+  Stream<NewPinScreenState> mapImageSelectedToState(
+      ImageSelected event) async* {
+    if (event.image == null) {
+      yield ImageUnaccepted();
+    } else {
+      // TODO: ファイル形式、ファイルサイズをチェックする #260
+      // TODO: 画像を圧縮する
+      yield ImageAccepted(image: File(event.image.path));
     }
   }
 
@@ -77,17 +112,9 @@ class NewPinScreenBloc extends Bloc<NewPinScreenEvent, NewPinScreenState> {
         await pinsRepository.createPin(
             event.newPin, event.imageFile, event.board);
         yield Finished();
-
-        if (event.onSuccess != null) {
-          event.onSuccess();
-        }
       } on Exception catch (e) {
         Logger().e(e);
         yield ErrorState();
-
-        if (event.onError != null) {
-          event.onError();
-        }
       }
     }
   }
