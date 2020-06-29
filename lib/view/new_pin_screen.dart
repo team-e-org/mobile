@@ -40,8 +40,12 @@ class NewPinScreen extends StatelessWidget {
   }
 
   Future _listener(BuildContext context, NewPinScreenState state) async {
-    if (state is ImageConfirmed) {
+    if (state is ImageAccepted) {
       await startSequence(context, state.image);
+    }
+
+    if (state is ImageUnaccepted) {
+      _onImageUnaccepted();
     }
 
     if (state is Finished) {
@@ -127,6 +131,10 @@ class NewPinScreen extends StatelessWidget {
     if (res != null && res as bool) {
       Navigator.of(context).pop();
     }
+  }
+
+  void _onImageUnaccepted() {
+    PinterestNotification.showError(title: '対応していない画像です');
   }
 
   void _onSuccess(BuildContext context) {

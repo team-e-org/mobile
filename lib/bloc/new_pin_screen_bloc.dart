@@ -54,9 +54,11 @@ abstract class NewPinScreenState extends Equatable {
 
 class InitialState extends NewPinScreenState {}
 
-class ImageConfirmed extends NewPinScreenState {
-  const ImageConfirmed({
-    this.image,
+class ImageUnaccepted extends NewPinScreenState {}
+
+class ImageAccepted extends NewPinScreenState {
+  const ImageAccepted({
+    @required this.image,
   });
 
   final File image;
@@ -94,10 +96,12 @@ class NewPinScreenBloc extends Bloc<NewPinScreenEvent, NewPinScreenState> {
 
   Stream<NewPinScreenState> mapImageSelectedToState(
       ImageSelected event) async* {
-    if (event.image != null) {
+    if (event.image == null) {
+      yield ImageUnaccepted();
+    } else {
       // TODO: ファイル形式、ファイルサイズをチェックする #260
       // TODO: 画像を圧縮する
-      yield ImageConfirmed(image: File(event.image.path));
+      yield ImageAccepted(image: File(event.image.path));
     }
   }
 
