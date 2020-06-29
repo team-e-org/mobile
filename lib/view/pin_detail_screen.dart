@@ -93,6 +93,7 @@ class PinDetailScreen extends StatelessWidget {
               user: user,
               onTap: (context, user) =>
                   {PinterestNotification.showNotImplemented()},
+              margin: EdgeInsets.symmetric(horizontal: 40),
             ),
             const SizedBox(height: 32),
 
