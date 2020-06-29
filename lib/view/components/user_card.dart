@@ -7,19 +7,26 @@ class UserCard extends StatelessWidget {
   const UserCard({
     this.user,
     this.onTap,
+    this.margin,
+    this.padding,
+    this.height = 60,
   });
 
   final User user;
+  final double height;
+  final EdgeInsetsGeometry margin, padding;
   final void Function(BuildContext context, User user) onTap;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => onTap(context, user),
-      child: Card(
+    return Card(
+      margin: margin,
+      child: GestureDetector(
+        onTap: () => onTap(context, user),
         child: Container(
-          height: 60,
+          height: height,
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               UserIcon(
                 imageUrl: user.icon,
