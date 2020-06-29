@@ -25,9 +25,8 @@ class CreateNewScreen extends StatelessWidget {
               PinterestButton.primary(
                 text: 'Board',
                 onPressed: () async {
-                  final result = await Navigator.of(context)
-                      .pushNamed(Routes.createNewBoard);
-                  Navigator.pop(context, result);
+                  await Navigator.of(context).pushNamed(Routes.createNewBoard);
+                  Navigator.pop(context);
                 },
               ),
               const SizedBox(width: 20),
@@ -43,6 +42,7 @@ class CreateNewScreen extends StatelessWidget {
   }
 
   Future _onPinPressed(BuildContext context) async {
-    Navigator.of(context).pushReplacementNamed(Routes.createNewPin);
+    await Navigator.of(context).pushNamed(Routes.createNewPin);
+    Navigator.pop(context);
   }
 }
