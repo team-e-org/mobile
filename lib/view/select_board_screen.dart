@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/bloc/select_board_screen_bloc.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
+import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/components.dart';
 import 'package:mobile/view/components/reloadable_board_grid_view.dart';
 import 'package:mobile/view/components/notification.dart';
@@ -56,10 +57,7 @@ class SelectBoardScreen extends StatelessWidget {
         final bloc = BlocProvider.of<SelectBoardScreenBloc>(context);
         return Column(
           children: [
-            const ActionCardSlim(
-              text: 'Add Board',
-              icon: Icon(Icons.add),
-            ),
+            _AddBoardCard(),
             Expanded(
               child: ReloadableBoardGridView(
                 layout: BoardGridViewLayout.slim,
@@ -78,6 +76,22 @@ class SelectBoardScreen extends StatelessWidget {
             ),
           ],
         );
+      },
+    );
+  }
+}
+
+class _AddBoardCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final bloc = BlocProvider.of<SelectBoardScreenBloc>(context);
+
+    return ActionCardSlim(
+      text: 'Add Board',
+      icon: Icon(Icons.add),
+      onTap: () async {
+        await Navigator.of(context).pushNamed(Routes.createNewBoard);
+        bloc.add(const Refresh());
       },
     );
   }
