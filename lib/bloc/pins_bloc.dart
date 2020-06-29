@@ -41,7 +41,7 @@ class DefaultState extends PinsBlocState {
   const DefaultState({
     @required int page,
     @required List<Pin> pins,
-    bool isEndOfPins,
+    bool isEndOfPins = false,
   }) : super(page: page, pins: pins, isEndOfPins: isEndOfPins);
 }
 
@@ -49,7 +49,7 @@ class Loading extends PinsBlocState {
   const Loading({
     @required int page,
     @required List<Pin> pins,
-    bool isEndOfPins,
+    bool isEndOfPins = false,
   }) : super(page: page, pins: pins, isEndOfPins: isEndOfPins);
 }
 
@@ -57,7 +57,7 @@ class ErrorState extends PinsBlocState {
   const ErrorState({
     int page = 0,
     List<Pin> pins = const [],
-    bool isEndOfPins,
+    bool isEndOfPins = false,
     @required Exception exception,
   }) : super(
           page: page,
