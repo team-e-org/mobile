@@ -1,6 +1,6 @@
-import 'package:file/file.dart';
+import 'dart:io';
+
 import 'package:file/memory.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mobile/util/image_validator.dart';
 
@@ -20,26 +20,57 @@ void main() {
   group('ImageValidatorTest', () {
     ImageValidator validator;
     setUp(() {
-      validator = ImageValidator(maxSizeInBytes: 1000);
+      validator = ImageValidator(
+        maxSizeInBytes: 10 * 1024 * 1024,
+        acceptedMimeTypes: [
+          'image/jpeg',
+          'image/jpg',
+          'image/png',
+          'image/heic',
+        ],
+      );
     });
 
     test('validate test', () async {
       final cases = <TestCase>[
         TestCase(
-            'file size limit',
-            MemoryFileSystem().file('image.dart')
-              ..writeAsBytesSync(List.filled(1000, 0)),
-            true),
+          'file size limit',
+          MemoryFileSystem().file('image.jpg')
+            ..writeAsBytesSync(List.filled(10 * 1024 * 1024, 0)),
+          true,
+        ),
         TestCase(
-            'file size over than limit',
-            MemoryFileSystem().file('image.dart')
-              ..writeAsBytesSync(List.filled(1001, 0)),
-            false),
+          'file size over than limit',
+          MemoryFileSystem().file('image.jpg')
+            ..writeAsBytesSync(List.filled(10 * 1024 * 1024 + 1, 0)),
+          false,
+        ),
+        TestCase(
+          'jpg file',
+          File('test/assets/cake.jpg'),
+          true,
+        ),
+        TestCase(
+          'png file',
+          File('test/assets/cake.png'),
+          true,
+        ),
+        TestCase(
+          'heic file',
+          File('test/assets/cake.heic'),
+          true,
+        ),
+        TestCase(
+          'unsupported file',
+          File('test/assets/cake.pdf'),
+          false,
+        ),
       ];
 
       for (final c in cases) {
         final actual = await validator.validate(c.image);
-        expect(actual, equals(c.expect));
+        expect(actual, equals(c.expect),
+            reason: 'Failing case: ${c.description}');
       }
     });
   });
