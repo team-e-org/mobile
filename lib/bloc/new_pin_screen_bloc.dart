@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/model/pin_model.dart';
@@ -14,6 +15,17 @@ abstract class NewPinScreenEvent extends Equatable {
 
   @override
   List<Object> get props => [];
+}
+
+class ImageSelected extends NewPinScreenEvent {
+  const ImageSelected({
+    this.image,
+  });
+
+  final PickedFile image;
+
+  @override
+  List<Object> get props => [image?.path];
 }
 
 class SendRequest extends NewPinScreenEvent {
@@ -46,6 +58,17 @@ abstract class NewPinScreenState extends Equatable {
 
 class InitialState extends NewPinScreenState {}
 
+class ImageConfirmed extends NewPinScreenState {
+  const ImageConfirmed({
+    this.image,
+  });
+
+  final File image;
+
+  @override
+  List<Object> get props => [image.path];
+}
+
 class Sending extends NewPinScreenState {}
 
 class Finished extends NewPinScreenState {}
@@ -65,8 +88,20 @@ class NewPinScreenBloc extends Bloc<NewPinScreenEvent, NewPinScreenState> {
 
   @override
   Stream<NewPinScreenState> mapEventToState(NewPinScreenEvent event) async* {
+    if (event is ImageSelected) {
+      yield* mapImageSelectedToState(event);
+    }
     if (event is SendRequest) {
       yield* mapSendRequestToState(event);
+    }
+  }
+
+  Stream<NewPinScreenState> mapImageSelectedToState(
+      ImageSelected event) async* {
+    if (event.image != null) {
+      // TODO: ファイル形式、ファイルサイズをチェックする #260
+      // TODO: 画像を圧縮する
+      yield ImageConfirmed(image: File(event.image.path));
     }
   }
 
