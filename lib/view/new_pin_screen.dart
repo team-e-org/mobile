@@ -32,46 +32,50 @@ class NewPinScreen extends StatelessWidget {
 
     return BlocProvider(
       create: (context) => NewPinScreenBloc(pinsRepository: _pinsRepository),
-      child: BlocBuilder<NewPinScreenBloc, NewPinScreenState>(
-        builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('Create Pin'),
-            ),
-            body: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  PinterestButton.primary(
-                      text: 'Camera',
-                      onPressed: () => _onCameraPressed(context)),
-                  const SizedBox(width: 24),
-                  PinterestButton.primary(
-                      text: 'Library',
-                      onPressed: () => _onLibraryPressed(context))
-                ],
-              ),
-            ),
-          );
-        },
+      child: BlocConsumer<NewPinScreenBloc, NewPinScreenState>(
+        listener: _listener,
+        builder: _builder,
       ),
     );
   }
 
-  Future _onCameraPressed(BuildContext context) async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
-    if (pickedFile == null) {
-      return;
+  Future _listener(BuildContext context, NewPinScreenState state) async {
+    if (state is ImageConfirmed) {
+      await startSequence(context, state.image);
     }
-    await startSequence(context, File(pickedFile.path));
   }
 
-  Future _onLibraryPressed(BuildContext context) async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    if (pickedFile == null) {
-      return;
-    }
-    await startSequence(context, File(pickedFile.path));
+  Widget _builder(BuildContext context, NewPinScreenState state) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Create Pin'),
+      ),
+      body: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            PinterestButton.primary(
+                text: 'Camera',
+                onPressed: () {
+                  _onImageSourcePressed(context, ImageSource.camera);
+                }),
+            const SizedBox(width: 24),
+            PinterestButton.primary(
+                text: 'Library',
+                onPressed: () {
+                  _onImageSourcePressed(context, ImageSource.gallery);
+                })
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future _onImageSourcePressed(BuildContext context, ImageSource source) async {
+    final pickedFile = await picker.getImage(source: source);
+    BlocProvider.of<NewPinScreenBloc>(context).add(ImageSelected(
+      image: pickedFile,
+    ));
   }
 
   Future startSequence(BuildContext context, File imageFile) async {
