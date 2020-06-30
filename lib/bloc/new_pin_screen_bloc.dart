@@ -8,6 +8,7 @@ import 'package:logger/logger.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/model/pin_model.dart';
 import 'package:mobile/repository/repositories.dart';
+import 'package:mobile/util/image_validator.dart';
 
 // Event
 abstract class NewPinScreenEvent extends Equatable {
@@ -80,6 +81,9 @@ class NewPinScreenBloc extends Bloc<NewPinScreenEvent, NewPinScreenState> {
   });
 
   final PinsRepository pinsRepository;
+  final ImageValidator validator = ImageValidator(
+    maxSizeInBytes: 10 * 1024 * 1024, // 10MB
+  );
 
   @override
   NewPinScreenState get initialState => InitialState();
@@ -99,9 +103,14 @@ class NewPinScreenBloc extends Bloc<NewPinScreenEvent, NewPinScreenState> {
     if (event.image == null) {
       yield ImageUnaccepted();
     } else {
-      // TODO: ファイル形式、ファイルサイズをチェックする #260
+      final file = File(event.image.path);
+      final isValid = await validator.validate(file);
+      if (!isValid) {
+        yield ImageUnaccepted();
+      }
+
       // TODO: 画像を圧縮する
-      yield ImageAccepted(image: File(event.image.path));
+      yield ImageAccepted(image: file);
     }
   }
 

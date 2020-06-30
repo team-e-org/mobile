@@ -44,11 +44,11 @@ void main() {
       'when image is selected, should be accepted state',
       build: () async => bloc,
       act: (bloc) async {
-        bloc.add(ImageSelected(image: PickedFile('image.png')));
+        bloc.add(ImageSelected(image: PickedFile('test/assets/cake.jpg')));
       },
       expect: <dynamic>[
         ImageAccepted(
-          image: MemoryFileSystem().file('image.png')..writeAsBytesSync([0]),
+          image: MemoryFileSystem().file('test/assets/cake.jpg'),
         ),
       ],
     );
