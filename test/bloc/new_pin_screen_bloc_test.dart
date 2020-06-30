@@ -1,6 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:file/memory.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobile/api/errors/error.dart';
 import 'package:mobile/bloc/new_pin_screen_bloc.dart';
 import 'package:mobile/model/models.dart';
@@ -27,6 +28,30 @@ void main() {
       expect(bloc.initialState, isA<InitialState>());
       expect(bloc.state, isA<InitialState>());
     });
+
+    blocTest<NewPinScreenBloc, NewPinScreenEvent, NewPinScreenState>(
+      'when image is not selected, should be unaccepted state',
+      build: () async => bloc,
+      act: (bloc) async {
+        bloc.add(const ImageSelected(image: null));
+      },
+      expect: <dynamic>[
+        ImageUnaccepted(),
+      ],
+    );
+
+    blocTest<NewPinScreenBloc, NewPinScreenEvent, NewPinScreenState>(
+      'when image is selected, should be accepted state',
+      build: () async => bloc,
+      act: (bloc) async {
+        bloc.add(ImageSelected(image: PickedFile('test/assets/cake.jpg')));
+      },
+      expect: <dynamic>[
+        ImageAccepted(
+          image: MemoryFileSystem().file('test/assets/cake.jpg'),
+        ),
+      ],
+    );
 
     blocTest<NewPinScreenBloc, NewPinScreenEvent, NewPinScreenState>(
       'when creating new pin succeeded, should be success state',
