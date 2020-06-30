@@ -45,7 +45,7 @@ class NewPin extends Equatable {
         description: 'pin description',
         url: 'https://example.com',
         isPrivate: false,
-        tags: [],
+        tags: const ['sample', 'ねこ'],
       );
 
   Map<String, dynamic> toJson() {
@@ -113,7 +113,7 @@ class EditPin extends Equatable {
         title: 'my pin',
         description: 'pin description',
         isPrivate: false,
-        tags: [],
+        tags: const ['sample', 'ねこ'],
       );
 
   Map<String, dynamic> toJson() {
@@ -198,7 +198,7 @@ class Pin extends Equatable {
       userId: 143,
       imageUrl: 'https://source.unsplash.com/random/${width}x${height}',
       isPrivate: false,
-      tags: const [],
+      tags: const ['sample', 'ねこ'],
     );
   }
 
@@ -239,7 +239,12 @@ class Pin extends Equatable {
 extension _TagsString on String {
   static String separator = ' ';
 
-  List<String> toTagList() => split(separator);
+  List<String> toTagList() {
+    if (this != '') {
+      return split(separator);
+    }
+    return [];
+  }
 
   static String fromTagList(List<String> tagList) => tagList.join(separator);
 }
