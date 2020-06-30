@@ -6,13 +6,16 @@ part 'pin_model.g.dart';
 
 @JsonSerializable(includeIfNull: false)
 class NewPin extends Equatable {
-  const NewPin({
+  NewPin({
     @required this.title,
     this.image,
     this.description,
     this.url,
     this.isPrivate,
-  });
+    List<String> tags,
+  }) {
+    tagsString = _TagsString.fromTagList(tags);
+  }
 
   final String title;
   final String description;
@@ -20,16 +23,49 @@ class NewPin extends Equatable {
   final bool isPrivate;
   final String image;
 
-  factory NewPin.fromJson(Map<String, dynamic> json) => _$NewPinFromJson(json);
+  String tagsString;
+  List<String> get tags => tagsString.toTagList();
+  set tags(List<String> tags) {
+    tagsString = _TagsString.fromTagList(tags);
+  }
 
-  factory NewPin.fromMock() => const NewPin(
+  factory NewPin.fromJson(Map<String, dynamic> json) => NewPin(
+        title: json['title'] as String,
+        image: json['image'] as String,
+        description: json['description'] as String,
+        url: json['url'] as String,
+        isPrivate: json['isPrivate'] as bool,
+        tags: (json['tags'] as String)?.toTagList(),
+      );
+
+  factory NewPin.fromMock() => NewPin(
         title: 'my pin',
         description: 'pin description',
         url: 'https://example.com',
         isPrivate: false,
+        tags: [],
       );
 
-  Map<String, dynamic> toJson() => _$NewPinToJson(this);
+  Map<String, dynamic> toJson() {
+    {
+      final instance = this;
+      final val = <String, dynamic>{};
+
+      void writeNotNull(String key, dynamic value) {
+        if (value != null) {
+          val[key] = value;
+        }
+      }
+
+      writeNotNull('title', instance.title);
+      writeNotNull('description', instance.description);
+      writeNotNull('url', instance.url);
+      writeNotNull('isPrivate', instance.isPrivate);
+      writeNotNull('image', instance.image);
+      writeNotNull('tagsString', instance.tagsString);
+      return val;
+    }
+  }
 
   @override
   List<Object> get props => [
@@ -43,26 +79,58 @@ class NewPin extends Equatable {
 
 @JsonSerializable(includeIfNull: false)
 class EditPin extends Equatable {
-  const EditPin({
+  EditPin({
     this.title,
     this.description,
     this.isPrivate,
-  });
+    List<String> tags,
+  }) {
+    tagsString = _TagsString.fromTagList(tags);
+  }
 
   final String title;
   final String description;
   final bool isPrivate;
 
-  factory EditPin.fromJson(Map<String, dynamic> json) =>
-      _$EditPinFromJson(json);
+  String tagsString;
+  List<String> get tags => tagsString.toTagList();
+  set tags(List<String> tags) {
+    tagsString = _TagsString.fromTagList(tags);
+  }
 
-  factory EditPin.fromMock() => const EditPin(
+  factory EditPin.fromJson(Map<String, dynamic> json) => EditPin(
+        title: json['title'] as String,
+        description: json['description'] as String,
+        isPrivate: json['isPrivate'] as bool,
+        tags: (json['tags'] as String)?.toTagList(),
+      );
+
+  factory EditPin.fromMock() => EditPin(
         title: 'my pin',
         description: 'pin description',
         isPrivate: false,
+        tags: [],
       );
 
-  Map<String, dynamic> toJson() => _$EditPinToJson(this);
+  Map<String, dynamic> toJson() {
+    {
+      final instance = this;
+      final val = <String, dynamic>{};
+
+      void writeNotNull(String key, dynamic value) {
+        if (value != null) {
+          val[key] = value;
+        }
+      }
+
+      writeNotNull('title', instance.title);
+      writeNotNull('description', instance.description);
+      writeNotNull('isPrivate', instance.isPrivate);
+      writeNotNull('tagsString', instance.tagsString);
+      writeNotNull('tags', instance.tags);
+      return val;
+    }
+  }
 
   @override
   List<Object> get props => [
@@ -74,7 +142,7 @@ class EditPin extends Equatable {
 
 @JsonSerializable(includeIfNull: false)
 class Pin extends Equatable {
-  const Pin({
+  Pin({
     this.id,
     this.title,
     this.description,
@@ -82,7 +150,10 @@ class Pin extends Equatable {
     this.userId,
     this.imageUrl,
     this.isPrivate,
-  });
+    List<String> tags,
+  }) {
+    tagsString = _TagsString.fromTagList(tags);
+  }
 
   final int id;
   final String title;
@@ -92,13 +163,28 @@ class Pin extends Equatable {
   final String imageUrl;
   final bool isPrivate;
 
-  factory Pin.fromJson(Map<String, dynamic> json) => _$PinFromJson(json);
+  String tagsString;
+  List<String> get tags => tagsString.toTagList();
+  set tags(List<String> tags) {
+    tagsString = _TagsString.fromTagList(tags);
+  }
+
+  factory Pin.fromJson(Map<String, dynamic> json) => Pin(
+        id: json['id'] as int,
+        title: json['title'] as String,
+        description: json['description'] as String,
+        url: json['url'] as String,
+        userId: json['userId'] as int,
+        imageUrl: json['imageUrl'] as String,
+        isPrivate: json['isPrivate'] as bool,
+        tags: (json['tags'] as String)?.toTagList(),
+      );
 
   factory Pin.fromMock() {
     const width = 200;
     const height = 400;
 
-    return const Pin(
+    return Pin(
       id: 123,
       title: 'title',
       description: 'description',
@@ -106,10 +192,31 @@ class Pin extends Equatable {
       userId: 143,
       imageUrl: 'https://source.unsplash.com/random/${width}x${height}',
       isPrivate: false,
+      tags: [],
     );
   }
 
-  Map<String, dynamic> toJson() => _$PinToJson(this);
+  Map<String, dynamic> toJson() {
+    final instance = this;
+    final val = <String, dynamic>{};
+
+    void writeNotNull(String key, dynamic value) {
+      if (value != null) {
+        val[key] = value;
+      }
+    }
+
+    writeNotNull('id', instance.id);
+    writeNotNull('title', instance.title);
+    writeNotNull('description', instance.description);
+    writeNotNull('url', instance.url);
+    writeNotNull('userId', instance.userId);
+    writeNotNull('imageUrl', instance.imageUrl);
+    writeNotNull('isPrivate', instance.isPrivate);
+    writeNotNull('tagsString', instance.tagsString);
+    writeNotNull('tags', instance.tags);
+    return val;
+  }
 
   @override
   List<Object> get props => [
