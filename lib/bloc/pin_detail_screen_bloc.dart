@@ -15,24 +15,21 @@ abstract class PinDetailScreenEvent extends Equatable {
 }
 
 class LoadInitial extends PinDetailScreenEvent {
-  final Pin pin;
-  const LoadInitial({this.pin});
+  const LoadInitial();
 }
 
 //////// State ////////
 abstract class PinDetailScreenState extends Equatable {
   const PinDetailScreenState({
-    this.pin,
     this.user,
     this.exception,
   });
 
-  final Pin pin;
   final User user;
   final dynamic exception;
 
   @override
-  List<Object> get props => [pin, user, exception];
+  List<Object> get props => [user, exception];
 }
 
 class InitialState extends PinDetailScreenState {
@@ -40,43 +37,38 @@ class InitialState extends PinDetailScreenState {
 }
 
 class DefaultState extends PinDetailScreenState {
-  final Pin pin;
   final User user;
 
   const DefaultState({
-    @required this.pin,
     @required this.user,
-  }) : super(pin: pin, user: user);
+  }) : super(user: user);
 }
 
 class Loading extends PinDetailScreenState {
-  final Pin pin;
   final User user;
 
   const Loading({
-    @required this.pin,
     @required this.user,
-  }) : super(pin: pin, user: user);
+  }) : super(user: user);
 }
 
 class ErrorState extends PinDetailScreenState {
-  final Pin pin;
   final User user;
   final dynamic exception;
 
   const ErrorState({
-    this.pin,
     this.user,
     @required this.exception,
-  }) : super(pin: pin, user: user, exception: exception);
+  }) : super(user: user, exception: exception);
 }
 
 //////// Bloc ////////
 class PinDetailScreenBloc
     extends Bloc<PinDetailScreenEvent, PinDetailScreenState> {
-  PinDetailScreenBloc({@required this.usersRepository});
+  PinDetailScreenBloc({@required this.usersRepository, this.pin});
 
   final UsersRepository usersRepository;
+  final Pin pin;
 
   @override
   PinDetailScreenState get initialState => const InitialState();
@@ -92,13 +84,13 @@ class PinDetailScreenBloc
   Stream<PinDetailScreenState> _mapLoadInitialToState(
       LoadInitial event) async* {
     if (state is! Loading) {
-      yield Loading(pin: event.pin, user: null);
+      yield const Loading(user: null);
       try {
-        final user = await usersRepository.getUser(event.pin.userId);
-        yield DefaultState(pin: event.pin, user: user);
+        final user = await usersRepository.getUser(pin.userId);
+        yield DefaultState(user: user);
       } on Exception catch (e) {
         Logger().e(e);
-        yield ErrorState(pin: event.pin, user: state.user, exception: e);
+        yield ErrorState(user: state.user, exception: e);
       }
     }
   }
