@@ -122,3 +122,11 @@ class Pin extends Equatable {
         isPrivate,
       ];
 }
+
+extension _TagsString on String {
+  static String separator = ' ';
+
+  List<String> toTagList() => split(separator);
+
+  static String fromTagList(List<String> tagList) => tagList.join(separator);
+}
