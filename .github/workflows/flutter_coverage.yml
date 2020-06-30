@@ -17,7 +17,7 @@ jobs:
     - name: Generate source files
       run: flutter packages pub run build_runner build
     - name: Run coverage
-      run: flutter test --coverage --coverage-path=lcov.info
+      run: flutter test --coverage --coverage-path=lcov.info test
     - name: tree
       run: ls -la
     - name: current dir
