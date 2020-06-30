@@ -31,9 +31,10 @@ class PinDetailScreen extends StatelessWidget {
     _usersRepository = RepositoryProvider.of(context);
 
     return BlocProvider(
-        create: (context) =>
-            PinDetailScreenBloc(usersRepository: _usersRepository)
-              ..add(LoadInitial(pin: args.pin)),
+        create: (context) => PinDetailScreenBloc(
+              usersRepository: _usersRepository,
+              pin: args.pin,
+            )..add(LoadInitial()),
         child: BlocConsumer<PinDetailScreenBloc, PinDetailScreenState>(
           listener: (context, state) {},
           builder: (context, state) => _contentBuilder(context, state),
@@ -58,7 +59,6 @@ class PinDetailScreen extends StatelessWidget {
   }
 
   Widget _builder(BuildContext context, PinDetailScreenState state) {
-    final pin = state.pin;
     final user = state.user;
 
     if (state is InitialState || state is Loading) {
@@ -79,13 +79,13 @@ class PinDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _pinImage(pin.imageUrl),
+            _pinImage(args.pin.imageUrl),
             // TODO 投稿者情報を入れる
             const SizedBox(height: 32),
 
             _buildPinInfo(
-              title: pin.title,
-              description: pin.description,
+              title: args.pin.title,
+              description: args.pin.description,
             ),
             const SizedBox(height: 32),
 
