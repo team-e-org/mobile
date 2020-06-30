@@ -48,7 +48,7 @@ class Loading extends PinDetailScreenState {
   final User user;
 
   const Loading({
-    @required this.user,
+    this.user,
   }) : super(user: user);
 }
 
@@ -87,7 +87,7 @@ class PinDetailScreenBloc
   Stream<PinDetailScreenState> _mapLoadInitialToState(
       LoadInitial event) async* {
     if (state is! Loading) {
-      yield const Loading(user: null);
+      yield const Loading();
       try {
         final user = await usersRepository.getUser(pin.userId);
         yield DefaultState(user: user);
