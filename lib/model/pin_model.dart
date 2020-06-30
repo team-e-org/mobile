@@ -14,7 +14,9 @@ class NewPin extends Equatable {
     this.isPrivate,
     List<String> tags,
   }) {
-    tagsString = _TagsString.fromTagList(tags);
+    if (tags != null) {
+      tagsString = _TagsString.fromTagList(tags);
+    }
   }
 
   final String title;
@@ -23,7 +25,7 @@ class NewPin extends Equatable {
   final bool isPrivate;
   final String image;
 
-  String tagsString;
+  String tagsString = '';
   List<String> get tags => tagsString.toTagList();
   set tags(List<String> tags) {
     tagsString = _TagsString.fromTagList(tags);
@@ -85,14 +87,16 @@ class EditPin extends Equatable {
     this.isPrivate,
     List<String> tags,
   }) {
-    tagsString = _TagsString.fromTagList(tags);
+    if (tags != null) {
+      tagsString = _TagsString.fromTagList(tags);
+    }
   }
 
   final String title;
   final String description;
   final bool isPrivate;
 
-  String tagsString;
+  String tagsString = '';
   List<String> get tags => tagsString.toTagList();
   set tags(List<String> tags) {
     tagsString = _TagsString.fromTagList(tags);
@@ -152,7 +156,9 @@ class Pin extends Equatable {
     this.isPrivate,
     List<String> tags,
   }) {
-    tagsString = _TagsString.fromTagList(tags);
+    if (tags != null) {
+      tagsString = _TagsString.fromTagList(tags);
+    }
   }
 
   final int id;
@@ -163,7 +169,7 @@ class Pin extends Equatable {
   final String imageUrl;
   final bool isPrivate;
 
-  String tagsString;
+  String tagsString = '';
   List<String> get tags => tagsString.toTagList();
   set tags(List<String> tags) {
     tagsString = _TagsString.fromTagList(tags);
@@ -192,7 +198,7 @@ class Pin extends Equatable {
       userId: 143,
       imageUrl: 'https://source.unsplash.com/random/${width}x${height}',
       isPrivate: false,
-      tags: [],
+      tags: const [],
     );
   }
 
