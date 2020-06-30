@@ -65,7 +65,10 @@ class ErrorState extends PinDetailScreenState {
 //////// Bloc ////////
 class PinDetailScreenBloc
     extends Bloc<PinDetailScreenEvent, PinDetailScreenState> {
-  PinDetailScreenBloc({@required this.usersRepository, this.pin});
+  PinDetailScreenBloc({
+    @required this.usersRepository,
+    @required this.pin,
+  });
 
   final UsersRepository usersRepository;
   final Pin pin;
