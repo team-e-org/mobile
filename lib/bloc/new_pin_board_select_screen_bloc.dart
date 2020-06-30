@@ -213,7 +213,7 @@ class NewPinBoardSelectScreenBloc
         }
       } on Exception catch (e) {
         Logger().e(e);
-        yield LoadBoardListErrorState(
+        yield CreatePinErrorState(
             boards: state.boards, boardPinMap: state.boardPinMap, error: e);
         if (event.onError != null) {
           event.onError();
