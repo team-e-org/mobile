@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_tags/flutter_tags.dart';
 import 'package:logger/logger.dart';
 import 'package:mobile/bloc/pin_detail_screen_bloc.dart';
 import 'package:mobile/model/models.dart';
@@ -89,6 +90,9 @@ class PinDetailScreen extends StatelessWidget {
             ),
             const SizedBox(height: 32),
 
+            _buildTags(args.pin.tags),
+            const SizedBox(height: 32),
+
             UserCard(
               user: user,
               onTap: (context, user) =>
@@ -162,6 +166,28 @@ class PinDetailScreen extends StatelessWidget {
     }
 
     return Column(children: list);
+  }
+
+  Widget _buildTags(List<String> tags) {
+    final tagWidgets = tags
+        .map((tag) => Chip(
+              key: Key(tag),
+              label: Text(
+                tag,
+                style: TextStyle(fontSize: 12),
+              ),
+            ))
+        .toList();
+
+    return Container(
+      child: tagWidgets.isNotEmpty
+          ? Wrap(
+              spacing: 4,
+              alignment: WrapAlignment.center,
+              children: tagWidgets,
+            )
+          : Container(),
+    );
   }
 
   Widget _buildActions(BuildContext context) {

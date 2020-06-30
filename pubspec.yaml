@@ -27,6 +27,7 @@ dependencies:
   image_picker: ^0.6.7
   http_parser: ^3.1.4
   mime: ^0.9.6+3
+  flutter_tags: ^0.4.8
   flutter_dotenv:
 
 dev_dependencies:
