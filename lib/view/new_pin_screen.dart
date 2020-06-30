@@ -9,8 +9,7 @@ import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/notification.dart';
-import 'package:mobile/view/pin_edit_screen.dart';
-import 'package:mobile/view/select_board_screen.dart';
+import 'package:mobile/view/new_pin_edit_screen.dart';
 
 class NewPinResult {
   NewPinResult({this.newPin, this.imageFile, this.board});
@@ -46,14 +45,6 @@ class NewPinScreen extends StatelessWidget {
 
     if (state is ImageUnaccepted) {
       _onImageUnaccepted();
-    }
-
-    if (state is Finished) {
-      _onSuccess(context);
-    }
-
-    if (state is ErrorState) {
-      _onError(context);
     }
   }
 
@@ -98,51 +89,17 @@ class NewPinScreen extends StatelessWidget {
     result.imageFile = imageFile;
     bloc = BlocProvider.of<NewPinScreenBloc>(context);
 
-    final res = await Navigator.of(context).pushNamed(
+    await Navigator.of(context).pushNamed(
       Routes.createNewPinEdit,
-      arguments: PinEditScreenArguments(
+      arguments: NewPinEditScreenArguments(
         file: result.imageFile,
-        onNextPressed: (context, newPin) async {
-          result.newPin = newPin;
-
-          // get board which the new pin will be added, from select board screen
-          final res = await Navigator.of(context).pushNamed(
-            Routes.createNewPinSelectBoard,
-            arguments: SelectBoardScreenArguments(
-              onBoardPressed: (context, board) {
-                result.board = board;
-
-                bloc.add(SendRequest(
-                  newPin: result.newPin,
-                  imageFile: result.imageFile,
-                  board: result.board,
-                ));
-              },
-            ),
-          );
-
-          if (res != null && res as bool) {
-            Navigator.of(context).pop(true);
-          }
-        },
       ),
     );
 
-    if (res != null && res as bool) {
-      Navigator.of(context).pop();
-    }
+    Navigator.of(context).pop();
   }
 
   void _onImageUnaccepted() {
     PinterestNotification.showError(title: '対応していない画像です');
-  }
-
-  void _onSuccess(BuildContext context) {
-    PinterestNotification.show(title: '新しいピンを作成しました');
-    Navigator.of(context).pop(true);
-  }
-
-  void _onError(BuildContext context) {
-    PinterestNotification.showError(title: 'ピンの作成に失敗しました');
   }
 }

@@ -1,22 +1,22 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/bloc/select_board_screen_bloc.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
-import 'package:mobile/routes.dart';
-import 'package:mobile/view/components/components.dart';
-import 'package:mobile/view/components/reloadable_board_grid_view.dart';
-import 'package:mobile/view/components/notification.dart';
-import 'components/board_grid_view.dart';
-
-typedef SelectBoardScreenCallback = void Function(BuildContext, Board);
+import 'package:mobile/view/pages/board_select_page.dart';
 
 class SelectBoardScreenArguments {
   SelectBoardScreenArguments({
-    this.onBoardPressed,
+    this.file,
+    this.newPin,
+    this.onSelected,
   });
 
-  final SelectBoardScreenCallback onBoardPressed;
+  final File file;
+  final NewPin newPin;
+  final Function(BuildContext context, Board board) onSelected;
 }
 
 class SelectBoardScreen extends StatelessWidget {
@@ -45,54 +45,29 @@ class SelectBoardScreen extends StatelessWidget {
             usersRepository: usersRepository,
             boardsRepository: boardsRepository,
           )..add(const LoadInitial()),
-          child: _buildContent(context),
+          child: BlocBuilder<SelectBoardScreenBloc, SelectBoardScreenState>(
+            builder: _contentBuilder,
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildContent(BuildContext context) {
-    return BlocBuilder<SelectBoardScreenBloc, SelectBoardScreenState>(
-      builder: (context, state) {
-        final bloc = BlocProvider.of<SelectBoardScreenBloc>(context);
-        return Column(
-          children: [
-            _AddBoardCard(),
-            Expanded(
-              child: ReloadableBoardGridView(
-                layout: BoardGridViewLayout.slim,
-                isLoading: state is Loading,
-                boards: state.boards,
-                boardPinMap: state.boardPinMap,
-                onBoardTap: args.onBoardPressed,
-                isError: state is ErrorState,
-                onReload: () {
-                  bloc.add(const Refresh());
-                },
-                onRefresh: () async {
-                  bloc.add(const Refresh());
-                },
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
-
-class _AddBoardCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
+  Widget _contentBuilder(BuildContext context, SelectBoardScreenState state) {
     final bloc = BlocProvider.of<SelectBoardScreenBloc>(context);
-
-    return ActionCardSlim(
-      text: 'Add Board',
-      icon: Icon(Icons.add),
-      onTap: () async {
-        await Navigator.of(context).pushNamed(Routes.createNewBoard);
+    return BoardSelectPage(
+      boards: state.boards,
+      isLoading: state is Loading,
+      boardPinMap: state.boardPinMap,
+      onSelected: args.onSelected,
+      isError: state is Error,
+      onReload: () {
         bloc.add(const Refresh());
       },
+      onRefresh: () async {
+        bloc.add(const Refresh());
+      },
+      enableAddBoard: true,
     );
   }
 }
