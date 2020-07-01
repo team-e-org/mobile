@@ -60,6 +60,21 @@ class ErrorState extends PinDetailScreenState {
   }) : super(user: user, isSaved: isSaved, exception: exception);
 }
 
+class SavePinWaiting extends PinDetailScreenState {
+  const SavePinWaiting({
+    User user,
+    bool isSaved,
+  }) : super(user: user, isSaved: isSaved);
+}
+
+class SavePinErrorState extends PinDetailScreenState {
+  const SavePinErrorState({
+    User user,
+    bool isSaved,
+    dynamic exception,
+  }) : super(user: user, isSaved: isSaved, exception: exception);
+}
+
 //////// Bloc ////////
 class PinDetailScreenBloc
     extends Bloc<PinDetailScreenEvent, PinDetailScreenState> {
@@ -102,12 +117,12 @@ class PinDetailScreenBloc
   Stream<PinDetailScreenState> _mapSavePinToState(SavePin event) async* {
     if (state is! Loading) {
       try {
-        yield Loading(user: state.user, isSaved: state.isSaved);
+        yield SavePinWaiting(user: state.user, isSaved: state.isSaved);
         final isSaved = true;
         yield DefaultState(user: state.user, isSaved: isSaved);
       } on Exception catch (e) {
         Logger().e(e);
-        yield ErrorState(
+        yield SavePinErrorState(
             user: state.user, isSaved: state.isSaved, exception: e);
       }
     }
