@@ -2,20 +2,20 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:mobile/model/models.dart';
+import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/common/typography_common.dart';
 import 'package:mobile/view/components/notification.dart';
 import 'package:mobile/view/components/option_menu.dart';
+import 'package:mobile/view/pin_edit_screen.dart';
 
 class PinCard extends StatelessWidget {
   const PinCard({
     this.pin,
     this.onTap,
-    this.menuItems = const [],
   });
 
   final Pin pin;
   final VoidCallback onTap;
-  final List<BottomSheetMenuItem> menuItems;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class PinCard extends StatelessWidget {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           _pinImageContainer(),
           const SizedBox(height: 4),
-          _pinInfo(),
+          _pinInfo(context),
         ]),
       ),
     );
@@ -67,13 +67,13 @@ class PinCard extends StatelessWidget {
     );
   }
 
-  Widget _pinInfo() {
+  Widget _pinInfo(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8),
       child: Row(
         children: [
           Expanded(child: _pinTitle()),
-          _MenuButton(menuItems: menuItems),
+          _MenuButton(menuItems: _menuItems(context)),
         ],
       ),
     );
@@ -86,6 +86,18 @@ class PinCard extends StatelessWidget {
       maxLines: 2,
     );
   }
+
+  List<BottomSheetMenuItem> _menuItems(BuildContext context) => [
+        BottomSheetMenuItem(
+          title: const Text('ピンの編集'),
+          onTap: () {
+            Navigator.of(context).pushNamed(
+              Routes.pinEdit,
+              arguments: PinEditScreenArguments(pin: pin),
+            );
+          },
+        ),
+      ];
 }
 
 class _MenuButton extends StatelessWidget {
