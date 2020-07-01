@@ -6,10 +6,9 @@ import 'package:mobile/api/api_client.dart';
 import 'package:mobile/model/models.dart';
 
 abstract class PinsApi {
+  Future<RecommendPinResponse> getRecommendPins({String pagingKey});
   Future<List<Pin>> pins({int page});
-
   Future<Pin> pin({int id});
-
   Future<void> newPin({
     String title,
     String description,
@@ -19,9 +18,7 @@ abstract class PinsApi {
     Uint8List imageBytes,
     int boardId,
   });
-
   Future<Pin> editPin({int id, EditPin pin});
-
   Future<bool> deletePin({int id});
 }
 
@@ -60,6 +57,22 @@ class DefaultPinsApi extends PinsApi {
   }
 
   @override
+  Future<RecommendPinResponse> getRecommendPins({String pagingKey}) async {
+    final body = json.encode({'pagingKey': pagingKey});
+    print(body);
+    final response = await _client.post('/pins', body: body);
+    final jsonBody = jsonDecode(response.body) as Map<String, dynamic>;
+    print('response.body');
+    // print(response.body);
+    return RecommendPinResponse(
+      pins: (jsonBody['pins'] as List)
+          .map((dynamic pin) => Pin.fromJson(pin as Map<String, dynamic>))
+          .toList(),
+      pagingKey: jsonBody['pagingKey'] as String,
+    );
+  }
+
+  @override
   Future<void> newPin({
     @required String title,
     @required String description,
@@ -85,4 +98,11 @@ class DefaultPinsApi extends PinsApi {
       fileBytes: imageBytes,
     );
   }
+}
+
+class RecommendPinResponse {
+  RecommendPinResponse({this.pins, this.pagingKey});
+
+  List<Pin> pins;
+  String pagingKey;
 }
