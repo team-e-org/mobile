@@ -254,41 +254,44 @@ abstract class BoardCardBase extends StatelessWidget {
       );
     }
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Expanded(
-          child: CachedNetworkImage(
-            fit: BoxFit.cover,
-            imageUrl: pins[0].imageUrl,
+    return Container(
+      color: Colors.grey,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: CachedNetworkImage(
+              fit: BoxFit.cover,
+              imageUrl: pins[0].imageUrl,
+            ),
           ),
-        ),
-        pins.length > 1
-            ? Expanded(
-                child: Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Expanded(
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl: pins[1].imageUrl,
+          pins.length > 1
+              ? Expanded(
+                  child: Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            imageUrl: pins[1].imageUrl,
+                          ),
                         ),
-                      ),
-                      pins.length > 2
-                          ? Expanded(
-                              child: CachedNetworkImage(
-                                fit: BoxFit.cover,
-                                imageUrl: pins[2].imageUrl,
-                              ),
-                            )
-                          : Container()
-                    ],
+                        pins.length > 2
+                            ? Expanded(
+                                child: CachedNetworkImage(
+                                  fit: BoxFit.cover,
+                                  imageUrl: pins[2].imageUrl,
+                                ),
+                              )
+                            : Container()
+                      ],
+                    ),
                   ),
-                ),
-              )
-            : Container()
-      ],
+                )
+              : Container()
+        ],
+      ),
     );
   }
 
