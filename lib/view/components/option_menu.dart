@@ -8,9 +8,11 @@ class BottomSheetMenu {
     return showModalBottomSheet<int>(
       context: context,
       builder: (context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: children,
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: children,
+          ),
         );
       },
     );
