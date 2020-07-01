@@ -10,12 +10,14 @@ class PinEditPage extends StatefulWidget {
     @required this.image,
     this.pin,
     this.submitButtonTitle = 'Submit',
+    this.isSubmitButtonLoading = false,
     @required this.onSubmit,
   }) : assert(image != null);
 
   final ImageProvider image;
   final String submitButtonTitle;
   final Pin pin;
+  final bool isSubmitButtonLoading;
   final void Function(BuildContext, NewPin) onSubmit;
 
   @override
@@ -63,6 +65,7 @@ class _PinEditPageState extends State<PinEditPage> {
                 _formField(),
                 PinterestButton.primary(
                     text: widget.submitButtonTitle,
+                    loading: widget.isSubmitButtonLoading,
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
                         widget.onSubmit(context, _formdata.toNewPin());
