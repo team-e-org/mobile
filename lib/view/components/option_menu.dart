@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class BottomSheetMenu {
-  Future show(BuildContext context, {List<BottomSheetMenuItem> children}) {
+  static Future show({
+    @required BuildContext context,
+    List<BottomSheetMenuItem> children = const [],
+  }) {
     return showModalBottomSheet<int>(
       context: context,
       builder: (context) {
