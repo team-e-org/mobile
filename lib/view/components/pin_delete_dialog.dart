@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/bloc/pin_delete_bloc.dart';
 import 'package:mobile/model/models.dart';
+import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/view/components/notification.dart';
 
 class PinDeleteDialog {
   static Future show({BuildContext context, Pin pin}) {
+    final pinsRepository = RepositoryProvider.of<PinsRepository>(context);
     return showDialog<void>(
       context: context,
       builder: (context) {
         return BlocProvider(
-          create: (context) => PinDeleteBloc(),
+          create: (context) => PinDeleteBloc(pinsRepository: pinsRepository),
           child: BlocConsumer<PinDeleteBloc, PinDeleteState>(
             listener: (context, state) {
               if (state is DeletePinFinished) {

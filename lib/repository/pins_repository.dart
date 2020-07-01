@@ -9,6 +9,7 @@ abstract class PinsRepository {
   Future<List<Pin>> getBoardPins({int boardId, int page});
   Future<void> createPin(NewPin newPin, File imageFile, Board board);
   Future<void> editPin(int pinId, EditPin editPin);
+  Future<void> deletePin(int pinId);
 }
 
 class DefaultPinsRepository extends PinsRepository {
@@ -45,5 +46,9 @@ class DefaultPinsRepository extends PinsRepository {
 
   Future<void> editPin(int pinId, EditPin editPin) async {
     return pinsApi.editPin(id: pinId, pin: editPin);
+  }
+
+  Future<void> deletePin(int pinId) async {
+    return pinsApi.deletePin(id: pinId);
   }
 }

@@ -8,6 +8,7 @@ import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/common/typography_common.dart';
 import 'package:mobile/view/components/notification.dart';
 import 'package:mobile/view/components/option_menu.dart';
+import 'package:mobile/view/components/pin_delete_dialog.dart';
 import 'package:mobile/view/pin_edit_screen.dart';
 
 class PinCard extends StatelessWidget {
@@ -103,7 +104,12 @@ class PinCard extends StatelessWidget {
                 );
               },
             )
-          : null
+          : null,
+      BottomSheetMenuItem(
+          title: const Text('ピンの削除'),
+          onTap: () async {
+            await PinDeleteDialog.show(context: context, pin: pin);
+          }),
     ]..remove(null);
   }
 }

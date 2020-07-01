@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:mobile/model/models.dart';
+import 'package:mobile/repository/repositories.dart';
 
 // Event
 abstract class PinDeleteEvent extends Equatable {
@@ -43,6 +44,10 @@ class ErrorState extends PinDeleteState {
 
 // Bloc
 class PinDeleteBloc extends Bloc<PinDeleteEvent, PinDeleteState> {
+  PinDeleteBloc({this.pinsRepository});
+
+  final PinsRepository pinsRepository;
+
   @override
   PinDeleteState get initialState => InitialState();
 
@@ -57,9 +62,10 @@ class PinDeleteBloc extends Bloc<PinDeleteEvent, PinDeleteState> {
     if (state is! DeletePinWaiting) {
       try {
         yield DeletePinWaiting();
+        await pinsRepository.deletePin(event.pin.id);
         yield DeletePinFinished();
       } on Exception catch (e) {
-        Logger().e(e);
+        Logger().e(e.toString());
         yield ErrorState(exception: e);
       }
     }
