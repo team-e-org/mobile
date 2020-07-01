@@ -1,19 +1,21 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/util/validator.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/textfield_common.dart';
-import 'package:mobile/view/components/tag_chips.dart';
 import 'package:mobile/view/components/tag_input.dart';
 
 class PinEditPage extends StatefulWidget {
   PinEditPage({
     @required this.image,
+    this.pin,
+    this.submitButtonTitle = 'Submit',
     @required this.onSubmit,
   }) : assert(image != null);
 
   final ImageProvider image;
+  final String submitButtonTitle;
+  final Pin pin;
   final void Function(BuildContext, NewPin) onSubmit;
 
   @override
@@ -23,6 +25,22 @@ class PinEditPage extends StatefulWidget {
 class _PinEditPageState extends State<PinEditPage> {
   final _formdata = _PinFormData();
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.pin != null) {
+      print('acagd gaagjdna');
+      setState(() {
+        _formdata
+          ..title = widget.pin.title
+          ..description = widget.pin.description ?? ''
+          ..url = widget.pin.url ?? ''
+          ..tags = widget.pin.tags ?? []
+          ..isPrivate = widget.pin.isPrivate ?? false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +62,7 @@ class _PinEditPageState extends State<PinEditPage> {
                 const Divider(),
                 _formField(),
                 PinterestButton.primary(
-                    text: 'Next',
+                    text: widget.submitButtonTitle,
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
                         widget.onSubmit(context, _formdata.toNewPin());
@@ -67,21 +85,24 @@ class _PinEditPageState extends State<PinEditPage> {
               children: <Widget>[
                 PinterestTextField(
                   props: PinterestTextFieldProps(
-                      label: 'Title',
-                      hintText: 'ここにタイトルを書く',
-                      validator: _pinTitleValidator,
-                      maxLength: 30,
-                      maxLengthEnforced: false,
-                      onChanged: (value) => {
-                            setState(() {
-                              _formdata.title = value;
-                            })
-                          }),
+                    label: 'Title',
+                    hintText: 'ここにタイトルを書く',
+                    initialValue: _formdata.title,
+                    validator: _pinTitleValidator,
+                    maxLength: 30,
+                    maxLengthEnforced: false,
+                    onChanged: (value) => {
+                      setState(() {
+                        _formdata.title = value;
+                      })
+                    },
+                  ),
                 ),
                 PinterestTextField(
                   props: PinterestTextFieldProps(
                     label: 'Description',
                     hintText: 'ここに説明を書く',
+                    initialValue: _formdata.description,
                     validator: _pinDescriptionValidator,
                     keyboardType: TextInputType.multiline,
                     minLines: 1,
@@ -97,24 +118,26 @@ class _PinEditPageState extends State<PinEditPage> {
                 ),
                 PinterestTextField(
                   props: PinterestTextFieldProps(
-                      label: 'URL',
-                      hintText: 'ここにURLを書く',
-                      validator: _pinUrlValidator,
-                      maxLengthEnforced: false,
-                      onChanged: (value) => {
-                            setState(() {
-                              _formdata.url = value;
-                            })
-                          }),
+                    label: 'URL',
+                    hintText: 'ここにURLを書く',
+                    initialValue: _formdata.url,
+                    validator: _pinUrlValidator,
+                    maxLengthEnforced: false,
+                    onChanged: (value) => {
+                      setState(() {
+                        _formdata.url = value;
+                      })
+                    },
+                  ),
                 ),
                 TagInput(
                   label: 'Tags',
                   hintText: 'ここにタグを書く',
+                  initialValue: _formdata.tags,
                   onChanged: (tags) {
                     setState(() {
                       _formdata.tags = tags;
                     });
-                    print(_formdata.tags);
                   },
                 ),
               ],
