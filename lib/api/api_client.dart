@@ -75,6 +75,7 @@ class ApiClient {
   }
 
   Future<StreamedResponse> fileUpload(
+    String method,
     String relativeUrl, {
     Map<String, String> fields,
     String fileKey,
@@ -82,14 +83,16 @@ class ApiClient {
   }) async {
     // Reference: https://pub.dev/documentation/http/latest/http/MultipartRequest-class.html
     final uri = Uri.parse('$apiEndpoint$relativeUrl');
-    final request = MultipartRequest('POST', uri);
+    final request = MultipartRequest(method, uri);
     request.fields.addAll(fields);
-    request.files.add(MultipartFile.fromBytes(
-      fileKey,
-      fileBytes,
-      filename: 'image.png', // FIXME: ファイルタイプをチェックするようにする
-      contentType: MediaType.parse('image/png'),
-    ));
+    if (fileKey != null) {
+      request.files.add(MultipartFile.fromBytes(
+        fileKey,
+        fileBytes,
+        filename: 'image.png', // FIXME: ファイルタイプをチェックするようにする
+        contentType: MediaType.parse('image/png'),
+      ));
+    }
     request.headers.addAll(await _headers);
 
     final response = await request.send();

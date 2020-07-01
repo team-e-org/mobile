@@ -38,11 +38,17 @@ class DefaultPinsApi extends PinsApi {
 
   @override
   Future<Pin> editPin({int id, EditPin pin}) async {
-    final response = await _client.put(
+    final fields = {
+      'title': pin.title,
+      'description': pin.description,
+      'isPrivate': pin.isPrivate.toString(),
+      // 'tags': pin.tagsString,
+    };
+    await _client.fileUpload(
+      'PUT',
       '/pins/$id',
-      body: json.encode(pin.toJson()),
+      fields: fields,
     );
-    return Pin.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   }
 
   @override
@@ -76,9 +82,9 @@ class DefaultPinsApi extends PinsApi {
       'isPrivate': isPrivate.toString(),
       'tags': tagsString,
     };
-    print(fields);
 
     await _client.fileUpload(
+      'POST',
       '/boards/$boardId/pins',
       fields: fields,
       fileKey: 'image',
