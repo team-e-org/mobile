@@ -121,7 +121,6 @@ class ApiClient {
       throw _handleError(response.statusCode, utf8.decode(response.bodyBytes),
           response.request?.url?.toString());
     }
-
     return ApiResponse.fromResponse(response);
   }
 

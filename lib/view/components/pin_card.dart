@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:mobile/model/models.dart';
+import 'package:mobile/repository/account_repository.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/common/typography_common.dart';
 import 'package:mobile/view/components/notification.dart';
@@ -87,17 +89,23 @@ class PinCard extends StatelessWidget {
     );
   }
 
-  List<BottomSheetMenuItem> _menuItems(BuildContext context) => [
-        BottomSheetMenuItem(
-          title: const Text('ピンの編集'),
-          onTap: () {
-            Navigator.of(context).pushNamed(
-              Routes.pinEdit,
-              arguments: PinEditScreenArguments(pin: pin),
-            );
-          },
-        ),
-      ];
+  List<BottomSheetMenuItem> _menuItems(BuildContext context) {
+    final userId =
+        RepositoryProvider.of<AccountRepository>(context).getPersistUserId();
+    return [
+      pin.userId == userId
+          ? BottomSheetMenuItem(
+              title: const Text('ピンの編集'),
+              onTap: () {
+                Navigator.of(context).pushNamed(
+                  Routes.pinEdit,
+                  arguments: PinEditScreenArguments(pin: pin),
+                );
+              },
+            )
+          : null
+    ]..remove(null);
+  }
 }
 
 class _MenuButton extends StatelessWidget {

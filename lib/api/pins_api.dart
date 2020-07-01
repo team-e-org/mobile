@@ -40,7 +40,7 @@ class DefaultPinsApi extends PinsApi {
   Future<Pin> editPin({int id, EditPin pin}) async {
     final response = await _client.put(
       '/pins/$id',
-      body: json.encode(pin),
+      body: json.encode(pin.toJson()),
     );
     return Pin.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   }

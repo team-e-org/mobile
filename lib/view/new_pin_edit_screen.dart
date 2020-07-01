@@ -26,7 +26,8 @@ class NewPinEditScreen extends StatelessWidget {
     );
   }
 
-  void _onSubmit(BuildContext context, NewPin newPin) async {
+  void _onSubmit(BuildContext context, PinFormData formdata) async {
+    final newPin = formdata.toNewPin();
     await Navigator.of(context).pushNamed(
       Routes.createNewPinSelectBoard,
       arguments: NewPinBoardSelectScreenArguments(

@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logger/logger.dart';
 import 'package:mobile/model/models.dart';
+import 'package:mobile/repository/repositories.dart';
 
 // event
 abstract class PinEditScreenEvent extends Equatable {
@@ -15,16 +17,16 @@ abstract class PinEditScreenEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class UpdatePin extends PinEditScreenEvent {
-  UpdatePin({
-    @required this.newPin,
-    @required this.imageFile,
+class RequestEditPin extends PinEditScreenEvent {
+  RequestEditPin({
+    @required this.pinId,
+    @required this.editPin,
   });
 
-  final NewPin newPin;
-  final File imageFile;
+  final int pinId;
+  final EditPin editPin;
 
-  List<Object> get props => [newPin, imageFile];
+  List<Object> get props => [pinId, editPin];
 }
 
 // state
@@ -37,31 +39,40 @@ abstract class PinEditScreenState extends Equatable {
 
 class InitialState extends PinEditScreenState {}
 
-class UpdatePinWaiting extends PinEditScreenState {}
+class EditPinWaiting extends PinEditScreenState {}
 
-class UpdatePinFinished extends PinEditScreenState {}
+class EditPinFinished extends PinEditScreenState {}
 
-class UpdatePinErrorState extends PinEditScreenState {}
+class EditPinErrorState extends PinEditScreenState {
+  EditPinErrorState({this.exception});
+
+  final dynamic exception;
+}
 
 // bloc
 class PinEditScreenBloc extends Bloc<PinEditScreenEvent, PinEditScreenState> {
+  PinEditScreenBloc({this.pinsRepository});
+
+  final PinsRepository pinsRepository;
   @override
   PinEditScreenState get initialState => InitialState();
 
   @override
   Stream<PinEditScreenState> mapEventToState(PinEditScreenEvent event) async* {
-    if (event is UpdatePin) {
+    if (event is RequestEditPin) {
       yield* mapUpdatePinToState(event);
     }
   }
 
-  Stream<PinEditScreenState> mapUpdatePinToState(UpdatePin event) async* {
-    if (state is! UpdatePinWaiting) {
-      yield UpdatePinWaiting();
+  Stream<PinEditScreenState> mapUpdatePinToState(RequestEditPin event) async* {
+    if (state is! EditPinWaiting) {
+      yield EditPinWaiting();
       try {
-        UpdatePinFinished();
+        await pinsRepository.editPin(event.pinId, event.editPin);
+        EditPinFinished();
       } on Exception catch (e) {
-        yield UpdatePinErrorState();
+        Logger().e(e);
+        yield EditPinErrorState(exception: e);
       }
     }
   }

@@ -18,14 +18,14 @@ class PinEditPage extends StatefulWidget {
   final String submitButtonTitle;
   final Pin pin;
   final bool isSubmitButtonLoading;
-  final void Function(BuildContext, NewPin) onSubmit;
+  final void Function(BuildContext, PinFormData) onSubmit;
 
   @override
   _PinEditPageState createState() => _PinEditPageState();
 }
 
 class _PinEditPageState extends State<PinEditPage> {
-  final _formdata = _PinFormData();
+  final _formdata = PinFormData();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -68,7 +68,7 @@ class _PinEditPageState extends State<PinEditPage> {
                     loading: widget.isSubmitButtonLoading,
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
-                        widget.onSubmit(context, _formdata.toNewPin());
+                        widget.onSubmit(context, _formdata);
                       }
                     }),
               ],
@@ -192,8 +192,8 @@ class _PinEditPageState extends State<PinEditPage> {
   }
 }
 
-class _PinFormData {
-  _PinFormData({
+class PinFormData {
+  PinFormData({
     this.title = '',
     this.description = '',
     this.url = '',
@@ -217,6 +217,15 @@ class _PinFormData {
       url: url,
       isPrivate: isPrivate,
       tags: tags,
+    );
+  }
+
+  EditPin toEditPin() {
+    return EditPin(
+      title: title,
+      description: description,
+      tags: tags,
+      isPrivate: isPrivate,
     );
   }
 }
