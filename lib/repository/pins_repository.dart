@@ -33,6 +33,7 @@ class DefaultPinsRepository extends PinsRepository {
         description: newPin.description,
         url: newPin.url,
         isPrivate: newPin.isPrivate,
+        tagsString: newPin.tagsString,
         imageBytes: imageFile.readAsBytesSync(),
         boardId: board.id,
       );

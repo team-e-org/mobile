@@ -1,8 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/util/validator.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/textfield_common.dart';
+import 'package:mobile/view/components/tag_chips.dart';
+import 'package:mobile/view/components/tag_input.dart';
 
 class PinEditPage extends StatefulWidget {
   PinEditPage({
@@ -18,7 +21,7 @@ class PinEditPage extends StatefulWidget {
 }
 
 class _PinEditPageState extends State<PinEditPage> {
-  final _PinFormData _formdata = _PinFormData();
+  final _formdata = _PinFormData();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -39,7 +42,7 @@ class _PinEditPageState extends State<PinEditPage> {
                   ),
                 ),
                 const Divider(),
-                _formField(_formdata),
+                _formField(),
                 PinterestButton.primary(
                     text: 'Next',
                     onPressed: () {
@@ -53,7 +56,7 @@ class _PinEditPageState extends State<PinEditPage> {
         ));
   }
 
-  Widget _formField(_PinFormData formData) {
+  Widget _formField() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: Column(
@@ -103,7 +106,17 @@ class _PinEditPageState extends State<PinEditPage> {
                               _formdata.url = value;
                             })
                           }),
-                )
+                ),
+                TagInput(
+                  label: 'Tags',
+                  hintText: 'ここにタグを書く',
+                  onChanged: (tags) {
+                    setState(() {
+                      _formdata.tags = tags;
+                    });
+                    print(_formdata.tags);
+                  },
+                ),
               ],
             ),
           ),
@@ -159,13 +172,17 @@ class _PinFormData {
     this.description = '',
     this.url = '',
     this.isPrivate = false,
-  });
+    List<String> tags,
+  }) {
+    this.tags = tags ?? [];
+  }
 
   String image;
   String title;
   String description;
   String url;
   bool isPrivate;
+  List<String> tags;
 
   NewPin toNewPin() {
     return NewPin(
@@ -173,6 +190,7 @@ class _PinFormData {
       description: description,
       url: url,
       isPrivate: isPrivate,
+      tags: tags,
     );
   }
 }

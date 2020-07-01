@@ -8,6 +8,7 @@ import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/typography_common.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mobile/view/components/notification.dart';
+import 'package:mobile/view/components/tag_chips.dart';
 import 'package:mobile/view/components/user_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -89,6 +90,9 @@ class PinDetailScreen extends StatelessWidget {
             ),
             const SizedBox(height: 32),
 
+            _buildTags(args.pin.tags),
+            const SizedBox(height: 32),
+
             UserCard(
               user: user,
               onTap: (context, user) =>
@@ -162,6 +166,10 @@ class PinDetailScreen extends StatelessWidget {
     }
 
     return Column(children: list);
+  }
+
+  Widget _buildTags(List<String> tags) {
+    return TagChips(tags: tags);
   }
 
   Widget _buildActions(BuildContext context) {
