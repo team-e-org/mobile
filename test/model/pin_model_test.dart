@@ -9,16 +9,18 @@ void main() {
       expect(actual, equals(expected));
     });
     test('toJson', () {
-      const np = NewPin(
+      final np = NewPin(
         title: 'pin',
         description: 'pin description',
         url: 'https://example.com',
+        tags: const ['aaa', 'bbb'],
         isPrivate: false,
       );
       final expected = {
         'title': 'pin',
         'description': 'pin description',
         'url': 'https://example.com',
+        'tags': 'aaa bbb',
         'isPrivate': false,
       };
       final actual = np.toJson();
@@ -33,14 +35,16 @@ void main() {
       expect(actual, equals(expected));
     });
     test('toJson', () {
-      const ep = EditPin(
+      final ep = EditPin(
         title: 'pin',
         description: 'pin description',
         isPrivate: false,
+        tags: const ['aaa', 'bbb'],
       );
       final expected = {
         'title': 'pin',
         'description': 'pin description',
+        'tags': 'aaa bbb',
         'isPrivate': false,
       };
       final actual = ep.toJson();
@@ -55,11 +59,12 @@ void main() {
       expect(actual, equals(expected));
     });
     test('toJson', () {
-      const p = Pin(
+      final p = Pin(
         id: 0,
         title: 'my pin',
         description: 'pin description',
         url: 'https://example.com',
+        tags: const ['aaa', 'bbb'],
         userId: 0,
         imageUrl: 'https://example.com/image.png',
         isPrivate: false,
@@ -69,6 +74,7 @@ void main() {
         'title': 'my pin',
         'description': 'pin description',
         'url': 'https://example.com',
+        'tags': 'aaa bbb',
         'userId': 0,
         'imageUrl': 'https://example.com/image.png',
         'isPrivate': false,
