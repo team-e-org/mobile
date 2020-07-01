@@ -15,6 +15,7 @@ abstract class PinsApi {
     String description,
     String url,
     bool isPrivate,
+    String tagsString,
     Uint8List imageBytes,
     int boardId,
   });
@@ -64,6 +65,7 @@ class DefaultPinsApi extends PinsApi {
     @required String description,
     @required String url,
     @required bool isPrivate,
+    @required String tagsString,
     @required Uint8List imageBytes,
     @required int boardId,
   }) async {
@@ -72,7 +74,9 @@ class DefaultPinsApi extends PinsApi {
       'description': description,
       'url': url,
       'isPrivate': isPrivate.toString(),
+      'tags': tagsString,
     };
+    print(fields);
 
     await _client.fileUpload(
       '/boards/$boardId/pins',
