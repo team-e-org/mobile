@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_tags/flutter_tags.dart';
 import 'package:logger/logger.dart';
 import 'package:mobile/bloc/pin_detail_screen_bloc.dart';
 import 'package:mobile/model/models.dart';
@@ -9,6 +8,7 @@ import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/typography_common.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mobile/view/components/notification.dart';
+import 'package:mobile/view/components/tag_chips.dart';
 import 'package:mobile/view/components/user_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -169,25 +169,7 @@ class PinDetailScreen extends StatelessWidget {
   }
 
   Widget _buildTags(List<String> tags) {
-    final tagWidgets = tags
-        .map((tag) => Chip(
-              key: Key(tag),
-              label: Text(
-                tag,
-                style: TextStyle(fontSize: 12),
-              ),
-            ))
-        .toList();
-
-    return Container(
-      child: tagWidgets.isNotEmpty
-          ? Wrap(
-              spacing: 4,
-              alignment: WrapAlignment.center,
-              children: tagWidgets,
-            )
-          : Container(),
-    );
+    return TagChips(tags: tags);
   }
 
   Widget _buildActions(BuildContext context) {
