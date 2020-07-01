@@ -5,11 +5,13 @@ class TagInput extends StatefulWidget {
   TagInput({
     this.label = '',
     this.hintText = '',
+    this.initialValue,
     this.onChanged,
   });
 
   final String label;
   final String hintText;
+  final List<String> initialValue;
   final void Function(List<String> tags) onChanged;
 
   @override
@@ -17,12 +19,19 @@ class TagInput extends StatefulWidget {
 }
 
 class _TagInputState extends State<TagInput> {
-  List<String> tags = [];
+  List<String> _tags = [];
   final _controller = TextEditingController(text: '');
 
   @override
   void initState() {
     super.initState();
+
+    if (widget.initialValue != null) {
+      setState(() {
+        _tags = widget.initialValue;
+      });
+    }
+
     _controller.addListener(() {
       final value = _controller.text;
       if (value.isEmpty) {
@@ -32,11 +41,11 @@ class _TagInputState extends State<TagInput> {
       final lastChar = value[value.length - 1];
       final tag = value.trim();
       if (lastChar == ' ' || lastChar == '\n' || lastChar == '\t') {
-        if (!tags.contains(tag)) {
+        if (!_tags.contains(tag)) {
           setState(() {
-            tags.add(tag);
+            _tags.add(tag);
           });
-          widget.onChanged(tags);
+          widget.onChanged(_tags);
         }
         _controller.clear();
       }
@@ -62,7 +71,7 @@ class _TagInputState extends State<TagInput> {
             onFieldSubmitted: _onTextFieldSubmitted,
           ),
           TagChips(
-            tags: tags,
+            tags: _tags,
           ),
         ],
       ),
@@ -75,11 +84,11 @@ class _TagInputState extends State<TagInput> {
     }
 
     final tag = value.trim();
-    if (!tags.contains(tag)) {
+    if (!_tags.contains(tag)) {
       setState(() {
-        tags.add(tag);
+        _tags.add(tag);
       });
-      widget.onChanged(tags);
+      widget.onChanged(_tags);
     }
     _controller.clear();
   }

@@ -1,9 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:mobile/model/models.dart';
+import 'package:mobile/repository/account_repository.dart';
+import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/common/typography_common.dart';
 import 'package:mobile/view/components/notification.dart';
+import 'package:mobile/view/components/option_menu.dart';
+import 'package:mobile/view/pin_edit_screen.dart';
 
 class PinCard extends StatelessWidget {
   const PinCard({
@@ -22,7 +27,7 @@ class PinCard extends StatelessWidget {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           _pinImageContainer(),
           const SizedBox(height: 4),
-          _pinInfo(),
+          _pinInfo(context),
         ]),
       ),
     );
@@ -64,19 +69,55 @@ class PinCard extends StatelessWidget {
     );
   }
 
-  Widget _pinInfo() {
+  Widget _pinInfo(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8),
       child: Row(
         children: [
           Expanded(child: _pinTitle()),
-          _optionButton(),
+          _MenuButton(menuItems: _menuItems(context)),
         ],
       ),
     );
   }
 
-  Widget _optionButton() {
+  Widget _pinTitle() {
+    return PinterestTypography.body2(
+      pin.title ?? '',
+      overflow: TextOverflow.ellipsis,
+      maxLines: 2,
+    );
+  }
+
+  List<BottomSheetMenuItem> _menuItems(BuildContext context) {
+    final userId =
+        RepositoryProvider.of<AccountRepository>(context).getPersistUserId();
+    return [
+      pin.userId == userId
+          ? BottomSheetMenuItem(
+              title: const Text('ピンの編集'),
+              onTap: () {
+                Navigator.of(context).pushNamed(
+                  Routes.pinEdit,
+                  arguments: PinEditScreenArguments(pin: pin),
+                );
+              },
+            )
+          : null
+    ]..remove(null);
+  }
+}
+
+class _MenuButton extends StatelessWidget {
+  _MenuButton({this.menuItems});
+  final List<BottomSheetMenuItem> menuItems;
+
+  @override
+  Widget build(BuildContext context) {
+    if (menuItems.isEmpty) {
+      return Container();
+    }
+
     return Container(
       width: 16,
       height: 16,
@@ -87,18 +128,10 @@ class PinCard extends StatelessWidget {
           size: 16,
         ),
         onPressed: () {
-          PinterestNotification.showNotImplemented();
+          BottomSheetMenu.show(context: context, children: menuItems);
         },
         iconSize: 16,
       ),
-    );
-  }
-
-  Widget _pinTitle() {
-    return PinterestTypography.body2(
-      pin.title ?? '',
-      overflow: TextOverflow.ellipsis,
-      maxLines: 2,
     );
   }
 }

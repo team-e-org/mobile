@@ -199,7 +199,7 @@ class NewPinBoardSelectScreenBloc
 
   Stream<NewPinBoardSelectScreenState> mapCreatePinToState(
       CreatePin event) async* {
-    if (state is DefaultState) {
+    if (state is DefaultState || state is CreatePinErrorState) {
       try {
         yield CreatePinWaiting(
             boards: state.boards, boardPinMap: state.boardPinMap);

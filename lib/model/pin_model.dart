@@ -64,7 +64,7 @@ class NewPin extends Equatable {
       writeNotNull('url', instance.url);
       writeNotNull('isPrivate', instance.isPrivate);
       writeNotNull('image', instance.image);
-      writeNotNull('tagsString', instance.tagsString);
+      writeNotNull('tags', instance.tagsString);
       return val;
     }
   }
@@ -130,8 +130,7 @@ class EditPin extends Equatable {
       writeNotNull('title', instance.title);
       writeNotNull('description', instance.description);
       writeNotNull('isPrivate', instance.isPrivate);
-      writeNotNull('tagsString', instance.tagsString);
-      writeNotNull('tags', instance.tags);
+      // writeNotNull('tags', instance.tagsString);
       return val;
     }
   }
@@ -219,8 +218,7 @@ class Pin extends Equatable {
     writeNotNull('userId', instance.userId);
     writeNotNull('imageUrl', instance.imageUrl);
     writeNotNull('isPrivate', instance.isPrivate);
-    writeNotNull('tagsString', instance.tagsString);
-    writeNotNull('tags', instance.tags);
+    writeNotNull('tags', instance.tagsString);
     return val;
   }
 
