@@ -199,10 +199,10 @@ class NewPinBoardSelectScreenBloc
 
   Stream<NewPinBoardSelectScreenState> mapCreatePinToState(
       CreatePin event) async* {
-    if (state is! CreatePinWaiting) {
-      yield CreatePinWaiting(
-          boards: state.boards, boardPinMap: state.boardPinMap);
+    if (state is DefaultState) {
       try {
+        yield CreatePinWaiting(
+            boards: state.boards, boardPinMap: state.boardPinMap);
         await pinsRepository.createPin(
             event.newPin, event.imageFile, event.board);
         yield CreatePinFinished(
