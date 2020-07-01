@@ -8,9 +8,9 @@ import 'package:mobile/view/pages/pin_edit_page.dart';
 import 'package:mobile/view/select_board_screen.dart';
 
 class PinEditScreenArguments {
-  PinEditScreenArguments({this.file});
+  PinEditScreenArguments({this.pin});
 
-  File file;
+  Pin pin;
 }
 
 class PinEditScreen extends StatelessWidget {
@@ -21,7 +21,9 @@ class PinEditScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PinEditPage(
-      image: FileImage(args.file),
+      image: NetworkImage(args.pin.imageUrl),
+      pin: args.pin,
+      submitButtonTitle: 'Update',
       onSubmit: _onSubmit,
     );
   }
