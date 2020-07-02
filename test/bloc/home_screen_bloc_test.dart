@@ -1,8 +1,8 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mobile/api/errors/error.dart';
+import 'package:mobile/api/pins_api.dart';
 import 'package:mobile/bloc/home_screen_bloc.dart';
-import 'package:mobile/bloc/pins_bloc.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/pins_repository.dart';
 import 'package:mockito/mockito.dart';
@@ -16,7 +16,9 @@ void main() {
 
     setUp(() {
       pinsRepository = MockPinsRepository();
-      bloc = HomeScreenBloc(pinsRepository);
+      bloc = HomeScreenBloc(
+        pinsRepository: pinsRepository,
+      );
     });
 
     test('initial state is InitialState', () {
@@ -24,27 +26,34 @@ void main() {
       expect(bloc.state, isA<InitialState>());
     });
 
-    blocTest<HomeScreenBloc, PinsBlocEvent, PinsBlocState>(
+    blocTest<HomeScreenBloc, HomeScreenEvent, HomeScreenState>(
       'when fetching home sceen pins succeeded, should be default state',
       build: () async => bloc,
       act: (bloc) async {
-        when(pinsRepository.getHomePagePins(page: anyNamed('page')))
-            .thenAnswer((_) => Future.value([Pin.fromMock()]));
-        bloc.add(PinsBlocEvent.loadNext);
+        when(pinsRepository.getReccomendPins(pagingKey: anyNamed('pagingKey')))
+            .thenAnswer((_) => Future.value(RecommendPinResponse(
+                  pins: [Pin.fromMock()],
+                  pagingKey: '',
+                )));
+        bloc.add(LoadRecommendPins());
       },
       expect: <dynamic>[
         isA<Loading>(),
-        equals(DefaultState(page: 1, pins: [Pin.fromMock()])),
+        equals(DefaultState(
+          pagingKey: '',
+          pins: [Pin.fromMock()],
+          isEndOfPins: false,
+        )),
       ],
     );
 
-    blocTest<HomeScreenBloc, PinsBlocEvent, PinsBlocState>(
+    blocTest<HomeScreenBloc, HomeScreenEvent, HomeScreenState>(
       'when fetching home screen pins failed, should be error state',
       build: () async => bloc,
       act: (bloc) async {
-        when(pinsRepository.getHomePagePins(page: anyNamed('page')))
+        when(pinsRepository.getReccomendPins(pagingKey: anyNamed('pagingKey')))
             .thenThrow(NetworkError());
-        bloc.add(PinsBlocEvent.loadNext);
+        bloc.add(LoadRecommendPins());
       },
       expect: <dynamic>[
         isA<Loading>(),
