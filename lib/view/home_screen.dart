@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/bloc/home_screen_bloc.dart';
-import 'package:mobile/bloc/pins_bloc.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
@@ -22,30 +21,27 @@ class _HomeScreenState extends State<HomeScreen> {
     final pinsRepository = RepositoryProvider.of<PinsRepository>(context);
 
     return BlocProvider(
-      create: (context) =>
-          HomeScreenBloc(pinsRepository)..add(PinsBlocEvent.loadNext),
-      child: _buildContent(context),
-    );
-  }
-
-  Widget _buildContent(BuildContext context) {
-    return SafeArea(
-      child: BlocBuilder<HomeScreenBloc, PinsBlocState>(
+      create: (context) => HomeScreenBloc(pinsRepository: pinsRepository)
+        ..add(LoadRecommendPins()),
+      child: BlocConsumer<HomeScreenBloc, HomeScreenState>(
+        listener: (context, state) {},
         builder: _contentBuilder,
       ),
     );
   }
 
-  Widget _contentBuilder(BuildContext context, PinsBlocState state) {
+  Widget _contentBuilder(BuildContext context, HomeScreenState state) {
     final bloc = BlocProvider.of<HomeScreenBloc>(context);
-    return ReloadablePinGridView(
-      isLoading: state is Loading,
-      pins: state.pins,
-      onPinTap: _onPinTap,
-      onScrollOut: () => {bloc.add(PinsBlocEvent.loadNext)},
-      enableScrollOut: !state.isEndOfPins,
-      isError: state is ErrorState,
-      onReload: () => {bloc.add(PinsBlocEvent.loadNext)},
+    return SafeArea(
+      child: ReloadablePinGridView(
+        isLoading: state is Loading,
+        pins: state.pins,
+        onPinTap: _onPinTap,
+        onScrollOut: () => {bloc.add(LoadRecommendPins())},
+        enableScrollOut: !state.isEndOfPins,
+        isError: state is ErrorState,
+        onReload: () => {bloc.add(LoadRecommendPins())},
+      ),
     );
   }
 
