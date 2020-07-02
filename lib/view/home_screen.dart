@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return BlocProvider(
       create: (context) => HomeScreenBloc(pinsRepository: pinsRepository)
-        ..add(LoadRecommendPins()),
+        ..add(HomeScreenEvent.loadNext),
       child: BlocConsumer<HomeScreenBloc, HomeScreenState>(
         listener: (context, state) {},
         builder: _contentBuilder,
@@ -37,10 +37,11 @@ class _HomeScreenState extends State<HomeScreen> {
         isLoading: state is Loading,
         pins: state.pins,
         onPinTap: _onPinTap,
-        onScrollOut: () => {bloc.add(LoadRecommendPins())},
+        onScrollOut: () => bloc.add(HomeScreenEvent.loadNext),
         enableScrollOut: !state.isEndOfPins,
         isError: state is ErrorState,
-        onReload: () => {bloc.add(LoadRecommendPins())},
+        onReload: () => bloc.add(HomeScreenEvent.loadNext),
+        onRefresh: () async => bloc.add(HomeScreenEvent.refresh),
       ),
     );
   }
