@@ -5,6 +5,7 @@ import 'package:mobile/routes.dart';
 import 'package:mobile/view/board_edit_screen.dart';
 import 'package:mobile/view/components/components.dart';
 import 'package:mobile/view/components/bottom_sheet_menu.dart';
+import 'package:mobile/view/components/menu_button.dart';
 
 class BoardCardLarge extends BoardCardBase {
   BoardCardLarge({
@@ -298,50 +299,8 @@ abstract class BoardCardBase extends StatelessWidget {
               ]..remove(null),
             ),
           ),
-          showMenu ? _MenuButton(menuItems: _menuItems(context)) : null,
+          props.menuButton,
         ]..remove(null),
-      ),
-    );
-  }
-
-  List<BottomSheetMenuItem> _menuItems(BuildContext context) {
-    return [
-      BottomSheetMenuItem(
-        title: const Text('ボードの編集'),
-        onTap: () {
-          Navigator.of(context).pushNamed(
-            Routes.boardEdit,
-            arguments: BoardEditScreenArguments(board: props.board),
-          );
-        },
-      )
-    ]..remove(null);
-  }
-}
-
-class _MenuButton extends StatelessWidget {
-  _MenuButton({this.menuItems});
-  final List<BottomSheetMenuItem> menuItems;
-
-  @override
-  Widget build(BuildContext context) {
-    if (menuItems.isEmpty) {
-      return Container();
-    }
-
-    return Container(
-      width: 16,
-      height: 16,
-      child: IconButton(
-        padding: const EdgeInsets.all(0),
-        icon: Icon(
-          Icons.more_horiz,
-          size: 16,
-        ),
-        onPressed: () {
-          BottomSheetMenu.show(context: context, items: menuItems);
-        },
-        iconSize: 16,
       ),
     );
   }
@@ -352,11 +311,13 @@ class BoardCardProps {
     @required this.board,
     this.pins = const [],
     this.onTap,
+    this.menuButton,
   });
 
   final Board board;
   final List<Pin> pins;
   final VoidCallback onTap;
+  final MenuButton menuButton;
 }
 
 class BoardCardStyle {}
