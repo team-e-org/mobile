@@ -136,7 +136,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
           isEndOfPins: state.isEndOfPins,
         );
         final res =
-            await pinsRepository.getReccomendPins(pagingKey: state.pagingKey);
+            await pinsRepository.getReccomendPins();
         yield DefaultState(
           pins: res.pins,
           pagingKey: res.pagingKey,
