@@ -46,7 +46,11 @@ class DefaultPinsRepository extends PinsRepository {
   }
 
   Future<void> editPin(int pinId, EditPin editPin) async {
-    return pinsApi.editPin(id: pinId, pin: editPin);
+    try {
+      await pinsApi.editPin(id: pinId, pin: editPin);
+    } on Exception {
+      rethrow;
+    }
   }
 
   Future<bool> removePin(int boardId, int pinId) async {
