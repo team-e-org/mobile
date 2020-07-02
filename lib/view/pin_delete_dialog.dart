@@ -6,8 +6,11 @@ import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/view/components/notification.dart';
 
 class PinDeleteDialog {
-  static Future show({BuildContext context, Pin pin}) {
-    final pinsRepository = RepositoryProvider.of<PinsRepository>(context);
+  PinsRepository pinsRepository;
+  PinDeleteBloc pinDeleteBloc;
+
+  Future show({BuildContext context, Pin pin}) {
+    pinsRepository = RepositoryProvider.of<PinsRepository>(context);
     return showDialog<void>(
       context: context,
       builder: (context) {
@@ -24,7 +27,7 @@ class PinDeleteDialog {
               }
             },
             builder: (context, state) {
-              final bloc = BlocProvider.of<PinDeleteBloc>(context);
+              pinDeleteBloc = BlocProvider.of<PinDeleteBloc>(context);
               return AlertDialog(
                 content: const Text('ピンを削除しますか？'),
                 actions: [
@@ -37,7 +40,7 @@ class PinDeleteDialog {
                   FlatButton(
                     child: const Text('Confirm'),
                     onPressed: () {
-                      bloc.add(DeletePin(pin: pin));
+                      pinDeleteBloc.add(DeletePin(pin: pin));
                     },
                   ),
                 ],

@@ -62,10 +62,11 @@ class PinDeleteBloc extends Bloc<PinDeleteEvent, PinDeleteState> {
     if (state is! DeletePinWaiting) {
       try {
         yield DeletePinWaiting();
+        print('pins id: ${event.pin.id}');
         await pinsRepository.deletePin(event.pin.id);
         yield DeletePinFinished();
       } on Exception catch (e) {
-        Logger().e(e.toString());
+        Logger().e(e);
         yield ErrorState(exception: e);
       }
     }

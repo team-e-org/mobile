@@ -49,7 +49,7 @@ class DefaultPinsRepository extends PinsRepository {
     return pinsApi.editPin(id: pinId, pin: editPin);
   }
 
-  Future<void> deletePin(int pinId) async {
+  Future<bool> deletePin(int pinId) async {
     return pinsApi.deletePin(id: pinId);
   }
 

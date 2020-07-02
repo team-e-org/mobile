@@ -34,6 +34,7 @@ class DefaultPinsApi extends PinsApi {
 
   @override
   Future<bool> deletePin({int id}) async {
+    print("asond;laknsdfk: $id");
     final response = await _client.delete('/pins/$id');
     return response.statusCode == 204;
   }
