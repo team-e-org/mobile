@@ -54,10 +54,11 @@ class BoardDetailScreen extends StatelessWidget {
       board: args.board,
       pins: state.pins,
       onPinTap: _onPinTap,
-      onScrollOut: () => {bloc.add(PinsBlocEvent.loadNext)},
+      onScrollOut: () => bloc.add(PinsBlocEvent.loadNext),
       enableScrollOut: !state.isEndOfPins,
       isError: state is ErrorState,
-      onReload: () => {bloc.add(PinsBlocEvent.loadNext)},
+      onReload: () => bloc.add(PinsBlocEvent.loadNext),
+      onRefresh: () async => bloc.add(PinsBlocEvent.refresh),
     );
   }
 
