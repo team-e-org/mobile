@@ -3,32 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/view/board_edit_screen.dart';
+import 'package:mobile/view/components/components.dart';
 import 'package:mobile/view/components/option_menu.dart';
 
 class BoardCardLarge extends BoardCardBase {
-  const BoardCardLarge({
-    @required this.board,
-    this.pins = const [],
-    this.onTap,
+  BoardCardLarge({
+    @required this.props,
     this.margin,
   }) : super(
-          board: board,
-          pins: pins,
-          onTap: onTap,
+          props: props,
           margin: margin,
           titleStyle: const TextStyle(fontSize: 16),
           subtitleStyle: const TextStyle(fontSize: 12),
         );
 
-  final Board board;
-  final List<Pin> pins;
-  final VoidCallback onTap;
+  final BoardCardProps props;
   final EdgeInsetsGeometry margin;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: props.onTap,
       child: Container(
         margin: margin,
         color: ThemeData().scaffoldBackgroundColor,
@@ -49,29 +44,23 @@ class BoardCardLarge extends BoardCardBase {
 }
 
 class BoardCardCompact extends BoardCardBase {
-  const BoardCardCompact({
-    @required this.board,
-    this.pins = const [],
-    this.onTap,
+  BoardCardCompact({
+    @required this.props,
     this.margin,
   }) : super(
-          board: board,
-          pins: pins,
-          onTap: onTap,
+          props: props,
           margin: margin,
           titleStyle: const TextStyle(fontSize: 12),
           subtitleStyle: const TextStyle(fontSize: 8),
         );
 
-  final Board board;
-  final List<Pin> pins;
-  final VoidCallback onTap;
+  final BoardCardProps props;
   final EdgeInsetsGeometry margin;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: props.onTap,
       child: Container(
         margin: margin,
         color: ThemeData().scaffoldBackgroundColor,
@@ -92,29 +81,22 @@ class BoardCardCompact extends BoardCardBase {
 }
 
 class BoardCardSlim extends BoardCardBase {
-  const BoardCardSlim({
-    @required this.board,
-    this.pins = const [],
-    this.onTap,
+  BoardCardSlim({
+    @required this.props,
     this.margin,
   }) : super(
-          board: board,
-          pins: pins,
-          onTap: onTap,
           margin: margin,
           titleStyle: const TextStyle(fontSize: 14),
           subtitleStyle: const TextStyle(fontSize: 12),
         );
 
-  final Board board;
-  final List<Pin> pins;
-  final VoidCallback onTap;
+  final BoardCardProps props;
   final EdgeInsetsGeometry margin;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: props.onTap,
       child: Container(
         color: ThemeData().scaffoldBackgroundColor,
         margin: margin,
@@ -198,18 +180,14 @@ class ActionCardSlim extends StatelessWidget {
 }
 
 abstract class BoardCardBase extends StatelessWidget {
-  const BoardCardBase({
-    @required this.board,
-    this.pins = const [],
-    this.onTap,
+  BoardCardBase({
+    @required this.props,
     this.margin,
     this.titleStyle = _titleStyle,
     this.subtitleStyle = _subtitleStyle,
   });
 
-  final Board board;
-  final List<Pin> pins;
-  final VoidCallback onTap;
+  BoardCardProps props;
   final EdgeInsetsGeometry margin;
   final TextStyle titleStyle, subtitleStyle;
 
@@ -224,7 +202,7 @@ abstract class BoardCardBase extends StatelessWidget {
   }
 
   Widget _image() {
-    if (pins.isEmpty) {
+    if (props.pins.isEmpty) {
       return Container(
         color: Colors.grey,
         child: const Center(child: Icon(Icons.photo_library)),
@@ -232,7 +210,7 @@ abstract class BoardCardBase extends StatelessWidget {
     }
 
     return CachedNetworkImage(
-      imageUrl: pins[0].imageUrl,
+      imageUrl: props.pins[0].imageUrl,
       fit: BoxFit.cover,
     );
   }
@@ -250,7 +228,7 @@ abstract class BoardCardBase extends StatelessWidget {
   }
 
   Widget _imageGrids() {
-    if (pins.isEmpty) {
+    if (props.pins.isEmpty) {
       return Container(
         color: Colors.grey,
         child: const Center(child: Icon(Icons.photo_library)),
@@ -265,10 +243,10 @@ abstract class BoardCardBase extends StatelessWidget {
           Expanded(
             child: CachedNetworkImage(
               fit: BoxFit.cover,
-              imageUrl: pins[0].imageUrl,
+              imageUrl: props.pins[0].imageUrl,
             ),
           ),
-          pins.length > 1
+          props.pins.length > 1
               ? Expanded(
                   child: Container(
                     child: Column(
@@ -277,14 +255,14 @@ abstract class BoardCardBase extends StatelessWidget {
                         Expanded(
                           child: CachedNetworkImage(
                             fit: BoxFit.cover,
-                            imageUrl: pins[1].imageUrl,
+                            imageUrl: props.pins[1].imageUrl,
                           ),
                         ),
-                        pins.length > 2
+                        props.pins.length > 2
                             ? Expanded(
                                 child: CachedNetworkImage(
                                   fit: BoxFit.cover,
-                                  imageUrl: pins[2].imageUrl,
+                                  imageUrl: props.pins[2].imageUrl,
                                 ),
                               )
                             : Container()
@@ -312,7 +290,7 @@ abstract class BoardCardBase extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  board.name,
+                  props.board.name,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: titleStyle,
@@ -333,7 +311,7 @@ abstract class BoardCardBase extends StatelessWidget {
         onTap: () {
           Navigator.of(context).pushNamed(
             Routes.boardEdit,
-            arguments: BoardEditScreenArguments(board: board),
+            arguments: BoardEditScreenArguments(board: props.board),
           );
         },
       )
@@ -368,3 +346,17 @@ class _MenuButton extends StatelessWidget {
     );
   }
 }
+
+class BoardCardProps {
+  const BoardCardProps({
+    @required this.board,
+    this.pins = const [],
+    this.onTap,
+  });
+
+  final Board board;
+  final List<Pin> pins;
+  final VoidCallback onTap;
+}
+
+class BoardCardStyle {}

@@ -9,6 +9,8 @@ import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/reloadable_pin_grid_view.dart';
 import 'package:mobile/view/pin_detail_screen.dart';
 
+import 'components/components.dart';
+
 class BoardDetailScreenArguments {
   BoardDetailScreenArguments({
     @required this.board,
@@ -51,9 +53,13 @@ class BoardDetailScreen extends StatelessWidget {
 
     return ReloadablePinGridView(
       isLoading: state is Loading,
-      board: args.board,
-      pins: state.pins,
-      onPinTap: _onPinTap,
+      itemCount: state.pins.length,
+      itemBuilder: (context, index) {
+        return PinCard(
+          pin: state.pins[index],
+          onTap: () => _onPinTap(context, state.pins[index]),
+        );
+      },
       onScrollOut: () => bloc.add(PinsBlocEvent.loadNext),
       enableScrollOut: !state.isEndOfPins,
       isError: state is ErrorState,

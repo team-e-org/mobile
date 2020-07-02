@@ -8,6 +8,8 @@ typedef BoardGridViewCallback = void Function(
 
 class BoardGridView extends StatefulWidget {
   const BoardGridView({
+    this.itemBuilder,
+    this.itemCount,
     this.boards = const [],
     this.boardPinMap = const {},
     this.layout = BoardGridViewLayout.large,
@@ -16,6 +18,9 @@ class BoardGridView extends StatefulWidget {
     this.primary = false,
     this.physics,
   });
+
+  final int itemCount;
+  final BoardCardProps Function(BuildContext, int) itemBuilder;
 
   final List<Board> boards;
   final Map<int, List<Pin>> boardPinMap;
@@ -47,12 +52,10 @@ class _BoardGridViewState extends State<BoardGridView> {
       staggeredTileBuilder: (index) {
         return const StaggeredTile.fit(1);
       },
-      itemCount: widget.boards.length,
+      itemCount: widget.itemCount,
       itemBuilder: (context, index) {
         return BoardCardLarge(
-          board: widget.boards[index],
-          pins: widget.boardPinMap[widget.boards[index].id],
-          onTap: () => widget.onTap(context, widget.boards[index]),
+          props: widget.itemBuilder(context, index),
         );
       },
     );
@@ -73,9 +76,7 @@ class _BoardGridViewState extends State<BoardGridView> {
       itemCount: widget.boards.length,
       itemBuilder: (context, index) {
         return BoardCardCompact(
-          board: widget.boards[index],
-          pins: widget.boardPinMap[widget.boards[index].id],
-          onTap: () => widget.onTap(context, widget.boards[index]),
+          props: widget.itemBuilder(context, index),
         );
       },
     );
@@ -96,9 +97,7 @@ class _BoardGridViewState extends State<BoardGridView> {
       itemCount: widget.boards.length,
       itemBuilder: (context, index) {
         return BoardCardSlim(
-          board: widget.boards[index],
-          pins: widget.boardPinMap[widget.boards[index].id],
-          onTap: () => widget.onTap(context, widget.boards[index]),
+          props: widget.itemBuilder(context, index),
         );
       },
     );
