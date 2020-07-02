@@ -23,6 +23,8 @@ abstract class PinsApi {
   Future<Pin> editPin({int id, EditPin pin});
 
   Future<bool> deletePin({int id});
+
+  Future<bool> savePin({int pinId, int boardId});
 }
 
 class DefaultPinsApi extends PinsApi {
@@ -57,6 +59,11 @@ class DefaultPinsApi extends PinsApi {
     return (jsonDecode(response.body) as List)
         .map((dynamic it) => Pin.fromJson(it as Map<String, dynamic>))
         .toList();
+  }
+
+  Future<bool> savePin({int pinId, int boardId}) async {
+    final response = await _client.post('/boards/$boardId/pins/$pinId');
+    return response.statusCode == 201;
   }
 
   @override

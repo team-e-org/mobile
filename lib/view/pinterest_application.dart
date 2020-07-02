@@ -23,6 +23,7 @@ import 'package:mobile/view/onboarding/auth_screen.dart';
 import 'package:mobile/view/onboarding/authentication_bloc.dart';
 import 'package:mobile/view/pin_detail_screen.dart';
 import 'package:mobile/view/pin_edit_screen.dart';
+import 'package:mobile/view/pin_save_screen.dart';
 import 'package:mobile/view/pin_select_photo_screen.dart';
 import 'package:mobile/view/root_screen.dart';
 import 'package:mobile/view/select_board_screen.dart';
@@ -113,6 +114,9 @@ class PinterestApplication extends StatelessWidget {
               return _pageRoute(PinDetailScreen(args: args));
             case Routes.pinEdit:
               return _pageRoute(PinEditScreen());
+            case Routes.pinSave:
+              final args = settings.arguments as PinSaveScreenArguments;
+              return _pageRoute(PinSaveScreen(args: args));
             // Board
             case Routes.boardDetail:
               final args = settings.arguments as BoardDetailScreenArguments;

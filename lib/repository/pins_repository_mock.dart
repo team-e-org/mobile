@@ -36,4 +36,8 @@ class MockPinsRepository extends PinsRepository {
       ..d('board id: ${board.id}');
     await Future<void>.delayed(const Duration(seconds: 1));
   }
+
+  Future<bool> savePin({int pinId, int boardId}) async {
+    await Future<bool>.delayed(const Duration(seconds: 1));
+  }
 }
