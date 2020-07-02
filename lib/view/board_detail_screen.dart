@@ -6,8 +6,12 @@ import 'package:mobile/model/board_model.dart';
 import 'package:mobile/model/pin_model.dart';
 import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
+import 'package:mobile/view/components/bottom_sheet_menu.dart';
+import 'package:mobile/view/components/menu_button.dart';
 import 'package:mobile/view/components/reloadable_pin_grid_view.dart';
+import 'package:mobile/view/pin_delete_dialog.dart';
 import 'package:mobile/view/pin_detail_screen.dart';
+import 'package:mobile/view/pin_edit_screen.dart';
 
 import 'components/components.dart';
 
@@ -20,9 +24,11 @@ class BoardDetailScreenArguments {
 }
 
 class BoardDetailScreen extends StatelessWidget {
-  const BoardDetailScreen({this.args});
+  BoardDetailScreen({this.args});
 
   final BoardDetailScreenArguments args;
+
+  BoardDetailScreenBloc bloc;
 
   @override
   Widget build(BuildContext context) {
@@ -49,15 +55,17 @@ class BoardDetailScreen extends StatelessWidget {
   }
 
   Widget _contentBuilder(BuildContext context, PinsBlocState state) {
-    final bloc = BlocProvider.of<BoardDetailScreenBloc>(context);
+    bloc = BlocProvider.of<BoardDetailScreenBloc>(context);
 
     return ReloadablePinGridView(
       isLoading: state is Loading,
       itemCount: state.pins.length,
       itemBuilder: (context, index) {
         return PinCard(
+          board: args.board,
           pin: state.pins[index],
           onTap: () => _onPinTap(context, state.pins[index]),
+          menuButton: _menuButton(context, state.pins[index]),
         );
       },
       onScrollOut: () => bloc.add(PinsBlocEvent.loadNext),
@@ -76,6 +84,37 @@ class BoardDetailScreen extends StatelessWidget {
     Navigator.of(context).pushNamed(
       Routes.pinDetail,
       arguments: PinDetailScreenArguments(pin: pin),
+    );
+  }
+
+  MenuButton _menuButton(BuildContext context, Pin pin) {
+    final userId =
+        RepositoryProvider.of<AccountRepository>(context).getPersistUserId();
+
+    return MenuButton(
+      items: [
+        pin.userId == userId
+            ? BottomSheetMenuItem(
+                title: const Text('ピンの編集'),
+                onTap: () async {
+                  await Navigator.of(context).pushNamed(
+                    Routes.pinEdit,
+                    arguments: PinEditScreenArguments(pin: pin),
+                  );
+                  Navigator.of(context).pop();
+                  bloc.add(PinsBlocEvent.refresh);
+                },
+              )
+            : null,
+        BottomSheetMenuItem(
+            title: const Text('ピンをボードから削除する'),
+            onTap: () async {
+              await PinDeleteDialog()
+                  .show(context: context, board: args.board, pin: pin);
+              Navigator.of(context).pop();
+              bloc.add(PinsBlocEvent.refresh);
+            }),
+      ]..remove(null),
     );
   }
 }

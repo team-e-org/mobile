@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class BottomSheetMenu {
   static Future show({
     @required BuildContext context,
-    List<BottomSheetMenuItem> children = const [],
+    List<BottomSheetMenuItem> items = const [],
   }) async {
     return showModalBottomSheet<int>(
       context: context,
@@ -11,7 +11,7 @@ class BottomSheetMenu {
         return SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: children,
+            children: items,
           ),
         );
       },

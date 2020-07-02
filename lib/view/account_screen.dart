@@ -7,7 +7,10 @@ import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/view/board_detail_screen.dart';
+import 'package:mobile/view/board_edit_screen.dart';
 import 'package:mobile/view/components/board_grid_view.dart';
+import 'package:mobile/view/components/bottom_sheet_menu.dart';
+import 'package:mobile/view/components/menu_button.dart';
 import 'package:mobile/view/components/reloadable_board_grid_view.dart';
 import 'package:mobile/view/components/user_icon.dart';
 import 'package:mobile/view/create_new_button.dart';
@@ -24,6 +27,9 @@ class AccountScreen extends StatelessWidget {
   UsersRepository usersRepository;
   BoardsRepository boardsRepository;
 
+  AuthenticationBloc authBloc;
+  AccountScreenBloc bloc;
+
   @override
   Widget build(BuildContext context) {
     accountRepository = RepositoryProvider.of(context);
@@ -32,6 +38,7 @@ class AccountScreen extends StatelessWidget {
 
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, stateAuth) {
+        authBloc = BlocProvider.of(context);
         return BlocProvider(
           create: (context) => AccountScreenBloc(
             accountRepository: accountRepository,
@@ -64,7 +71,7 @@ class AccountScreen extends StatelessWidget {
         PopupMenuButton<String>(
           onSelected: (String choice) {
             if (choice == _Choices.logout) {
-              BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut());
+              authBloc.add(LoggedOut());
             }
           },
           itemBuilder: (BuildContext context) => choices
@@ -81,6 +88,7 @@ class AccountScreen extends StatelessWidget {
   Widget _buildContent(BuildContext context) {
     return BlocBuilder<AccountScreenBloc, AccountScreenState>(
       builder: (context, state) {
+        bloc = BlocProvider.of(context);
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -99,6 +107,7 @@ class AccountScreen extends StatelessWidget {
                     board: state.boards[index],
                     pins: state.boardPinMap[state.boards[index].id],
                     onTap: () => _onBoardTap(context, state.boards[index]),
+                    menuButton: _menuButton(context, state.boards[index]),
                   );
                 },
                 boards: state.boards,
@@ -151,5 +160,24 @@ class AccountScreen extends StatelessWidget {
     }
     Navigator.of(context).pushNamed(Routes.boardDetail,
         arguments: BoardDetailScreenArguments(board: board));
+  }
+
+  MenuButton _menuButton(BuildContext context, Board board) {
+    return MenuButton(
+      items: [
+        BottomSheetMenuItem(
+          title: const Text('ボードの編集'),
+          onTap: () async {
+            await Navigator.of(context).pushNamed(
+              Routes.boardEdit,
+              arguments: BoardEditScreenArguments(board: board),
+            );
+
+            Navigator.of(context).pop();
+            bloc.add(const Refresh());
+          },
+        )
+      ]..remove(null),
+    );
   }
 }
