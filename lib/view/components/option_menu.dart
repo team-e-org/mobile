@@ -4,7 +4,7 @@ class BottomSheetMenu {
   static Future show({
     @required BuildContext context,
     List<BottomSheetMenuItem> children = const [],
-  }) {
+  }) async {
     return showModalBottomSheet<int>(
       context: context,
       builder: (context) {

@@ -5,6 +5,8 @@ abstract class BoardsRepository {
   Future<List<Pin>> getBoardPins({int id, int page});
 
   Future<Board> createBoard(NewBoard board);
+
+  Future<Board> editBoard(int id, EditBoard editBoard);
 }
 
 class DefaultBoardsRepository extends BoardsRepository {
@@ -16,4 +18,7 @@ class DefaultBoardsRepository extends BoardsRepository {
       api.boardPins(id: id, page: page);
 
   Future<Board> createBoard(NewBoard board) => api.newBoard(board: board);
+
+  Future<Board> editBoard(int id, EditBoard editBoard) =>
+      api.editBoard(id: id, board: editBoard);
 }

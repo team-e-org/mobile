@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/model/models.dart';
+import 'package:mobile/routes.dart';
+import 'package:mobile/view/board_edit_screen.dart';
+import 'package:mobile/view/components/option_menu.dart';
 
 class BoardCardLarge extends BoardCardBase {
   const BoardCardLarge({
@@ -36,7 +39,7 @@ class BoardCardLarge extends BoardCardBase {
             Container(
               margin: const EdgeInsets.only(top: 8, bottom: 16),
               padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: _infoContainer(),
+              child: _infoContainer(context),
             ),
           ],
         ),
@@ -79,7 +82,7 @@ class BoardCardCompact extends BoardCardBase {
             Container(
               margin: const EdgeInsets.only(top: 8, bottom: 16),
               padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: _infoContainer(),
+              child: _infoContainer(context),
             ),
           ],
         ),
@@ -122,7 +125,7 @@ class BoardCardSlim extends BoardCardBase {
             _imageContainer(),
             const SizedBox(width: 10),
             Expanded(
-              child: _infoContainer(),
+              child: _infoContainer(context, showMenu: false),
             )
           ],
         ),
@@ -298,18 +301,70 @@ abstract class BoardCardBase extends StatelessWidget {
   static const TextStyle _titleStyle = TextStyle(fontSize: 16);
   static const TextStyle _subtitleStyle = TextStyle(fontSize: 12);
 
-  Widget _infoContainer() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          board.name,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          style: titleStyle,
+  Widget _infoContainer(BuildContext context, {bool showMenu = true}) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  board.name,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: titleStyle,
+                ),
+              ]..remove(null),
+            ),
+          ),
+          showMenu ? _MenuButton(menuItems: _menuItems(context)) : null,
+        ]..remove(null),
+      ),
+    );
+  }
+
+  List<BottomSheetMenuItem> _menuItems(BuildContext context) {
+    return [
+      BottomSheetMenuItem(
+        title: const Text('ボードの編集'),
+        onTap: () {
+          Navigator.of(context).pushNamed(
+            Routes.boardEdit,
+            arguments: BoardEditScreenArguments(board: board),
+          );
+        },
+      )
+    ]..remove(null);
+  }
+}
+
+class _MenuButton extends StatelessWidget {
+  _MenuButton({this.menuItems});
+  final List<BottomSheetMenuItem> menuItems;
+
+  @override
+  Widget build(BuildContext context) {
+    if (menuItems.isEmpty) {
+      return Container();
+    }
+
+    return Container(
+      width: 16,
+      height: 16,
+      child: IconButton(
+        padding: const EdgeInsets.all(0),
+        icon: Icon(
+          Icons.more_horiz,
+          size: 16,
         ),
-      ],
+        onPressed: () {
+          BottomSheetMenu.show(context: context, children: menuItems);
+        },
+        iconSize: 16,
+      ),
     );
   }
 }
