@@ -40,12 +40,12 @@ void main() {
 
     test('edit pin test', () async {
       final expected = Pin.fromMock();
-      when(apiClient.put(any, body: anyNamed('body'))).thenAnswer(
+      when(apiClient.post(any, body: anyNamed('body'))).thenAnswer(
           (_) => Future.value(ApiResponse(jsonEncode(expected), 200)));
 
-      final actual = await pinsApi.editPin(id: 0, pin: EditPin.fromMock());
+      final f = pinsApi.editPin(id: 0, pin: EditPin.fromMock());
 
-      expect(actual, equals(expected));
+      expect(await f, isNot(throwsException));
     });
 
     test('delete pin test', () async {
