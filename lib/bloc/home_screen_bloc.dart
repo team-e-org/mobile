@@ -8,14 +8,10 @@ import 'package:mobile/repository/repositories.dart';
 
 //////// Event ////////
 
-abstract class HomeScreenEvent extends Equatable {
-  const HomeScreenEvent();
-
-  @override
-  List<Object> get props => [];
+enum HomeScreenEvent {
+  loadNext,
+  refresh,
 }
-
-class LoadRecommendPins extends HomeScreenEvent {}
 
 //////// State ////////
 abstract class HomeScreenState extends Equatable {
@@ -93,13 +89,18 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
 
   @override
   Stream<HomeScreenState> mapEventToState(HomeScreenEvent event) async* {
-    if (event is LoadRecommendPins) {
-      yield* mapLoadRecommendPinsToState(event);
+    switch (event) {
+      case HomeScreenEvent.loadNext:
+        yield* mapLoadNextToState(event);
+        break;
+      case HomeScreenEvent.refresh:
+        yield* mapRefreshToState(event);
+        break;
     }
   }
 
-  Stream<HomeScreenState> mapLoadRecommendPinsToState(
-      LoadRecommendPins event) async* {
+  Stream<HomeScreenState> mapLoadNextToState(
+      HomeScreenEvent event) async* {
     if (state is! Loading && !state.isEndOfPins) {
       try {
         yield Loading(
@@ -111,6 +112,33 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
             await pinsRepository.getReccomendPins(pagingKey: state.pagingKey);
         yield DefaultState(
           pins: state.pins..addAll(res.pins),
+          pagingKey: res.pagingKey,
+          isEndOfPins: res.pagingKey == 'null',
+        );
+      } on Exception catch (e) {
+        Logger().e(e);
+        yield ErrorState(
+          pins: state.pins,
+          pagingKey: state.pagingKey,
+          isEndOfPins: state.isEndOfPins,
+          exception: e,
+        );
+      }
+    }
+  }
+
+  Stream<HomeScreenState> mapRefreshToState(HomeScreenEvent event) async* {
+    if (state is! Loading) {
+      try {
+        yield Loading(
+          pins: state.pins,
+          pagingKey: state.pagingKey,
+          isEndOfPins: state.isEndOfPins,
+        );
+        final res =
+            await pinsRepository.getReccomendPins();
+        yield DefaultState(
+          pins: res.pins,
           pagingKey: res.pagingKey,
           isEndOfPins: res.pagingKey == 'null',
         );

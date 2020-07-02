@@ -8,6 +8,7 @@ import 'package:mobile/model/models.dart';
 //////// Event ////////
 enum PinsBlocEvent {
   loadNext,
+  refresh,
 }
 
 //////// State ////////
@@ -80,6 +81,9 @@ abstract class PinsBloc extends Bloc<PinsBlocEvent, PinsBlocState> {
       case PinsBlocEvent.loadNext:
         yield* mapLoadNextToState(event);
         break;
+      case PinsBlocEvent.refresh:
+        yield* mapRefreshToState(event);
+        break;
     }
   }
 
@@ -92,6 +96,27 @@ abstract class PinsBloc extends Bloc<PinsBlocEvent, PinsBlocState> {
         final additionalPins = await getPins(page: nextPage);
         final pins = List<Pin>.from(state.pins)..addAll(additionalPins);
         final isEndOfPins = additionalPins.isEmpty || state.isEndOfPins;
+        yield DefaultState(
+            page: nextPage, pins: pins, isEndOfPins: isEndOfPins);
+      } on Exception catch (e) {
+        Logger().e(e);
+        yield ErrorState(
+            page: state.page,
+            pins: state.pins,
+            isEndOfPins: false,
+            exception: e);
+      }
+    }
+  }
+
+  Stream<PinsBlocState> mapRefreshToState(PinsBlocEvent event) async* {
+    if (state is! Loading) {
+      yield Loading(
+          page: state.page, pins: state.pins, isEndOfPins: state.isEndOfPins);
+      try {
+        const nextPage = 1;
+        final pins = await getPins(page: nextPage);
+        final isEndOfPins = pins.isEmpty;
         yield DefaultState(
             page: nextPage, pins: pins, isEndOfPins: isEndOfPins);
       } on Exception catch (e) {

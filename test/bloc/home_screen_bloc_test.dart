@@ -35,7 +35,7 @@ void main() {
                   pins: [Pin.fromMock()],
                   pagingKey: '',
                 )));
-        bloc.add(LoadRecommendPins());
+        bloc.add(HomeScreenEvent.loadNext);
       },
       expect: <dynamic>[
         isA<Loading>(),
@@ -53,7 +53,7 @@ void main() {
       act: (bloc) async {
         when(pinsRepository.getReccomendPins(pagingKey: anyNamed('pagingKey')))
             .thenThrow(NetworkError());
-        bloc.add(LoadRecommendPins());
+        bloc.add(HomeScreenEvent.loadNext);
       },
       expect: <dynamic>[
         isA<Loading>(),

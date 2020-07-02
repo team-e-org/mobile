@@ -13,6 +13,7 @@ class ReloadablePinGridView extends StatelessWidget {
     this.enableScrollOut = true,
     this.isError = false,
     this.onReload,
+    this.onRefresh,
   });
 
   final bool isLoading;
@@ -24,6 +25,7 @@ class ReloadablePinGridView extends StatelessWidget {
   final bool enableScrollOut;
   final bool isError;
   final VoidCallback onReload;
+  final RefreshCallback onRefresh;
 
   Widget _loadingWidget() {
     return Container(
@@ -88,7 +90,9 @@ class ReloadablePinGridView extends StatelessWidget {
     }
 
     return Container(
-        padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
+      child: RefreshIndicator(
+        onRefresh: onRefresh,
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -104,6 +108,8 @@ class ReloadablePinGridView extends StatelessWidget {
             ],
           ),
           controller: controller,
-        ));
+        ),
+      ),
+    );
   }
 }
