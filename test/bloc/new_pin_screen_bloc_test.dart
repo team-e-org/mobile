@@ -30,13 +30,13 @@ void main() {
     });
 
     blocTest<NewPinScreenBloc, NewPinScreenEvent, NewPinScreenState>(
-      'when image is not selected, should be unaccepted state',
+      'when image is not selected, should be canceled state',
       build: () async => bloc,
       act: (bloc) async {
         bloc.add(const ImageSelected(image: null));
       },
       expect: <dynamic>[
-        ImageUnaccepted(),
+        ImageCanceled(),
       ],
     );
 

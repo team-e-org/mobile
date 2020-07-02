@@ -5,7 +5,7 @@ import 'package:mobile/api/pins_api.dart';
 import 'package:mobile/model/models.dart';
 
 abstract class PinsRepository {
-  Future<List<Pin>> getHomePagePins({int page});
+  Future<RecommendPinResponse> getReccomendPins({String pagingKey});
   Future<List<Pin>> getBoardPins({int boardId, int page});
   Future<void> createPin(NewPin newPin, File imageFile, Board board);
   Future<void> editPin(int pinId, EditPin editPin);
@@ -23,8 +23,8 @@ class DefaultPinsRepository extends PinsRepository {
   BoardsApi boardsApi;
 
   @override
-  Future<List<Pin>> getHomePagePins({int page}) =>
-      pinsApi.pins(page: page ?? 1);
+  Future<RecommendPinResponse> getReccomendPins({String pagingKey}) =>
+      pinsApi.getRecommendPins(pagingKey: pagingKey);
   Future<List<Pin>> getBoardPins({int boardId, int page}) =>
       boardsApi.boardPins(id: boardId, page: page ?? 1);
 
@@ -46,7 +46,11 @@ class DefaultPinsRepository extends PinsRepository {
   }
 
   Future<void> editPin(int pinId, EditPin editPin) async {
-    return pinsApi.editPin(id: pinId, pin: editPin);
+    try {
+      await pinsApi.editPin(id: pinId, pin: editPin);
+    } on Exception {
+      rethrow;
+    }
   }
 
   Future<bool> removePin(int boardId, int pinId) async {

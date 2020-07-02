@@ -94,8 +94,9 @@ class ApiClient {
       ));
     }
     request.headers.addAll(await _headers);
-
+    print('aaaaaaaa');
     final response = await request.send();
+    print('bbbbbbbb');
     if (response.statusCode >= 400) {
       throw _handleError(
           response.statusCode,
@@ -107,6 +108,7 @@ class ApiClient {
 
   Future<Map<String, String>> get _headers async {
     final result = <String, String>{};
+    print(prefs.getAccessToken());
     result[headerXAuthToken] = prefs.getAccessToken();
     return result;
   }
