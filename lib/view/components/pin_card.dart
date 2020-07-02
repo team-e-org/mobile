@@ -8,6 +8,7 @@ import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/common/typography_common.dart';
 import 'package:mobile/view/components/bottom_sheet_menu.dart';
 import 'package:mobile/view/components/menu_button.dart';
+import 'package:mobile/view/components/pin_image.dart';
 import 'package:mobile/view/pin_delete_dialog.dart';
 import 'package:mobile/view/pin_edit_screen.dart';
 
@@ -46,32 +47,7 @@ class PinCard extends StatelessWidget {
   }
 
   Widget _pinImage() {
-    return CachedNetworkImage(
-      imageUrl: pin.imageUrl,
-      placeholder: (context, url) {
-        return _placeholder(
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.grey[300]),
-          ),
-        );
-      },
-      errorWidget: (context, url, dynamic error) {
-        Logger().e(error);
-        return _placeholder(
-            child: const Icon(
-          Icons.error_outline,
-          color: Colors.black,
-        ));
-      },
-    );
-  }
-
-  Widget _placeholder({Widget child}) {
-    return Container(
-      height: 200,
-      color: Colors.grey[100],
-      child: Center(child: child),
-    );
+    return PinImage(pin.imageUrl);
   }
 
   Widget _pinInfo(BuildContext context) {

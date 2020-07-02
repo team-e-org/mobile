@@ -9,6 +9,7 @@ import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/typography_common.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mobile/view/components/notification.dart';
+import 'package:mobile/view/components/pin_image.dart';
 import 'package:mobile/view/components/tag_chips.dart';
 import 'package:mobile/view/components/user_card.dart';
 import 'package:mobile/view/components/user_icon.dart';
@@ -131,10 +132,7 @@ class PinDetailScreen extends StatelessWidget {
   }
 
   Widget _pinImage(String imageUrl) {
-    return CachedNetworkImage(
-      fit: BoxFit.contain,
-      imageUrl: imageUrl,
-    );
+    return PinImage(imageUrl);
   }
 
   Widget _userBuilder(User user) {
