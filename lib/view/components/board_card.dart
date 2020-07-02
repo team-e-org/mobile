@@ -4,7 +4,7 @@ import 'package:mobile/model/models.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/view/board_edit_screen.dart';
 import 'package:mobile/view/components/components.dart';
-import 'package:mobile/view/components/option_menu.dart';
+import 'package:mobile/view/components/bottom_sheet_menu.dart';
 
 class BoardCardLarge extends BoardCardBase {
   BoardCardLarge({

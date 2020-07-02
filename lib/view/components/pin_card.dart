@@ -6,7 +6,7 @@ import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/account_repository.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/common/typography_common.dart';
-import 'package:mobile/view/components/option_menu.dart';
+import 'package:mobile/view/components/bottom_sheet_menu.dart';
 import 'package:mobile/view/pin_delete_dialog.dart';
 import 'package:mobile/view/pin_edit_screen.dart';
 
