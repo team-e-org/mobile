@@ -7,6 +7,8 @@ typedef PinGridViewCallback = void Function(BuildContext context, Pin pin);
 
 class PinGridView extends StatelessWidget {
   const PinGridView({
+    this.itemCount = 0,
+    this.itemBuilder,
     this.board,
     this.pins = const [],
     this.onTap,
@@ -16,6 +18,8 @@ class PinGridView extends StatelessWidget {
     this.physics,
   });
 
+  final int itemCount;
+  final Widget Function(BuildContext, int) itemBuilder;
   final Board board;
   final List<Pin> pins;
   final PinGridViewCallback onTap;
@@ -29,8 +33,8 @@ class PinGridView extends StatelessWidget {
       crossAxisCount: 4,
       mainAxisSpacing: 8,
       crossAxisSpacing: 8,
-      itemCount: pins.length,
-      itemBuilder: _itemBuilder,
+      itemCount: itemCount,
+      itemBuilder: itemBuilder,
       staggeredTileBuilder: _staggeredTileBuilder,
       controller: controller,
       shrinkWrap: shrinkWrap,
