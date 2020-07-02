@@ -100,7 +100,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
 
   Stream<HomeScreenState> mapLoadRecommendPinsToState(
       LoadRecommendPins event) async* {
-    if (state is! Loading) {
+    if (state is! Loading && !state.isEndOfPins) {
       try {
         yield Loading(
           pins: state.pins,
@@ -112,7 +112,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
         yield DefaultState(
           pins: state.pins..addAll(res.pins),
           pagingKey: res.pagingKey,
-          isEndOfPins: res.pagingKey == null,
+          isEndOfPins: res.pagingKey == 'null',
         );
       } on Exception catch (e) {
         Logger().e(e);
