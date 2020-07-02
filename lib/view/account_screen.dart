@@ -10,6 +10,7 @@ import 'package:mobile/view/board_detail_screen.dart';
 import 'package:mobile/view/board_edit_screen.dart';
 import 'package:mobile/view/components/board_grid_view.dart';
 import 'package:mobile/view/components/bottom_sheet_menu.dart';
+import 'package:mobile/view/components/circle_flat_button.dart';
 import 'package:mobile/view/components/menu_button.dart';
 import 'package:mobile/view/components/reloadable_board_grid_view.dart';
 import 'package:mobile/view/components/user_icon.dart';
@@ -45,20 +46,89 @@ class AccountScreen extends StatelessWidget {
             usersRepository: usersRepository,
             boardsRepository: boardsRepository,
           )..add(const LoadInitial()),
-          child: Scaffold(
-            appBar: _buildAppBar(context),
-            body: SafeArea(
-              child: _buildContent(context),
-            ),
-            floatingActionButton: CreateNewButton(
-              callback: (context) {
-                BlocProvider.of<AccountScreenBloc>(context)
-                    .add(const Refresh());
-              },
-            ),
+          child: BlocBuilder<AccountScreenBloc, AccountScreenState>(
+            builder: (context, state) {
+              bloc = BlocProvider.of(context);
+              return _contentBuilder(context, state);
+            },
           ),
         );
       },
+    );
+  }
+
+  Widget _contentBuilder(BuildContext context, AccountScreenState state) {
+    return Scaffold(
+      body: SafeArea(
+        top: false,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            _header(context, state.user),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.only(bottom: 100) + EdgeInsets.all(0),
+                children: [
+                  _boardsBuilder(context, state),
+                ]..removeWhere((e) => e == null),
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: CreateNewButton(
+        callback: (context) {
+          BlocProvider.of<AccountScreenBloc>(context).add(const Refresh());
+        },
+      ),
+    );
+  }
+
+  Widget _header(BuildContext context, User user) {
+    final choices = [_Choices.logout];
+
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.symmetric(vertical: 16) +
+          EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+      child: Stack(
+        children: [
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                UserIcon(
+                  imageUrl: user == null ? '' : user.icon,
+                  radius: 32,
+                  margin: const EdgeInsets.all(8),
+                ),
+                Text(
+                  user == null ? '' : user.name,
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            right: 8,
+            child: PopupMenuButton<String>(
+              icon: const Icon(Icons.more_vert),
+              onSelected: (String choice) {
+                if (choice == _Choices.logout) {
+                  authBloc.add(LoggedOut());
+                }
+              },
+              itemBuilder: (BuildContext context) => choices
+                  .map((choice) => PopupMenuItem(
+                        value: choice,
+                        child: Text(choice),
+                      ))
+                  .toList(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -126,6 +196,32 @@ class AccountScreen extends StatelessWidget {
             ),
           ],
         );
+      },
+    );
+  }
+
+  Widget _boardsBuilder(BuildContext context, AccountScreenState state) {
+    return ReloadableBoardGridView(
+      layout: BoardGridViewLayout.large,
+      isLoading: state is Loading,
+      itemCount: state.boards.length,
+      itemBuilder: (context, index) {
+        return BoardCardProps(
+          board: state.boards[index],
+          pins: state.boardPinMap[state.boards[index].id],
+          onTap: () => _onBoardTap(context, state.boards[index]),
+          menuButton: _menuButton(context, state.boards[index]),
+        );
+      },
+      boards: state.boards,
+      boardPinMap: state.boardPinMap,
+      onBoardTap: _onBoardTap,
+      isError: state is ErrorState,
+      onReload: () {
+        BlocProvider.of<AccountScreenBloc>(context).add(const Refresh());
+      },
+      onRefresh: () async {
+        BlocProvider.of<AccountScreenBloc>(context).add(const Refresh());
       },
     );
   }

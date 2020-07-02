@@ -5,6 +5,7 @@ import 'package:mobile/bloc/pin_detail_screen_bloc.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/users_repository.dart';
 import 'package:mobile/routes.dart';
+import 'package:mobile/view/components/circle_flat_button.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/typography_common.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -177,23 +178,11 @@ class PinDetailScreen extends StatelessWidget {
   }
 
   Widget _backButton(BuildContext context) {
-    return ClipOval(
-      child: Material(
-        color: Colors.black.withOpacity(0.3), // button color
-        child: InkWell(
-          child: SizedBox(
-            width: 42,
-            height: 42,
-            child: Icon(
-              Icons.chevron_left,
-              color: Colors.white,
-            ),
-          ),
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ),
+    return CircleFlatButton(
+      icon: Icons.chevron_left,
+      onTap: () {
+        Navigator.of(context).pop();
+      },
     );
   }
 
