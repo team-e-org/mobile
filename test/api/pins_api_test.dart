@@ -52,7 +52,7 @@ void main() {
       when(apiClient.delete(any))
           .thenAnswer((_) => Future.value(ApiResponse('', 204)));
 
-      final actual = await pinsApi.deletePin(id: 0);
+      final actual = await pinsApi.unsavePin(boardId: 0, pinId: 0);
 
       expect(actual, equals(true));
     });

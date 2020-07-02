@@ -12,10 +12,12 @@ import 'package:mobile/view/pin_edit_screen.dart';
 
 class PinCard extends StatelessWidget {
   const PinCard({
+    this.board,
     this.pin,
     this.onTap,
   });
 
+  final Board board;
   final Pin pin;
   final VoidCallback onTap;
 
@@ -107,7 +109,8 @@ class PinCard extends StatelessWidget {
       BottomSheetMenuItem(
           title: const Text('ピンの削除'),
           onTap: () async {
-            await PinDeleteDialog().show(context: context, pin: pin);
+            await PinDeleteDialog()
+                .show(context: context, board: board, pin: pin);
           }),
     ]..remove(null);
   }

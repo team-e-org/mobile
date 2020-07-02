@@ -51,6 +51,7 @@ class BoardDetailScreen extends StatelessWidget {
 
     return ReloadablePinGridView(
       isLoading: state is Loading,
+      board: args.board,
       pins: state.pins,
       onPinTap: _onPinTap,
       onScrollOut: () => {bloc.add(PinsBlocEvent.loadNext)},

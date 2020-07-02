@@ -41,7 +41,7 @@ class MockPinsRepository extends PinsRepository {
     await Future<void>.delayed(const Duration(seconds: 1));
   }
 
-  Future<void> deletePin(int pinId) async {
+  Future<void> removePin(int boardId, int pinId) async {
     await Future<void>.delayed(const Duration(seconds: 1));
   }
 

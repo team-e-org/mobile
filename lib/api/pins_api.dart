@@ -22,7 +22,7 @@ abstract class PinsApi {
 
   Future<Pin> editPin({int id, EditPin pin});
 
-  Future<bool> deletePin({int id});
+  Future<bool> unsavePin({int boardId, int pinId});
 
   Future<bool> savePin({int pinId, int boardId});
 }
@@ -33,9 +33,8 @@ class DefaultPinsApi extends PinsApi {
   final ApiClient _client;
 
   @override
-  Future<bool> deletePin({int id}) async {
-    print("asond;laknsdfk: $id");
-    final response = await _client.delete('/pins/$id');
+  Future<bool> unsavePin({int boardId, int pinId}) async {
+    final response = await _client.delete('/boards/$boardId/pins/$pinId');
     return response.statusCode == 204;
   }
 

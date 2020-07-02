@@ -14,7 +14,8 @@ abstract class PinDeleteEvent extends Equatable {
 }
 
 class DeletePin extends PinDeleteEvent {
-  const DeletePin({this.pin});
+  const DeletePin({this.board, this.pin});
+  final Board board;
   final Pin pin;
 }
 
@@ -63,10 +64,10 @@ class PinDeleteBloc extends Bloc<PinDeleteEvent, PinDeleteState> {
       try {
         yield DeletePinWaiting();
         print('pins id: ${event.pin.id}');
-        await pinsRepository.deletePin(event.pin.id);
+        await pinsRepository.removePin(event.board.id, event.pin.id);
         yield DeletePinFinished();
       } on Exception catch (e) {
-        Logger().e(e);
+        Logger().e(e.toString());
         yield ErrorState(exception: e);
       }
     }

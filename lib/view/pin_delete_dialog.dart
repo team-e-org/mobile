@@ -9,7 +9,7 @@ class PinDeleteDialog {
   PinsRepository pinsRepository;
   PinDeleteBloc pinDeleteBloc;
 
-  Future show({BuildContext context, Pin pin}) {
+  Future show({BuildContext context, Board board, Pin pin}) {
     pinsRepository = RepositoryProvider.of<PinsRepository>(context);
     return showDialog<void>(
       context: context,
@@ -40,7 +40,7 @@ class PinDeleteDialog {
                   FlatButton(
                     child: const Text('Confirm'),
                     onPressed: () {
-                      pinDeleteBloc.add(DeletePin(pin: pin));
+                      pinDeleteBloc.add(DeletePin(board: board, pin: pin));
                     },
                   ),
                 ],
