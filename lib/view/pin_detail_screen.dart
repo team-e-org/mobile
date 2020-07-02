@@ -16,32 +16,28 @@ import 'package:url_launcher/url_launcher.dart';
 
 class PinDetailScreenArguments {
   const PinDetailScreenArguments({
-    this.pin,
-  }) : assert(pin != null);
+    @required this.pin,
+  });
 
   final Pin pin;
 }
 
 class PinDetailScreen extends StatelessWidget {
-  PinDetailScreen({this.args});
+  const PinDetailScreen({this.args});
 
   final PinDetailScreenArguments args;
 
-  UsersRepository _usersRepository;
-
   @override
   Widget build(BuildContext context) {
-    _usersRepository = RepositoryProvider.of(context);
-
     return BlocProvider(
-        create: (context) => PinDetailScreenBloc(
-              usersRepository: _usersRepository,
-              pin: args.pin,
-            )..add(LoadInitial()),
-        child: BlocConsumer<PinDetailScreenBloc, PinDetailScreenState>(
-          listener: (context, state) {},
-          builder: (context, state) => _contentBuilder(context, state),
-        ));
+      create: (context) => PinDetailScreenBloc(
+        usersRepository: RepositoryProvider.of<UsersRepository>(context),
+        pin: args.pin,
+      )..add(const LoadInitial()),
+      child: BlocBuilder<PinDetailScreenBloc, PinDetailScreenState>(
+        builder: _contentBuilder,
+      ),
+    );
   }
 
   Widget _contentBuilder(BuildContext context, PinDetailScreenState state) {
@@ -61,13 +57,13 @@ class PinDetailScreen extends StatelessWidget {
     final user = state.user;
 
     if (state is InitialState || state is Loading) {
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(),
       );
     }
 
     if (state is ErrorState) {
-      return Center(
+      return const Center(
         child: Text('読み込みに失敗しました'),
       );
     }
@@ -79,26 +75,21 @@ class PinDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _pinImage(args.pin.imageUrl),
-            // TODO 投稿者情報を入れる
             const SizedBox(height: 32),
-
             _buildPinInfo(
               title: args.pin.title,
               description: args.pin.description,
             ),
             const SizedBox(height: 32),
-
             _buildTags(args.pin.tags),
             const SizedBox(height: 32),
-
             UserCard(
               user: user,
               onTap: (context, user) =>
                   {PinterestNotification.showNotImplemented()},
-              margin: EdgeInsets.symmetric(horizontal: 40),
+              margin: const EdgeInsets.symmetric(horizontal: 40),
             ),
             const SizedBox(height: 32),
-
             _buildActions(context),
           ],
         ),
