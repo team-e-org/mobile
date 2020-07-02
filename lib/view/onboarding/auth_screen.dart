@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/flavors.dart';
+import 'package:mobile/view/components/flavor_title_badge.dart';
 import 'package:mobile/view/onboarding/auth_navigation_bloc.dart';
 import 'package:mobile/view/onboarding/login_screen.dart';
 import 'package:mobile/view/onboarding/signup_screen.dart';
@@ -23,8 +24,11 @@ class AuthWidget extends StatelessWidget {
       body: SafeArea(
         child: Container(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Text(F.title),
+              F.appFlavor != Flavor.PRODUCTION
+                  ? FlavorTitleBadge()
+                  : Container(),
               Expanded(
                 child: BlocBuilder<AuthNavigationBloc, AuthNavigationState>(
                     builder: (_, state) =>
