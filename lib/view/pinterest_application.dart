@@ -93,6 +93,7 @@ class PinterestApplication extends StatelessWidget {
           ),
           accentColor: Colors.red,
           buttonColor: Colors.red,
+          scaffoldBackgroundColor: Colors.black,
         ),
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
