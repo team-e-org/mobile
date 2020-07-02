@@ -58,7 +58,6 @@ class SignUpWidget extends StatelessWidget {
   Widget _buildContent(BuildContext context, LoginState state) {
     return AuthCommonWidget(
       formKey: _formKey,
-      message: 'Welcome!',
       textFieldsProps: [
         PinterestTextFieldProps(
           label: 'User name',
@@ -78,6 +77,7 @@ class SignUpWidget extends StatelessWidget {
           label: 'Email',
           hintText: 'Your Email',
           obscure: false,
+          keyboardType: TextInputType.emailAddress,
           validator: (value) {
             if (!Validator.isValidEmail(value)) {
               return 'Invalid email format.';
@@ -114,6 +114,7 @@ class SignUpWidget extends StatelessWidget {
       action: BlocBuilder<SignUpBloc, LoginState>(
         builder: (context, state) => PinterestButton.primary(
           loading: state is LoginLoading,
+          size: PinterestButtonSize.big,
           text: 'Sign up',
           onPressed: () {
             if (state is LoginLoading) {
