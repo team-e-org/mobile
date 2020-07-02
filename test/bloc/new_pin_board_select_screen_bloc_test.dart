@@ -60,7 +60,7 @@ void main() {
           id: anyNamed('id'),
           page: anyNamed('page'),
         )).thenAnswer((_) => Future.value([pin]));
-        bloc.add(LoadBoardList());
+        bloc.add(const LoadBoardList());
       },
       expect: <dynamic>[
         LoadBoardListWaiting(boards: [board], boardPinMap: const {}),
@@ -79,7 +79,7 @@ void main() {
       build: () async => bloc,
       act: (bloc) async {
         when(accountRepository.getPersistUserId()).thenThrow(error);
-        bloc.add(LoadBoardList());
+        bloc.add(const LoadBoardList());
       },
       expect: <dynamic>[
         const LoadBoardListWaiting(boards: [], boardPinMap: {}),
@@ -93,13 +93,36 @@ void main() {
       'when creating new pin succeeded, should be finished state',
       build: () async => bloc,
       act: (bloc) async {
-        when(pinRepository.createPin(any, any, any))
-            .thenAnswer((_) => Future.value());
-        bloc.add(const CreatePin(newPin: null, imageFile: null, board: null));
+        when(accountRepository.getPersistUserId()).thenAnswer((_) => 1);
+        when(userRepository.getUser(any)).thenAnswer((_) => Future.value(user));
+        when(userRepository.getUserBoards(any))
+            .thenAnswer((_) => Future.value([board]));
+        when(boardRepository.getBoardPins(
+          id: anyNamed('id'),
+          page: anyNamed('page'),
+        )).thenAnswer((_) => Future.value([pin]));
+        bloc
+          ..add(const LoadBoardList())
+          ..add(const CreatePin(newPin: null, imageFile: null, board: null));
       },
       expect: <dynamic>[
-        const CreatePinWaiting(boards: [], boardPinMap: {}),
-        const CreatePinFinished(boards: [], boardPinMap: {}),
+        LoadBoardListWaiting(boards: [board], boardPinMap: const {}),
+        DefaultState(
+          boards: [board],
+          boardPinMap: {
+            board.id: [pin],
+          },
+        ),
+        CreatePinWaiting(boards: [
+          board
+        ], boardPinMap: {
+          board.id: [pin]
+        }),
+        CreatePinFinished(boards: [
+          board
+        ], boardPinMap: {
+          board.id: [pin]
+        }),
       ],
     );
 
@@ -108,13 +131,37 @@ void main() {
       'when request to create pin failed, should be error state',
       build: () async => bloc,
       act: (bloc) async {
+        when(accountRepository.getPersistUserId()).thenAnswer((_) => 1);
+        when(userRepository.getUser(any)).thenAnswer((_) => Future.value(user));
+        when(userRepository.getUserBoards(any))
+            .thenAnswer((_) => Future.value([board]));
+        when(boardRepository.getBoardPins(
+          id: anyNamed('id'),
+          page: anyNamed('page'),
+        )).thenAnswer((_) => Future.value([pin]));
         when(pinRepository.createPin(any, any, any)).thenThrow(error);
-        bloc.add(const CreatePin(newPin: null, imageFile: null, board: null));
+        bloc
+          ..add(const LoadBoardList())
+          ..add(const CreatePin(newPin: null, imageFile: null, board: null));
       },
       expect: <dynamic>[
-        const CreatePinWaiting(boards: [], boardPinMap: {}),
-        CreatePinErrorState(
-            boards: const [], boardPinMap: const {}, error: error),
+        LoadBoardListWaiting(boards: [board], boardPinMap: const {}),
+        DefaultState(
+          boards: [board],
+          boardPinMap: {
+            board.id: [pin],
+          },
+        ),
+        CreatePinWaiting(boards: [
+          board
+        ], boardPinMap: {
+          board.id: [pin]
+        }),
+        CreatePinErrorState(boards: [
+          board
+        ], boardPinMap: {
+          board.id: [pin]
+        }, error: error),
       ],
     );
   });
