@@ -4,21 +4,20 @@ import 'package:mobile/util/validator.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/textfield_common.dart';
 
-typedef BoardEditPageCallback = void Function(
-    BuildContext context, NewBoard newBoard);
-
 class BoardEditPage extends StatefulWidget {
   const BoardEditPage({
-    this.title = '',
-    this.name,
-    this.isPrivate,
+    this.title,
+    this.board,
+    this.submitButtonTitle,
+    this.isSubmitButtonLoading,
     this.onSubmit,
   });
 
   final String title;
-  final String name;
-  final bool isPrivate;
-  final BoardEditPageCallback onSubmit;
+  final Board board;
+  final String submitButtonTitle;
+  final bool isSubmitButtonLoading;
+  final void Function(BuildContext context, BoardFormData formData) onSubmit;
 
   @override
   _BoardEditPageState createState() => _BoardEditPageState();
@@ -39,6 +38,13 @@ class BoardFormData {
       isPrivate: isPrivate,
     );
   }
+
+  EditBoard toEditBoard() {
+    return EditBoard(
+      name: name,
+      isPrivate: isPrivate,
+    );
+  }
 }
 
 class _BoardEditPageState extends State<BoardEditPage> {
@@ -48,16 +54,13 @@ class _BoardEditPageState extends State<BoardEditPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.name != null) {
+    if (widget.board != null) {
       _formData = BoardFormData(
-        name: widget.name,
-        isPrivate: widget.isPrivate,
+        name: widget.board.name,
+        isPrivate: widget.board.isPrivate,
       );
     } else {
-      _formData = BoardFormData(
-        name: '',
-        isPrivate: false,
-      );
+      _formData = BoardFormData();
     }
   }
 
@@ -81,7 +84,8 @@ class _BoardEditPageState extends State<BoardEditPage> {
             Container(
               margin: EdgeInsets.symmetric(vertical: 8),
               child: PinterestButton.primary(
-                text: 'Create',
+                text: widget.submitButtonTitle,
+                loading: widget.isSubmitButtonLoading,
                 onPressed: _formData.name.isEmpty
                     ? null
                     : () => _onCreateButtonPressed(context),
@@ -135,7 +139,7 @@ class _BoardEditPageState extends State<BoardEditPage> {
   void _onCreateButtonPressed(BuildContext context) {
     if (_formKey.currentState.validate()) {
       final newBoard = _formData.toNewBoard();
-      widget.onSubmit(context, newBoard);
+      widget.onSubmit(context, _formData);
     }
   }
 

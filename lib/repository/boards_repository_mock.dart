@@ -25,4 +25,13 @@ class MockBoardsRepository extends BoardsRepository {
       isPrivate: board.isPrivate,
     );
   }
+
+  Future<Board> editBoard(int id, EditBoard editBoard) async {
+    await Future<void>.delayed(const Duration(seconds: 1));
+    return Board(
+      name: editBoard.name,
+      description: editBoard.description,
+      isPrivate: editBoard.isPrivate,
+    );
+  }
 }
