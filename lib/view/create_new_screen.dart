@@ -44,8 +44,8 @@ class CreateNewScreen extends StatelessWidget {
 }
 
 class CreateNewMenu {
-  static Future show({@required BuildContext context}) {
-    BottomSheetMenu.show(context: context, children: [
+  static Future show({@required BuildContext context}) async {
+    return BottomSheetMenu.show(context: context, children: [
       BottomSheetMenuItem(
         title: const Text('ボードの作成'),
         onTap: () async {

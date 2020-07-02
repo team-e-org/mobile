@@ -11,6 +11,7 @@ import 'package:mobile/view/components/board_grid_view.dart';
 import 'package:mobile/view/components/notification.dart';
 import 'package:mobile/view/components/reloadable_board_grid_view.dart';
 import 'package:mobile/view/components/user_icon.dart';
+import 'package:mobile/view/create_new_button.dart';
 import 'package:mobile/view/create_new_screen.dart';
 import 'package:mobile/view/onboarding/authentication_bloc.dart';
 
@@ -42,23 +43,15 @@ class AccountScreen extends StatelessWidget {
             body: SafeArea(
               child: _buildContent(context),
             ),
-            floatingActionButton: _buildFAB(context),
+            floatingActionButton: CreateNewButton(
+              callback: (context) {
+                BlocProvider.of<AccountScreenBloc>(context)
+                    .add(const Refresh());
+              },
+            ),
           ),
         );
       },
-    );
-  }
-
-  Widget _buildFAB(BuildContext context) {
-    return BlocBuilder<AccountScreenBloc, AccountScreenState>(
-      builder: (context, state) => FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () async {
-          await CreateNewMenu.show(context: context);
-          // await Navigator.of(context).pushNamed(Routes.createNew);
-          BlocProvider.of<AccountScreenBloc>(context).add(const Refresh());
-        },
-      ),
     );
   }
 
