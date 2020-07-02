@@ -20,7 +20,7 @@ void main() {
         'title': 'pin',
         'description': 'pin description',
         'url': 'https://example.com',
-        'tagsString': 'aaa bbb',
+        'tags': 'aaa bbb',
         'isPrivate': false,
       };
       final actual = np.toJson();
@@ -44,8 +44,6 @@ void main() {
       final expected = {
         'title': 'pin',
         'description': 'pin description',
-        'tagsString': 'aaa bbb',
-        'tags': ['aaa', 'bbb'],
         'isPrivate': false,
       };
       final actual = ep.toJson();
@@ -75,8 +73,7 @@ void main() {
         'title': 'my pin',
         'description': 'pin description',
         'url': 'https://example.com',
-        'tagsString': 'aaa bbb',
-        'tags': ['aaa', 'bbb'],
+        'tags': 'aaa bbb',
         'userId': 0,
         'imageUrl': 'https://example.com/image.png',
         'isPrivate': false,

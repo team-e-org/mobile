@@ -7,8 +7,11 @@ import 'package:mobile/model/models.dart';
 
 abstract class PinsApi {
   Future<RecommendPinResponse> getRecommendPins({String pagingKey});
+
   Future<List<Pin>> pins({int page});
+
   Future<Pin> pin({int id});
+
   Future<void> newPin({
     String title,
     String description,
@@ -18,7 +21,8 @@ abstract class PinsApi {
     Uint8List imageBytes,
     int boardId,
   });
-  Future<Pin> editPin({int id, EditPin pin});
+
+  Future editPin({int id, EditPin pin});
 
   Future<bool> unsavePin({int boardId, int pinId});
 
@@ -37,7 +41,7 @@ class DefaultPinsApi extends PinsApi {
   }
 
   @override
-  Future<Pin> editPin({int id, EditPin pin}) async {
+  Future editPin({int id, EditPin pin}) async {
     final fields = {
       'title': pin.title,
       'description': pin.description,
