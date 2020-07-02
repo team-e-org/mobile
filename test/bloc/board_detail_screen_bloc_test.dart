@@ -55,5 +55,44 @@ void main() {
         isA<ErrorState>(),
       ],
     );
+
+    blocTest<BoardDetailScreenBloc, PinsBlocEvent, PinsBlocState>(
+      'when refreshing board pins succeeded, should be default state',
+      build: () async => bloc,
+      act: (bloc) async {
+        when(pinsRepository.getBoardPins(
+          boardId: Board.fromMock().id,
+          page: anyNamed('page'),
+        )).thenAnswer((_) => Future.value([Pin.fromMock()]));
+        bloc
+          ..add(PinsBlocEvent.loadNext)
+          ..add(PinsBlocEvent.loadNext)
+          ..add(PinsBlocEvent.refresh);
+      },
+      expect: <dynamic>[
+        isA<Loading>(),
+        equals(DefaultState(page: 1, pins: [Pin.fromMock()])),
+        isA<Loading>(),
+        equals(DefaultState(page: 2, pins: [Pin.fromMock(), Pin.fromMock()])),
+        isA<Loading>(),
+        equals(DefaultState(page: 1, pins: [Pin.fromMock()])),
+      ],
+    );
+
+    blocTest<BoardDetailScreenBloc, PinsBlocEvent, PinsBlocState>(
+      'when refreshing board pins failed, should be error state',
+      build: () async => bloc,
+      act: (bloc) async {
+        when(
+          pinsRepository.getBoardPins(
+              boardId: Board.fromMock().id, page: anyNamed('page')),
+        ).thenThrow(NetworkError());
+        bloc.add(PinsBlocEvent.refresh);
+      },
+      expect: <dynamic>[
+        isA<Loading>(),
+        isA<ErrorState>(),
+      ],
+    );
   });
 }
