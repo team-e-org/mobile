@@ -32,7 +32,6 @@ class _PinEditPageState extends State<PinEditPage> {
   void initState() {
     super.initState();
     if (widget.pin != null) {
-      print('acagd gaagjdna');
       setState(() {
         _formdata
           ..title = widget.pin.title

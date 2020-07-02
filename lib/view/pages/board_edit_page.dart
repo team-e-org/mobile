@@ -48,19 +48,18 @@ class BoardFormData {
 }
 
 class _BoardEditPageState extends State<BoardEditPage> {
-  BoardFormData _formData;
+  BoardFormData _formData = BoardFormData();
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     if (widget.board != null) {
-      _formData = BoardFormData(
-        name: widget.board.name,
-        isPrivate: widget.board.isPrivate,
-      );
-    } else {
-      _formData = BoardFormData();
+      setState(() {
+        _formData
+          ..name = widget.board.name
+          ..isPrivate = widget.board.isPrivate;
+      });
     }
   }
 
@@ -111,6 +110,7 @@ class _BoardEditPageState extends State<BoardEditPage> {
             label: 'Board name',
             hintText: 'Add',
             validator: _boardNameValidator,
+            initialValue: _formData.name,
             maxLength: 30,
             onChanged: (value) {
               setState(() {
@@ -124,8 +124,8 @@ class _BoardEditPageState extends State<BoardEditPage> {
   Widget _buildPrivateBoardSwitch(BuildContext context) {
     return Row(
       children: <Widget>[
-        Text('Private board'),
-        Spacer(),
+        const Text('Private board'),
+        const Spacer(),
         Switch(
           value: _formData.isPrivate,
           onChanged: (value) {
@@ -138,7 +138,6 @@ class _BoardEditPageState extends State<BoardEditPage> {
 
   void _onCreateButtonPressed(BuildContext context) {
     if (_formKey.currentState.validate()) {
-      final newBoard = _formData.toNewBoard();
       widget.onSubmit(context, _formData);
     }
   }

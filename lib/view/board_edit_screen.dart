@@ -23,6 +23,8 @@ class BoardEditScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('aokndgojangoaosndggona');
+    print(args.board.id);
     _boardsRepository = RepositoryProvider.of(context);
     return BlocProvider(
       create: (context) =>
