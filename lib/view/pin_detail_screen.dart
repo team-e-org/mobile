@@ -4,12 +4,14 @@ import 'package:logger/logger.dart';
 import 'package:mobile/bloc/pin_detail_screen_bloc.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/users_repository.dart';
+import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/typography_common.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mobile/view/components/notification.dart';
 import 'package:mobile/view/components/tag_chips.dart';
 import 'package:mobile/view/components/user_card.dart';
+import 'package:mobile/view/pin_save_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PinDetailScreenArguments {
@@ -187,9 +189,7 @@ class PinDetailScreen extends StatelessWidget {
     list.add(
       PinterestButton.primary(
         text: 'Save',
-        onPressed: () {
-          PinterestNotification.showNotImplemented();
-        },
+        onPressed: () => _onSavePressed(context),
       ),
     );
 
@@ -206,5 +206,12 @@ class PinDetailScreen extends StatelessWidget {
     } else {
       PinterestNotification.showError(title: '無効なURLです');
     }
+  }
+
+  Future _onSavePressed(BuildContext context) async {
+    await Navigator.of(context).pushNamed(
+      Routes.pinSave,
+      arguments: PinSaveScreenArguments(pin: args.pin),
+    );
   }
 }
