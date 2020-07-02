@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 import 'package:mobile/bloc/new_pin_screen_bloc.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
@@ -44,7 +45,11 @@ class NewPinScreen extends StatelessWidget {
     }
 
     if (state is ImageUnaccepted) {
-      _onImageUnaccepted();
+      PinterestNotification.showError(title: '対応していない画像です');
+    }
+
+    if (state is ImageCanceled) {
+      Logger().d('Image not selected');
     }
   }
 
@@ -97,9 +102,5 @@ class NewPinScreen extends StatelessWidget {
     );
 
     Navigator.of(context).pop();
-  }
-
-  void _onImageUnaccepted() {
-    PinterestNotification.showError(title: '対応していない画像です');
   }
 }

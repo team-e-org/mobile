@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/model/pin_model.dart';
+import 'package:mobile/model/models.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/pin_grid_view.dart';
 
 class ReloadablePinGridView extends StatelessWidget {
   const ReloadablePinGridView({
     this.isLoading = false,
+    this.board,
     this.pins = const [],
     this.onPinTap,
     this.onScrollOut,
@@ -16,6 +17,7 @@ class ReloadablePinGridView extends StatelessWidget {
 
   final bool isLoading;
 
+  final Board board;
   final List<Pin> pins;
   final PinGridViewCallback onPinTap;
   final VoidCallback onScrollOut;
@@ -91,6 +93,7 @@ class ReloadablePinGridView extends StatelessWidget {
           child: Column(
             children: [
               PinGridView(
+                board: board,
                 pins: pins,
                 onTap: onPinTap,
                 shrinkWrap: true,

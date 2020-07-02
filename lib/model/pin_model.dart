@@ -106,7 +106,7 @@ class EditPin extends Equatable {
         title: json['title'] as String,
         description: json['description'] as String,
         isPrivate: json['isPrivate'] as bool,
-        tags: (json['tags'] as String)?.toTagList(),
+        tags: (json['tagString'] as String)?.toTagList(),
       );
 
   factory EditPin.fromMock() => EditPin(
@@ -182,7 +182,7 @@ class Pin extends Equatable {
         userId: json['userId'] as int,
         imageUrl: json['imageUrl'] as String,
         isPrivate: json['isPrivate'] as bool,
-        tags: (json['tags'] as String)?.toTagList(),
+        tags: (json['tagString'] as String)?.toTagList(),
       );
 
   factory Pin.fromMock() {

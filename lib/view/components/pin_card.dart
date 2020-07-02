@@ -6,16 +6,18 @@ import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/account_repository.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/common/typography_common.dart';
-import 'package:mobile/view/components/notification.dart';
 import 'package:mobile/view/components/option_menu.dart';
+import 'package:mobile/view/pin_delete_dialog.dart';
 import 'package:mobile/view/pin_edit_screen.dart';
 
 class PinCard extends StatelessWidget {
   const PinCard({
+    this.board,
     this.pin,
     this.onTap,
   });
 
+  final Board board;
   final Pin pin;
   final VoidCallback onTap;
 
@@ -103,7 +105,13 @@ class PinCard extends StatelessWidget {
                 );
               },
             )
-          : null
+          : null,
+      BottomSheetMenuItem(
+          title: const Text('ピンの削除'),
+          onTap: () async {
+            await PinDeleteDialog()
+                .show(context: context, board: board, pin: pin);
+          }),
     ]..remove(null);
   }
 }

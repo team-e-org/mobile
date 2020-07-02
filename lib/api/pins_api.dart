@@ -6,10 +6,9 @@ import 'package:mobile/api/api_client.dart';
 import 'package:mobile/model/models.dart';
 
 abstract class PinsApi {
+  Future<RecommendPinResponse> getRecommendPins({String pagingKey});
   Future<List<Pin>> pins({int page});
-
   Future<Pin> pin({int id});
-
   Future<void> newPin({
     String title,
     String description,
@@ -19,10 +18,11 @@ abstract class PinsApi {
     Uint8List imageBytes,
     int boardId,
   });
-
   Future<Pin> editPin({int id, EditPin pin});
 
-  Future<bool> deletePin({int id});
+  Future<bool> unsavePin({int boardId, int pinId});
+
+  Future<bool> savePin({int pinId, int boardId});
 }
 
 class DefaultPinsApi extends PinsApi {
@@ -31,8 +31,8 @@ class DefaultPinsApi extends PinsApi {
   final ApiClient _client;
 
   @override
-  Future<bool> deletePin({int id}) async {
-    final response = await _client.delete('/pins/$id');
+  Future<bool> unsavePin({int boardId, int pinId}) async {
+    final response = await _client.delete('/boards/$boardId/pins/$pinId');
     return response.statusCode == 204;
   }
 
@@ -65,6 +65,27 @@ class DefaultPinsApi extends PinsApi {
         .toList();
   }
 
+  Future<bool> savePin({int pinId, int boardId}) async {
+    final response = await _client.post('/boards/$boardId/pins/$pinId');
+    return response.statusCode == 201;
+  }
+
+  @override
+  Future<RecommendPinResponse> getRecommendPins({String pagingKey}) async {
+    final body = json.encode({'pagingKey': pagingKey});
+    print(body);
+    final response = await _client.post('/pins', body: body);
+    final jsonBody = jsonDecode(response.body) as Map<String, dynamic>;
+    print('response.body');
+    // print(response.body);
+    return RecommendPinResponse(
+      pins: (jsonBody['pins'] as List)
+          .map((dynamic pin) => Pin.fromJson(pin as Map<String, dynamic>))
+          .toList(),
+      pagingKey: jsonBody['pagingKey'] as String,
+    );
+  }
+
   @override
   Future<void> newPin({
     @required String title,
@@ -91,4 +112,11 @@ class DefaultPinsApi extends PinsApi {
       fileBytes: imageBytes,
     );
   }
+}
+
+class RecommendPinResponse {
+  RecommendPinResponse({this.pins, this.pagingKey});
+
+  List<Pin> pins;
+  String pagingKey;
 }
