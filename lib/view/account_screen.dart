@@ -58,23 +58,82 @@ class AccountScreen extends StatelessWidget {
   }
 
   Widget _contentBuilder(BuildContext context, AccountScreenState state) {
+    final choices = [_Choices.logout];
+
     return Scaffold(
       body: SafeArea(
         top: false,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            _header(context, state.user),
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.only(bottom: 100) + EdgeInsets.all(0),
-                children: [
-                  _boardsBuilder(context, state),
-                ]..removeWhere((e) => e == null),
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              iconTheme: const IconThemeData(color: Colors.black),
+              pinned: true,
+              expandedHeight: 150.0,
+              flexibleSpace: FlexibleSpaceBar(
+                stretchModes: [
+                  StretchMode.blurBackground,
+                  StretchMode.zoomBackground,
+                ],
+                background: Center(
+                  child: UserIcon(
+                    imageUrl: state.user == null ? '' : state.user.icon,
+                    radius: 32,
+                    margin: const EdgeInsets.all(8),
+                  ),
+                ),
+                title: Text(
+                  state.user.name,
+                  style: TextStyle(color: Colors.black),
+                ),
               ),
+              actions: <Widget>[
+                PopupMenuButton<String>(
+                  icon: const Icon(Icons.more_vert),
+                  onSelected: (String choice) {
+                    if (choice == _Choices.logout) {
+                      authBloc.add(LoggedOut());
+                    }
+                  },
+                  itemBuilder: (BuildContext context) => choices
+                      .map((choice) => PopupMenuItem(
+                            value: choice,
+                            child: Text(choice),
+                          ))
+                      .toList(),
+                ),
+              ],
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate([
+                ListView(
+                  padding:
+                      const EdgeInsets.only(bottom: 100) + EdgeInsets.all(0),
+                  primary: true,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    _boardsBuilder(context, state),
+                  ]..removeWhere((e) => e == null),
+                )
+              ]),
             ),
           ],
         ),
+
+        // Column(
+        //   mainAxisAlignment: MainAxisAlignment.start,
+        //   children: [
+        //     _header(context, state.user),
+        //     Expanded(
+        //       child: ListView(
+        //         padding: const EdgeInsets.only(bottom: 100) + EdgeInsets.all(0),
+        //         children: [
+        //           _boardsBuilder(context, state),
+        //         ]..removeWhere((e) => e == null),
+        //       ),
+        //     ),
+        //   ],
+        // ),
       ),
       floatingActionButton: CreateNewButton(
         callback: (context) {
