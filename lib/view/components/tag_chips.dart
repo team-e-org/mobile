@@ -21,13 +21,11 @@ class TagChips extends StatelessWidget {
         .toList();
 
     return Container(
-      child: tagWidgets.isNotEmpty
-          ? Wrap(
-              spacing: 4,
-              alignment: WrapAlignment.center,
-              children: tagWidgets,
-            )
-          : Container(),
+      child: Wrap(
+        spacing: 4,
+        alignment: WrapAlignment.center,
+        children: tagWidgets,
+      ),
     );
   }
 }
