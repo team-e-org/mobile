@@ -10,6 +10,7 @@ abstract class PinsRepository {
   Future<void> createPin(NewPin newPin, File imageFile, Board board);
   Future<void> editPin(int pinId, EditPin editPin);
   Future<void> deletePin(int pinId);
+  Future<bool> savePin({int pinId, int boardId});
 }
 
 class DefaultPinsRepository extends PinsRepository {
@@ -50,5 +51,9 @@ class DefaultPinsRepository extends PinsRepository {
 
   Future<void> deletePin(int pinId) async {
     return pinsApi.deletePin(id: pinId);
+  }
+
+  Future<bool> savePin({int pinId, int boardId}) async {
+    return pinsApi.savePin(pinId: pinId, boardId: boardId);
   }
 }
