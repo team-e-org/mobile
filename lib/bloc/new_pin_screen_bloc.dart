@@ -57,6 +57,8 @@ class InitialState extends NewPinScreenState {}
 
 class ImageUnaccepted extends NewPinScreenState {}
 
+class ImageCanceled extends NewPinScreenState {}
+
 class ImageAccepted extends NewPinScreenState {
   const ImageAccepted({
     @required this.image,
@@ -101,7 +103,7 @@ class NewPinScreenBloc extends Bloc<NewPinScreenEvent, NewPinScreenState> {
   Stream<NewPinScreenState> mapImageSelectedToState(
       ImageSelected event) async* {
     if (event.image == null) {
-      yield ImageUnaccepted();
+      yield ImageCanceled();
     } else {
       final file = File(event.image.path);
       final isValid = await validator.validate(file);
