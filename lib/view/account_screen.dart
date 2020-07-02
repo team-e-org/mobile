@@ -68,7 +68,7 @@ class AccountScreen extends StatelessWidget {
             SliverAppBar(
               iconTheme: const IconThemeData(color: Colors.black),
               pinned: true,
-              expandedHeight: 150.0,
+              expandedHeight: 150,
               flexibleSpace: FlexibleSpaceBar(
                 stretchModes: [
                   StretchMode.blurBackground,
