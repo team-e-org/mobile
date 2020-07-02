@@ -42,8 +42,9 @@ class DefaultPinsApi extends PinsApi {
       'title': pin.title,
       'description': pin.description,
       'isPrivate': pin.isPrivate.toString(),
-      // 'tags': pin.tagsString,
+      'tags': pin.tagsString,
     };
+
     await _client.fileUpload(
       'PUT',
       '/pins/$id',

@@ -69,7 +69,7 @@ class PinEditScreenBloc extends Bloc<PinEditScreenEvent, PinEditScreenState> {
       yield EditPinWaiting();
       try {
         await pinsRepository.editPin(event.pinId, event.editPin);
-        EditPinFinished();
+        yield EditPinFinished();
       } on Exception catch (e) {
         Logger().e(e);
         yield EditPinErrorState(exception: e);
