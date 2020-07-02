@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mobile/flavors.dart';
 
@@ -22,7 +24,9 @@ Future<void> loadDotEnv() async {
 
 Future<ApplicationConfig> readConfig() async {
   await loadDotEnv();
-  final apiEndpoint = DotEnv().env['API_ENDPOINT'];
+  final apiEndpoint = F.appFlavor == Flavor.DEV && Platform.isAndroid
+      ? DotEnv().env['API_ENDPOINT_ANDROID']
+      : DotEnv().env['API_ENDPOINT'];
   if (apiEndpoint == null || apiEndpoint.isEmpty) {
     throw Exception('API_ENDPOINT is missing');
   }
