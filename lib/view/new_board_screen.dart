@@ -37,13 +37,14 @@ class NewBoardScreen extends StatelessWidget {
           }
         },
         builder: (context, state) => BoardEditPage(
-              title: 'Create a new board',
+              title: 'Create Board',
+              submitButtonTitle: 'Create',
               onSubmit: _onSubmit,
             ));
   }
 
-  void _onSubmit(BuildContext context, NewBoard newBoard) {
+  void _onSubmit(BuildContext context, BoardFormData formdata) {
     BlocProvider.of<NewBoardScreenBloc>(context)
-        .add(CreateBoardRequest(newBoard: newBoard));
+        .add(CreateBoardRequest(newBoard: formdata.toNewBoard()));
   }
 }

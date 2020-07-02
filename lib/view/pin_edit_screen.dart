@@ -31,6 +31,9 @@ class PinEditScreen extends StatelessWidget {
       child: BlocConsumer<PinEditScreenBloc, PinEditScreenState>(
         listener: (context, state) {
           if (state is EditPinFinished) {
+            PinterestNotification.showError(
+              title: 'ピンを更新しました',
+            );
             Navigator.of(context).pop();
           } else if (state is EditPinErrorState) {
             PinterestNotification.showError(
