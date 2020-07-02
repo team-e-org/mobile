@@ -12,6 +12,7 @@ import 'package:mobile/repository/pins_repository.dart';
 import 'package:mobile/api/auth_api.dart';
 import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
+import 'package:mobile/theme.dart';
 import 'package:mobile/view/board_detail_screen.dart';
 import 'package:mobile/view/board_edit_screen.dart';
 import 'package:mobile/view/create_new_screen.dart';
@@ -81,19 +82,7 @@ class PinterestApplication extends StatelessWidget {
     return OverlaySupport(
       child: MaterialApp(
         title: 'pinko',
-        theme: ThemeData(
-          appBarTheme: AppBarTheme(
-            color: Colors.grey[200],
-            textTheme: TextTheme(
-              headline6: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-              ),
-            ),
-          ),
-          accentColor: Colors.red,
-          buttonColor: Colors.red,
-        ),
+        theme: pinterestThemeData,
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
             case Routes.root:
