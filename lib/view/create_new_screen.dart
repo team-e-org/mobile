@@ -45,21 +45,24 @@ class CreateNewScreen extends StatelessWidget {
 
 class CreateNewMenu {
   static Future show({@required BuildContext context}) async {
-    return BottomSheetMenu.show(context: context, children: [
-      BottomSheetMenuItem(
-        title: const Text('ボードの作成'),
-        onTap: () async {
-          await Navigator.of(context).pushNamed(Routes.createNewBoard);
-          Navigator.pop(context);
-        },
-      ),
-      BottomSheetMenuItem(
-        title: const Text('ピンの作成'),
-        onTap: () async {
-          await Navigator.of(context).pushNamed(Routes.createNewPin);
-          Navigator.pop(context);
-        },
-      ),
-    ]);
+    return BottomSheetMenu.show(
+      context: context,
+      items: [
+        BottomSheetMenuItem(
+          title: const Text('ボードの作成'),
+          onTap: () async {
+            await Navigator.of(context).pushNamed(Routes.createNewBoard);
+            Navigator.pop(context);
+          },
+        ),
+        BottomSheetMenuItem(
+          title: const Text('ピンの作成'),
+          onTap: () async {
+            await Navigator.of(context).pushNamed(Routes.createNewPin);
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    );
   }
 }

@@ -339,7 +339,7 @@ class _MenuButton extends StatelessWidget {
           size: 16,
         ),
         onPressed: () {
-          BottomSheetMenu.show(context: context, children: menuItems);
+          BottomSheetMenu.show(context: context, items: menuItems);
         },
         iconSize: 16,
       ),

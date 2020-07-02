@@ -7,19 +7,22 @@ import 'package:mobile/repository/account_repository.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/common/typography_common.dart';
 import 'package:mobile/view/components/bottom_sheet_menu.dart';
+import 'package:mobile/view/components/menu_button.dart';
 import 'package:mobile/view/pin_delete_dialog.dart';
 import 'package:mobile/view/pin_edit_screen.dart';
 
 class PinCard extends StatelessWidget {
   const PinCard({
     this.board,
-    this.pin,
+    @required this.pin,
     this.onTap,
+    this.menuButton,
   });
 
   final Board board;
   final Pin pin;
   final VoidCallback onTap;
+  final MenuButton menuButton;
 
   @override
   Widget build(BuildContext context) {
@@ -77,8 +80,8 @@ class PinCard extends StatelessWidget {
       child: Row(
         children: [
           Expanded(child: _pinTitle()),
-          _MenuButton(menuItems: _menuItems(context)),
-        ],
+          menuButton,
+        ]..remove(null),
       ),
     );
   }
@@ -88,58 +91,6 @@ class PinCard extends StatelessWidget {
       pin.title ?? '',
       overflow: TextOverflow.ellipsis,
       maxLines: 2,
-    );
-  }
-
-  List<BottomSheetMenuItem> _menuItems(BuildContext context) {
-    final userId =
-        RepositoryProvider.of<AccountRepository>(context).getPersistUserId();
-    return [
-      pin.userId == userId
-          ? BottomSheetMenuItem(
-              title: const Text('ピンの編集'),
-              onTap: () {
-                Navigator.of(context).pushNamed(
-                  Routes.pinEdit,
-                  arguments: PinEditScreenArguments(pin: pin),
-                );
-              },
-            )
-          : null,
-      BottomSheetMenuItem(
-          title: const Text('ピンの削除'),
-          onTap: () async {
-            await PinDeleteDialog()
-                .show(context: context, board: board, pin: pin);
-          }),
-    ]..remove(null);
-  }
-}
-
-class _MenuButton extends StatelessWidget {
-  _MenuButton({this.menuItems});
-  final List<BottomSheetMenuItem> menuItems;
-
-  @override
-  Widget build(BuildContext context) {
-    if (menuItems.isEmpty) {
-      return Container();
-    }
-
-    return Container(
-      width: 16,
-      height: 16,
-      child: IconButton(
-        padding: const EdgeInsets.all(0),
-        icon: Icon(
-          Icons.more_horiz,
-          size: 16,
-        ),
-        onPressed: () {
-          BottomSheetMenu.show(context: context, children: menuItems);
-        },
-        iconSize: 16,
-      ),
     );
   }
 }
