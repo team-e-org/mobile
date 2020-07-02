@@ -79,7 +79,7 @@ class PinterestApplication extends StatelessWidget {
   Widget _app() {
     return OverlaySupport(
       child: MaterialApp(
-        title: 'Pinterest',
+        title: 'pinko',
         theme: ThemeData(
           appBarTheme: AppBarTheme(
             color: Colors.grey[200],
