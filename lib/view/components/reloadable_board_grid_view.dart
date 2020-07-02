@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/view/components/board_grid_view.dart';
 import 'package:mobile/view/components/common/button_common.dart';
+import 'package:mobile/view/components/components.dart';
 
 class ReloadableBoardGridView extends StatelessWidget {
   const ReloadableBoardGridView({
     this.layout = BoardGridViewLayout.large,
     this.isLoading = false,
+    this.itemCount,
+    this.itemBuilder,
     this.boards = const [],
     this.boardPinMap = const {},
     this.onBoardTap,
@@ -20,6 +23,9 @@ class ReloadableBoardGridView extends StatelessWidget {
   });
 
   final bool isLoading;
+
+  final int itemCount;
+  final BoardCardProps Function(BuildContext, int) itemBuilder;
 
   final BoardGridViewLayout layout;
   final List<Board> boards;
@@ -102,6 +108,8 @@ class ReloadableBoardGridView extends StatelessWidget {
             child: Column(
               children: [
                 BoardGridView(
+                  itemCount: itemCount,
+                  itemBuilder: itemBuilder,
                   boards: boards,
                   boardPinMap: boardPinMap,
                   onTap: onBoardTap,
