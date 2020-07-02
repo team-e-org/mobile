@@ -6,6 +6,7 @@ import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/reloadable_pin_grid_view.dart';
 
+import 'components/components.dart';
 import 'pin_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -35,8 +36,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: ReloadablePinGridView(
         isLoading: state is Loading,
-        pins: state.pins,
-        onPinTap: _onPinTap,
+        itemCount: state.pins.length,
+        itemBuilder: (context, index) {
+          return PinCard(
+            pin: state.pins[index],
+            onTap: () => _onPinTap(context, state.pins[index]),
+          );
+        },
         onScrollOut: () => bloc.add(HomeScreenEvent.loadNext),
         enableScrollOut: !state.isEndOfPins,
         isError: state is ErrorState,
@@ -50,7 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
     if (pin == null) {
       return;
     }
-
     Navigator.of(context).pushNamed(
       Routes.pinDetail,
       arguments: PinDetailScreenArguments(pin: pin),

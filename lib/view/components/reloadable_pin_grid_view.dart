@@ -6,9 +6,8 @@ import 'package:mobile/view/components/pin_grid_view.dart';
 class ReloadablePinGridView extends StatelessWidget {
   const ReloadablePinGridView({
     this.isLoading = false,
-    this.board,
-    this.pins = const [],
-    this.onPinTap,
+    @required this.itemCount,
+    @required this.itemBuilder,
     this.onScrollOut,
     this.enableScrollOut = true,
     this.isError = false,
@@ -18,9 +17,9 @@ class ReloadablePinGridView extends StatelessWidget {
 
   final bool isLoading;
 
-  final Board board;
-  final List<Pin> pins;
-  final PinGridViewCallback onPinTap;
+  final int itemCount;
+  final Widget Function(BuildContext, int) itemBuilder;
+
   final VoidCallback onScrollOut;
   final bool enableScrollOut;
   final bool isError;
@@ -63,7 +62,7 @@ class ReloadablePinGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (pins.isEmpty) {
+    if (itemCount == 0) {
       if (isLoading) {
         return _loadingWidget();
       } else if (isError) {
@@ -97,9 +96,8 @@ class ReloadablePinGridView extends StatelessWidget {
           child: Column(
             children: [
               PinGridView(
-                board: board,
-                pins: pins,
-                onTap: onPinTap,
+                itemCount: itemCount,
+                itemBuilder: itemBuilder,
                 shrinkWrap: true,
                 primary: true,
                 physics: const NeverScrollableScrollPhysics(),

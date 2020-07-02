@@ -8,11 +8,9 @@ import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
 import 'package:mobile/view/board_detail_screen.dart';
 import 'package:mobile/view/components/board_grid_view.dart';
-import 'package:mobile/view/components/notification.dart';
 import 'package:mobile/view/components/reloadable_board_grid_view.dart';
 import 'package:mobile/view/components/user_icon.dart';
 import 'package:mobile/view/create_new_button.dart';
-import 'package:mobile/view/create_new_screen.dart';
 import 'package:mobile/view/onboarding/authentication_bloc.dart';
 
 class _Choices {
