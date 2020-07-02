@@ -23,6 +23,7 @@ import 'package:mobile/view/onboarding/auth_screen.dart';
 import 'package:mobile/view/onboarding/authentication_bloc.dart';
 import 'package:mobile/view/pin_detail_screen.dart';
 import 'package:mobile/view/pin_edit_screen.dart';
+import 'package:mobile/view/pin_save_screen.dart';
 import 'package:mobile/view/pin_select_photo_screen.dart';
 import 'package:mobile/view/root_screen.dart';
 import 'package:mobile/view/select_board_screen.dart';
@@ -79,7 +80,7 @@ class PinterestApplication extends StatelessWidget {
   Widget _app() {
     return OverlaySupport(
       child: MaterialApp(
-        title: 'Pinterest',
+        title: 'pinko',
         theme: ThemeData(
           appBarTheme: AppBarTheme(
             color: Colors.grey[200],
@@ -112,7 +113,11 @@ class PinterestApplication extends StatelessWidget {
               final args = settings.arguments as PinDetailScreenArguments;
               return _pageRoute(PinDetailScreen(args: args));
             case Routes.pinEdit:
-              return _pageRoute(PinEditScreen());
+              final args = settings.arguments as PinEditScreenArguments;
+              return _pageRoute(PinEditScreen(args: args));
+            case Routes.pinSave:
+              final args = settings.arguments as PinSaveScreenArguments;
+              return _pageRoute(PinSaveScreen(args: args));
             // Board
             case Routes.boardDetail:
               final args = settings.arguments as BoardDetailScreenArguments;

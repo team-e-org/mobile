@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -9,42 +8,24 @@ import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 
 //////// Event ////////
-abstract class NewPinBoardSelectScreenEvent extends Equatable {
-  const NewPinBoardSelectScreenEvent();
+abstract class BoardsBlocEvent extends Equatable {
+  const BoardsBlocEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class LoadBoardList extends NewPinBoardSelectScreenEvent {
+class LoadBoardList extends BoardsBlocEvent {
   const LoadBoardList();
 }
 
-class RefreshBoardList extends NewPinBoardSelectScreenEvent {
+class RefreshBoardList extends BoardsBlocEvent {
   const RefreshBoardList();
 }
 
-class CreatePin extends NewPinBoardSelectScreenEvent {
-  const CreatePin({
-    @required this.newPin,
-    @required this.imageFile,
-    @required this.board,
-    this.onSuccess,
-    this.onError,
-  });
-
-  final NewPin newPin;
-  final File imageFile;
-  final Board board;
-  final VoidCallback onSuccess;
-  final VoidCallback onError;
-
-  List<Object> get props => [newPin, imageFile, board];
-}
-
 //////// State ////////
-abstract class NewPinBoardSelectScreenState extends Equatable {
-  const NewPinBoardSelectScreenState({
+abstract class BoardsBlocState extends Equatable {
+  const BoardsBlocState({
     @required this.boards,
     @required this.boardPinMap,
     this.error,
@@ -58,12 +39,12 @@ abstract class NewPinBoardSelectScreenState extends Equatable {
   List<Object> get props => [boardPinMap, error];
 }
 
-class InitialState extends NewPinBoardSelectScreenState {
+class InitialState extends BoardsBlocState {
   @override
   const InitialState() : super(boards: const [], boardPinMap: const {});
 }
 
-class DefaultState extends NewPinBoardSelectScreenState {
+class DefaultState extends BoardsBlocState {
   @override
   const DefaultState({
     @required List<Board> boards,
@@ -71,7 +52,7 @@ class DefaultState extends NewPinBoardSelectScreenState {
   }) : super(boards: boards, boardPinMap: boardPinMap);
 }
 
-class LoadBoardListWaiting extends NewPinBoardSelectScreenState {
+class LoadBoardListWaiting extends BoardsBlocState {
   @override
   const LoadBoardListWaiting({
     @required List<Board> boards,
@@ -79,7 +60,7 @@ class LoadBoardListWaiting extends NewPinBoardSelectScreenState {
   }) : super(boards: boards, boardPinMap: boardPinMap);
 }
 
-class LoadBoardListErrorState extends NewPinBoardSelectScreenState {
+class LoadBoardListErrorState extends BoardsBlocState {
   @override
   const LoadBoardListErrorState({
     @required List<Board> boards,
@@ -88,63 +69,31 @@ class LoadBoardListErrorState extends NewPinBoardSelectScreenState {
   }) : super(boards: boards, boardPinMap: boardPinMap, error: error);
 }
 
-class CreatePinWaiting extends NewPinBoardSelectScreenState {
-  @override
-  const CreatePinWaiting({
-    @required List<Board> boards,
-    @required Map<int, List<Pin>> boardPinMap,
-  }) : super(boards: boards, boardPinMap: boardPinMap);
-}
-
-class CreatePinFinished extends NewPinBoardSelectScreenState {
-  @override
-  const CreatePinFinished({
-    @required List<Board> boards,
-    @required Map<int, List<Pin>> boardPinMap,
-  }) : super(boards: boards, boardPinMap: boardPinMap);
-}
-
-class CreatePinErrorState extends NewPinBoardSelectScreenState {
-  @override
-  const CreatePinErrorState({
-    @required List<Board> boards,
-    @required Map<int, List<Pin>> boardPinMap,
-    @required dynamic error,
-  }) : super(boards: boards, boardPinMap: boardPinMap, error: error);
-}
-
 //////// Bloc ////////
-class NewPinBoardSelectScreenBloc
-    extends Bloc<NewPinBoardSelectScreenEvent, NewPinBoardSelectScreenState> {
-  NewPinBoardSelectScreenBloc({
+class BoardsBloc extends Bloc<BoardsBlocEvent, BoardsBlocState> {
+  BoardsBloc({
     @required this.accountRepository,
     @required this.usersRepository,
     @required this.boardsRepository,
-    @required this.pinsRepository,
   });
 
   final AccountRepository accountRepository;
   final UsersRepository usersRepository;
   final BoardsRepository boardsRepository;
-  final PinsRepository pinsRepository;
 
   @override
-  NewPinBoardSelectScreenState get initialState => const InitialState();
+  BoardsBlocState get initialState => const InitialState();
 
   @override
-  Stream<NewPinBoardSelectScreenState> mapEventToState(
-      NewPinBoardSelectScreenEvent event) async* {
+  Stream<BoardsBlocState> mapEventToState(BoardsBlocEvent event) async* {
     if (event is LoadBoardList) {
       yield* mapLoadInitialToState(event);
     } else if (event is RefreshBoardList) {
       yield* mapRefreshToState(event);
-    } else if (event is CreatePin) {
-      yield* mapCreatePinToState(event);
     }
   }
 
-  Stream<NewPinBoardSelectScreenState> mapLoadInitialToState(
-      LoadBoardList event) async* {
+  Stream<BoardsBlocState> mapLoadInitialToState(LoadBoardList event) async* {
     if (state is InitialState) {
       yield const LoadBoardListWaiting(boards: [], boardPinMap: {});
       try {
@@ -162,6 +111,7 @@ class NewPinBoardSelectScreenBloc
         }
         yield DefaultState(boards: boards, boardPinMap: boardPinMap);
       } on Exception catch (e) {
+        Logger().e(e);
         yield LoadBoardListErrorState(
           boards: state.boards,
           boardPinMap: state.boardPinMap,
@@ -171,8 +121,7 @@ class NewPinBoardSelectScreenBloc
     }
   }
 
-  Stream<NewPinBoardSelectScreenState> mapRefreshToState(
-      RefreshBoardList event) async* {
+  Stream<BoardsBlocState> mapRefreshToState(RefreshBoardList event) async* {
     yield LoadBoardListWaiting(
         boards: state.boards, boardPinMap: state.boardPinMap);
     try {
@@ -189,36 +138,12 @@ class NewPinBoardSelectScreenBloc
       }
       yield DefaultState(boards: boards, boardPinMap: boardPinMap);
     } on Exception catch (e) {
+      Logger().e(e);
       yield LoadBoardListErrorState(
         boards: state.boards,
         boardPinMap: state.boardPinMap,
         error: e,
       );
-    }
-  }
-
-  Stream<NewPinBoardSelectScreenState> mapCreatePinToState(
-      CreatePin event) async* {
-    if (state is DefaultState || state is CreatePinErrorState) {
-      try {
-        yield CreatePinWaiting(
-            boards: state.boards, boardPinMap: state.boardPinMap);
-        await pinsRepository.createPin(
-            event.newPin, event.imageFile, event.board);
-        yield CreatePinFinished(
-            boards: state.boards, boardPinMap: state.boardPinMap);
-
-        if (event.onSuccess != null) {
-          event.onSuccess();
-        }
-      } on Exception catch (e) {
-        Logger().e(e);
-        yield CreatePinErrorState(
-            boards: state.boards, boardPinMap: state.boardPinMap, error: e);
-        if (event.onError != null) {
-          event.onError();
-        }
-      }
     }
   }
 }

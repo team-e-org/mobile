@@ -2,6 +2,7 @@ class Routes {
   static const root = '/';
   static const pinDetail = '/pin/detail';
   static const pinEdit = '/pin/edit';
+  static const pinSave = '/pin/save';
   static const boardDetail = '/board/detail';
   static const boardEdit = '/board/edit';
   static const createNew = '/new';

@@ -33,32 +33,38 @@ abstract class PinDetailScreenState extends Equatable {
 }
 
 class InitialState extends PinDetailScreenState {
-  const InitialState() : super();
+  const InitialState() : super(user: null, exception: null);
 }
 
 class DefaultState extends PinDetailScreenState {
-  final User user;
-
   const DefaultState({
-    @required this.user,
+    User user,
   }) : super(user: user);
 }
 
 class Loading extends PinDetailScreenState {
-  final User user;
-
   const Loading({
-    this.user,
+    User user,
   }) : super(user: user);
 }
 
 class ErrorState extends PinDetailScreenState {
-  final User user;
-  final dynamic exception;
-
   const ErrorState({
-    this.user,
-    @required this.exception,
+    User user,
+    dynamic exception,
+  }) : super(user: user, exception: exception);
+}
+
+class SavePinWaiting extends PinDetailScreenState {
+  const SavePinWaiting({
+    User user,
+  }) : super(user: user);
+}
+
+class SavePinErrorState extends PinDetailScreenState {
+  const SavePinErrorState({
+    User user,
+    dynamic exception,
   }) : super(user: user, exception: exception);
 }
 
@@ -87,8 +93,8 @@ class PinDetailScreenBloc
   Stream<PinDetailScreenState> _mapLoadInitialToState(
       LoadInitial event) async* {
     if (state is! Loading) {
-      yield const Loading();
       try {
+        yield Loading(user: state.user);
         final user = await usersRepository.getUser(pin.userId);
         yield DefaultState(user: user);
       } on Exception catch (e) {

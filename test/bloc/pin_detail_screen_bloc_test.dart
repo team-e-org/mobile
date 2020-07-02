@@ -33,7 +33,7 @@ void main() {
         when(usersRepository.getUser(
           bloc.pin.userId,
         )).thenAnswer((_) => Future.value(User.fromMock()));
-        bloc.add(const LoadInitial());
+        bloc.add(LoadInitial());
       },
       expect: <dynamic>[
         const Loading(),
@@ -49,7 +49,7 @@ void main() {
         when(usersRepository.getUser(
           bloc.pin.userId,
         )).thenThrow(error);
-        bloc.add(const LoadInitial());
+        bloc.add(LoadInitial());
       },
       expect: <dynamic>[
         const Loading(),

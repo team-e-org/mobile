@@ -64,7 +64,7 @@ class NewPin extends Equatable {
       writeNotNull('url', instance.url);
       writeNotNull('isPrivate', instance.isPrivate);
       writeNotNull('image', instance.image);
-      writeNotNull('tagsString', instance.tagsString);
+      writeNotNull('tags', instance.tagsString);
       return val;
     }
   }
@@ -106,7 +106,7 @@ class EditPin extends Equatable {
         title: json['title'] as String,
         description: json['description'] as String,
         isPrivate: json['isPrivate'] as bool,
-        tags: (json['tags'] as String)?.toTagList(),
+        tags: (json['tagString'] as String)?.toTagList(),
       );
 
   factory EditPin.fromMock() => EditPin(
@@ -130,8 +130,7 @@ class EditPin extends Equatable {
       writeNotNull('title', instance.title);
       writeNotNull('description', instance.description);
       writeNotNull('isPrivate', instance.isPrivate);
-      writeNotNull('tagsString', instance.tagsString);
-      writeNotNull('tags', instance.tags);
+      // writeNotNull('tags', instance.tagsString);
       return val;
     }
   }
@@ -183,7 +182,7 @@ class Pin extends Equatable {
         userId: json['userId'] as int,
         imageUrl: json['imageUrl'] as String,
         isPrivate: json['isPrivate'] as bool,
-        tags: (json['tags'] as String)?.toTagList(),
+        tags: (json['tagString'] as String)?.toTagList(),
       );
 
   factory Pin.fromMock() {
@@ -219,8 +218,7 @@ class Pin extends Equatable {
     writeNotNull('userId', instance.userId);
     writeNotNull('imageUrl', instance.imageUrl);
     writeNotNull('isPrivate', instance.isPrivate);
-    writeNotNull('tagsString', instance.tagsString);
-    writeNotNull('tags', instance.tags);
+    writeNotNull('tags', instance.tagsString);
     return val;
   }
 

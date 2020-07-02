@@ -19,7 +19,10 @@ abstract class PinsApi {
     int boardId,
   });
   Future<Pin> editPin({int id, EditPin pin});
-  Future<bool> deletePin({int id});
+
+  Future<bool> unsavePin({int boardId, int pinId});
+
+  Future<bool> savePin({int pinId, int boardId});
 }
 
 class DefaultPinsApi extends PinsApi {
@@ -28,18 +31,24 @@ class DefaultPinsApi extends PinsApi {
   final ApiClient _client;
 
   @override
-  Future<bool> deletePin({int id}) async {
-    final response = await _client.delete('/pins/$id');
+  Future<bool> unsavePin({int boardId, int pinId}) async {
+    final response = await _client.delete('/boards/$boardId/pins/$pinId');
     return response.statusCode == 204;
   }
 
   @override
   Future<Pin> editPin({int id, EditPin pin}) async {
-    final response = await _client.put(
+    final fields = {
+      'title': pin.title,
+      'description': pin.description,
+      'isPrivate': pin.isPrivate.toString(),
+      // 'tags': pin.tagsString,
+    };
+    await _client.fileUpload(
+      'PUT',
       '/pins/$id',
-      body: json.encode(pin),
+      fields: fields,
     );
-    return Pin.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   }
 
   @override
@@ -54,6 +63,11 @@ class DefaultPinsApi extends PinsApi {
     return (jsonDecode(response.body) as List)
         .map((dynamic it) => Pin.fromJson(it as Map<String, dynamic>))
         .toList();
+  }
+
+  Future<bool> savePin({int pinId, int boardId}) async {
+    final response = await _client.post('/boards/$boardId/pins/$pinId');
+    return response.statusCode == 201;
   }
 
   @override
@@ -89,9 +103,9 @@ class DefaultPinsApi extends PinsApi {
       'isPrivate': isPrivate.toString(),
       'tags': tagsString,
     };
-    print(fields);
 
     await _client.fileUpload(
+      'POST',
       '/boards/$boardId/pins',
       fields: fields,
       fileKey: 'image',
