@@ -27,7 +27,6 @@ class BoardCardLarge extends BoardCardBase {
       onTap: props.onTap,
       child: Container(
         margin: margin,
-        color: ThemeData().scaffoldBackgroundColor,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -205,7 +204,7 @@ abstract class BoardCardBase extends StatelessWidget {
   Widget _image() {
     if (props.pins.isEmpty) {
       return Container(
-        color: Colors.grey,
+        color: Colors.grey[100],
         child: const Center(child: Icon(Icons.photo_library)),
       );
     }
@@ -231,13 +230,13 @@ abstract class BoardCardBase extends StatelessWidget {
   Widget _imageGrids() {
     if (props.pins.isEmpty) {
       return Container(
-        color: Colors.grey,
+        color: Colors.grey[100],
         child: const Center(child: Icon(Icons.photo_library)),
       );
     }
 
     return Container(
-      color: Colors.grey,
+      color: Colors.grey[100],
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
