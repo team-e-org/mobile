@@ -8,6 +8,7 @@ abstract class PinsRepository {
   Future<List<Pin>> getHomePagePins({int page});
   Future<List<Pin>> getBoardPins({int boardId, int page});
   Future<void> createPin(NewPin newPin, File imageFile, Board board);
+  Future<bool> savePin({int pinId, int boardId}) async {}
 }
 
 class DefaultPinsRepository extends PinsRepository {
@@ -40,5 +41,9 @@ class DefaultPinsRepository extends PinsRepository {
     } on Exception {
       rethrow;
     }
+  }
+
+  Future<bool> savePin({int pinId, int boardId}) async {
+    return pinsApi.savePin(pinId: pinId, boardId: boardId);
   }
 }

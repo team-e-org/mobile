@@ -16,63 +16,54 @@ abstract class PinDetailScreenEvent extends Equatable {
 
 class LoadInitial extends PinDetailScreenEvent {}
 
-class SavePin extends PinDetailScreenEvent {}
-
 //////// State ////////
 abstract class PinDetailScreenState extends Equatable {
   const PinDetailScreenState({
     this.user,
-    this.isSaved,
     this.exception,
   });
 
   final User user;
-  final bool isSaved;
   final dynamic exception;
 
   @override
-  List<Object> get props => [user, isSaved, exception];
+  List<Object> get props => [user, exception];
 }
 
 class InitialState extends PinDetailScreenState {
-  const InitialState() : super(user: null, isSaved: false, exception: null);
+  const InitialState() : super(user: null, exception: null);
 }
 
 class DefaultState extends PinDetailScreenState {
   const DefaultState({
     User user,
-    bool isSaved,
-  }) : super(user: user, isSaved: isSaved);
+  }) : super(user: user);
 }
 
 class Loading extends PinDetailScreenState {
   const Loading({
     User user,
-    bool isSaved,
-  }) : super(user: user, isSaved: isSaved);
+  }) : super(user: user);
 }
 
 class ErrorState extends PinDetailScreenState {
   const ErrorState({
     User user,
-    bool isSaved,
     dynamic exception,
-  }) : super(user: user, isSaved: isSaved, exception: exception);
+  }) : super(user: user, exception: exception);
 }
 
 class SavePinWaiting extends PinDetailScreenState {
   const SavePinWaiting({
     User user,
-    bool isSaved,
-  }) : super(user: user, isSaved: isSaved);
+  }) : super(user: user);
 }
 
 class SavePinErrorState extends PinDetailScreenState {
   const SavePinErrorState({
     User user,
-    bool isSaved,
     dynamic exception,
-  }) : super(user: user, isSaved: isSaved, exception: exception);
+  }) : super(user: user, exception: exception);
 }
 
 //////// Bloc ////////
@@ -94,8 +85,6 @@ class PinDetailScreenBloc
       PinDetailScreenEvent event) async* {
     if (event is LoadInitial) {
       yield* _mapLoadInitialToState(event);
-    } else if (event is SavePin) {
-      yield* _mapSavePinToState(event);
     }
   }
 
@@ -103,27 +92,12 @@ class PinDetailScreenBloc
       LoadInitial event) async* {
     if (state is! Loading) {
       try {
-        yield Loading(user: state.user, isSaved: state.isSaved);
+        yield Loading(user: state.user);
         final user = await usersRepository.getUser(pin.userId);
-        yield DefaultState(user: user, isSaved: state.isSaved);
+        yield DefaultState(user: user);
       } on Exception catch (e) {
         Logger().e(e);
-        yield ErrorState(
-            user: state.user, isSaved: state.isSaved, exception: e);
-      }
-    }
-  }
-
-  Stream<PinDetailScreenState> _mapSavePinToState(SavePin event) async* {
-    if (state is! Loading) {
-      try {
-        yield SavePinWaiting(user: state.user, isSaved: state.isSaved);
-        final isSaved = true;
-        yield DefaultState(user: state.user, isSaved: isSaved);
-      } on Exception catch (e) {
-        Logger().e(e);
-        yield SavePinErrorState(
-            user: state.user, isSaved: state.isSaved, exception: e);
+        yield ErrorState(user: state.user, exception: e);
       }
     }
   }
