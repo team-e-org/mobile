@@ -59,12 +59,12 @@ class LoginWidget extends StatelessWidget {
   Widget _buildContent(BuildContext context, LoginState state) {
     return AuthCommonWidget(
       formKey: _formKey,
-      message: 'Welcome back!',
       textFieldsProps: [
         PinterestTextFieldProps(
           label: 'Email',
           hintText: 'Your Email',
           obscure: false,
+          keyboardType: TextInputType.emailAddress,
           validator: (value) {
             if (!Validator.isValidEmail(value)) {
               return 'Invalid email format.';
@@ -101,6 +101,7 @@ class LoginWidget extends StatelessWidget {
       ),
       action: PinterestButton.primary(
         loading: state is LoginLoading,
+        size: PinterestButtonSize.big,
         text: 'Login',
         onPressed: () {
           if (state is LoginLoading) {
