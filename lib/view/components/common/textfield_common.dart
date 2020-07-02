@@ -4,6 +4,7 @@ class PinterestTextFieldProps {
   PinterestTextFieldProps({
     @required this.label,
     @required this.hintText,
+    this.initialValue,
     this.validator,
     this.obscure = false,
     this.onChanged,
@@ -15,6 +16,7 @@ class PinterestTextFieldProps {
     this.maxLengthEnforced = false,
   });
 
+  final String initialValue;
   final FormFieldValidator<String> validator;
   final String label;
   final String hintText;
@@ -43,6 +45,7 @@ class PinterestTextField extends StatelessWidget {
           props.label,
         ),
         TextFormField(
+          initialValue: props.initialValue,
           obscureText: props.obscure,
           validator: props.validator,
           onChanged: props.onChanged,
