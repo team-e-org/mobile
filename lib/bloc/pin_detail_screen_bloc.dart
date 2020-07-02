@@ -14,7 +14,9 @@ abstract class PinDetailScreenEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadInitial extends PinDetailScreenEvent {}
+class LoadInitial extends PinDetailScreenEvent {
+  const LoadInitial();
+}
 
 //////// State ////////
 abstract class PinDetailScreenState extends Equatable {
