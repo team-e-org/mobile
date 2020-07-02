@@ -114,7 +114,7 @@ class BoardDetailScreen extends StatelessWidget {
               Navigator.of(context).pop();
               bloc.add(PinsBlocEvent.refresh);
             }),
-      ]..remove(null),
+      ]..removeWhere((e) => e == null),
     );
   }
 }

@@ -177,7 +177,7 @@ class AccountScreen extends StatelessWidget {
             bloc.add(const Refresh());
           },
         )
-      ]..remove(null),
+      ]..removeWhere((e) => e == null),
     );
   }
 }

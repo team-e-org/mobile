@@ -296,11 +296,11 @@ abstract class BoardCardBase extends StatelessWidget {
                   maxLines: 1,
                   style: titleStyle,
                 ),
-              ]..remove(null),
+              ]..removeWhere((e) => e == null),
             ),
           ),
           props.menuButton,
-        ]..remove(null),
+        ]..removeWhere((e) => e == null),
       ),
     );
   }

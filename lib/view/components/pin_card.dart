@@ -81,7 +81,7 @@ class PinCard extends StatelessWidget {
         children: [
           Expanded(child: _pinTitle()),
           menuButton,
-        ]..remove(null),
+        ]..removeWhere((e) => e == null),
       ),
     );
   }

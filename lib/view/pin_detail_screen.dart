@@ -79,6 +79,7 @@ class PinDetailScreen extends StatelessWidget {
             _buildPinInfo(
               title: args.pin.title,
               description: args.pin.description,
+          ]..removeWhere((e) => e == null),
             ),
             const SizedBox(height: 32),
             _buildTags(args.pin.tags),
@@ -183,6 +184,7 @@ class PinDetailScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: list,
+      ]..removeWhere((e) => e == null),
     );
   }
 
