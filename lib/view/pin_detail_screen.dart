@@ -45,19 +45,15 @@ class PinDetailScreen extends StatelessWidget {
   }
 
   Widget _contentBuilder(BuildContext context, PinDetailScreenState state) {
-    final bloc = BlocProvider.of<PinDetailScreenBloc>(context);
-
     return Scaffold(
-      body: SafeArea(
-        child: Stack(children: [
-          _builder(context, state),
-          Positioned(
-            left: 12,
-            top: 16,
-            child: _backButton(context),
-          ),
-        ]),
-      ),
+      body: Stack(children: [
+        _builder(context, state),
+        Positioned(
+          left: 12,
+          top: 16,
+          child: SafeArea(child: _backButton(context)),
+        ),
+      ]),
     );
   }
 
