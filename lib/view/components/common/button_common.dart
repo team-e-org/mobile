@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/theme.dart';
 
 enum PinterestButtonVariant {
   primary,
@@ -36,24 +37,22 @@ class PinterestButton extends StatelessWidget {
     return RaisedButton(
       child: loading
           ? _loadingIndicator()
-          : Text(
-              text,
+          : Text(text,
               style: TextStyle(
                 color: variant == PinterestButtonVariant.primary
-                    ? Colors.white
-                    : Colors.black,
-              ),
-            ),
+                    ? ColorPalettes.defaultPalette.thirdText
+                    : ColorPalettes.defaultPalette.primaryText,
+              )),
       onPressed: onPressed,
       padding: size == PinterestButtonSize.big
           ? const EdgeInsets.symmetric(vertical: 16)
           : const EdgeInsets.symmetric(vertical: 6),
-      color: variant == PinterestButtonVariant.primary
-          ? Theme.of(context).buttonColor
-          : Colors.grey[300],
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(9999),
       ),
+      color: variant == PinterestButtonVariant.primary
+          ? ColorPalettes.defaultPalette.primary
+          : ColorPalettes.defaultPalette.secondary,
     );
   }
 
@@ -61,9 +60,7 @@ class PinterestButton extends StatelessWidget {
     return const SizedBox(
       width: 20,
       height: 20,
-      child: CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-      ),
+      child: CircularProgressIndicator(),
     );
   }
 }

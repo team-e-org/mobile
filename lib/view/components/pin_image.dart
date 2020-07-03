@@ -12,16 +12,13 @@ class PinImage extends StatelessWidget {
       imageUrl: url,
       placeholder: (context, url) {
         return _placeholder(
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.grey[300]),
-          ),
+          child: CircularProgressIndicator(),
         );
       },
       errorWidget: (context, url, dynamic error) {
         return _placeholder(
             child: const Icon(
           Icons.error_outline,
-          color: Colors.black,
         ));
       },
     );
@@ -31,7 +28,6 @@ class PinImage extends StatelessWidget {
     return AspectRatio(
       aspectRatio: 4 / 5,
       child: Container(
-        color: Colors.grey[100],
         child: Center(child: child),
       ),
     );

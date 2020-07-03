@@ -63,7 +63,6 @@ class BoardCardCompact extends BoardCardBase {
       onTap: props.onTap,
       child: Container(
         margin: margin,
-        color: ThemeData().scaffoldBackgroundColor,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -98,7 +97,6 @@ class BoardCardSlim extends BoardCardBase {
     return GestureDetector(
       onTap: props.onTap,
       child: Container(
-        color: ThemeData().scaffoldBackgroundColor,
         margin: margin,
         height: 60,
         child: Row(
@@ -135,7 +133,6 @@ class ActionCardSlim extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: margin,
-        color: ThemeData().scaffoldBackgroundColor,
         height: 60,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -204,7 +201,6 @@ abstract class BoardCardBase extends StatelessWidget {
   Widget _image() {
     if (props.pins.isEmpty) {
       return Container(
-        color: Colors.grey[100],
         child: const Center(child: Icon(Icons.photo_library)),
       );
     }
@@ -230,13 +226,11 @@ abstract class BoardCardBase extends StatelessWidget {
   Widget _imageGrids() {
     if (props.pins.isEmpty) {
       return Container(
-        color: Colors.grey[100],
         child: const Center(child: Icon(Icons.photo_library)),
       );
     }
 
     return Container(
-      color: Colors.grey[100],
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
