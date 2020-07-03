@@ -122,19 +122,26 @@ class _PinDetailScreenState extends State<PinDetailScreen> {
         physics: const NeverScrollableScrollPhysics(),
         children: [
           _pinImage(pin.imageUrl),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 24,
-              vertical: 16,
-            ),
-            child: Column(
-              children: [
-                _pinTitle(pin.title),
-                _pinDescription(pin.description),
-              ],
-            ),
-          )
-        ],
+          (pin.title != null && pin.title.isNotEmpty) ||
+                  (pin.description != null && pin.description.isNotEmpty)
+              ? Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 16,
+                  ),
+                  child: Column(
+                    children: [
+                      (pin.title != null && pin.title.isNotEmpty)
+                          ? _pinTitle(pin.title)
+                          : null,
+                      (pin.description != null && pin.description.isNotEmpty)
+                          ? _pinDescription(pin.description)
+                          : null,
+                    ]..removeWhere((element) => element == null),
+                  ),
+                )
+              : null,
+        ]..removeWhere((element) => element == null),
       ),
     );
   }
