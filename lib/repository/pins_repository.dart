@@ -7,6 +7,7 @@ import 'package:mobile/model/models.dart';
 abstract class PinsRepository {
   Future<RecommendPinResponse> getReccomendPins({String pagingKey});
   Future<List<Pin>> getBoardPins({int boardId, int page});
+  Future<List<Pin>> getPinsByTag({String tag, int page});
   Future<void> createPin(NewPin newPin, File imageFile, Board board);
   Future<void> editPin(int pinId, EditPin editPin);
   Future<void> removePin(int boardId, int pinId);
@@ -23,10 +24,23 @@ class DefaultPinsRepository extends PinsRepository {
   BoardsApi boardsApi;
 
   @override
-  Future<RecommendPinResponse> getReccomendPins({String pagingKey}) =>
-      pinsApi.getRecommendPins(pagingKey: pagingKey);
-  Future<List<Pin>> getBoardPins({int boardId, int page}) =>
-      boardsApi.boardPins(id: boardId, page: page ?? 1);
+  Future<RecommendPinResponse> getReccomendPins({String pagingKey}) async {
+    final res = await pinsApi.getRecommendPins(pagingKey: pagingKey);
+    for (var i = 0; i < res.pins.length; i++) {
+      res.pins[i].tags = await pinsApi.getTags(pinId: res.pins[i].id);
+    }
+    return res;
+  }
+
+  Future<List<Pin>> getPinsByTag({String tag, int page}) async {}
+
+  Future<List<Pin>> getBoardPins({int boardId, int page}) async {
+    final pins = await boardsApi.boardPins(id: boardId, page: page ?? 1);
+    for (var i = 0; i < pins.length; i++) {
+      pins[i].tags = await pinsApi.getTags(pinId: pins[i].id);
+    }
+    return pins;
+  }
 
   @override
   Future<void> createPin(NewPin newPin, File imageFile, Board board) async {
