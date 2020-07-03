@@ -37,11 +37,16 @@ class BoardSelectPage extends StatelessWidget {
           children: [
             enableAddBoard ? _addBoardCard(context) : null,
             ReloadableBoardGridView(
+              itemCount: boards.length,
+              itemBuilder: (context, index) {
+                return BoardCardProps(
+                  board: boards[index],
+                  pins: boardPinMap[boards[index].id],
+                  onTap: () => onSelected(context, boards[index]),
+                );
+              },
               layout: BoardGridViewLayout.slim,
               isLoading: isLoading,
-              boards: boards,
-              boardPinMap: boardPinMap,
-              onBoardTap: onSelected,
               isError: isError,
               onReload: onReload,
               onRefresh: onRefresh,

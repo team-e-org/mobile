@@ -10,7 +10,6 @@ import 'package:mobile/view/board_detail_screen.dart';
 import 'package:mobile/view/board_edit_screen.dart';
 import 'package:mobile/view/components/board_grid_view.dart';
 import 'package:mobile/view/components/bottom_sheet_menu.dart';
-import 'package:mobile/view/components/circle_flat_button.dart';
 import 'package:mobile/view/components/menu_button.dart';
 import 'package:mobile/view/components/reloadable_board_grid_view.dart';
 import 'package:mobile/view/components/user_icon.dart';
@@ -85,6 +84,7 @@ class AccountScreen extends StatelessWidget {
                   state.user == null ? ''  : state.user.name,
                   style: TextStyle(color: Colors.black),
                 ),
+                centerTitle: true,
               ),
               actions: <Widget>[
                 PopupMenuButton<String>(
@@ -239,9 +239,6 @@ class AccountScreen extends StatelessWidget {
                     menuButton: _menuButton(context, state.boards[index]),
                   );
                 },
-                boards: state.boards,
-                boardPinMap: state.boardPinMap,
-                onBoardTap: _onBoardTap,
                 isError: state is ErrorState,
                 onReload: () {
                   BlocProvider.of<AccountScreenBloc>(context)
@@ -272,9 +269,6 @@ class AccountScreen extends StatelessWidget {
           menuButton: _menuButton(context, state.boards[index]),
         );
       },
-      boards: state.boards,
-      boardPinMap: state.boardPinMap,
-      onBoardTap: _onBoardTap,
       isError: state is ErrorState,
       onReload: () {
         BlocProvider.of<AccountScreenBloc>(context).add(const Refresh());
