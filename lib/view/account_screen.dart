@@ -6,6 +6,7 @@ import 'package:mobile/model/board_model.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/repositories.dart';
 import 'package:mobile/routes.dart';
+import 'package:mobile/theme.dart';
 import 'package:mobile/view/board_detail_screen.dart';
 import 'package:mobile/view/board_edit_screen.dart';
 import 'package:mobile/view/components/board_grid_view.dart';
@@ -65,7 +66,6 @@ class AccountScreen extends StatelessWidget {
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
-              iconTheme: const IconThemeData(color: Colors.black),
               pinned: true,
               expandedHeight: 150,
               flexibleSpace: FlexibleSpaceBar(
@@ -80,10 +80,10 @@ class AccountScreen extends StatelessWidget {
                     margin: const EdgeInsets.all(8),
                   ),
                 ),
-                title: Text(
-                  state.user == null ? ''  : state.user.name,
-                  style: TextStyle(color: Colors.black),
-                ),
+                title: Text(state.user == null ? '' : state.user.name,
+                    style: TextStyle(
+                      color: ColorPalettes.defaultPalette.primaryText,
+                    )),
                 centerTitle: true,
               ),
               actions: <Widget>[
@@ -147,7 +147,6 @@ class AccountScreen extends StatelessWidget {
     final choices = [_Choices.logout];
 
     return Container(
-      color: Colors.white,
       padding: const EdgeInsets.symmetric(vertical: 16) +
           EdgeInsets.only(top: MediaQuery.of(context).padding.top),
       child: Stack(

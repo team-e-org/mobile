@@ -300,7 +300,6 @@ class _RoundedContainer extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24),
         child: Container(
-          color: Colors.white,
           child: child,
         ),
       ),

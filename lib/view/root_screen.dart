@@ -47,8 +47,6 @@ class _RootScreenState extends State<RootScreen> {
       elevation: 4,
       child: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey[500],
         currentIndex: _currentIndex,
         items: rootScreenDestinations
             .map(

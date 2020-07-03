@@ -13,7 +13,7 @@ class PinterestTypography extends Text {
           style: TextStyle(
             fontSize: 18,
             color: color,
-          ),
+          )..copyWith(),
         );
 
   PinterestTypography.body2(

@@ -6,7 +6,6 @@ class FlavorTitleBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 4),
-      color: Colors.yellow,
       child: Text(
         F.title,
         textAlign: TextAlign.center,
