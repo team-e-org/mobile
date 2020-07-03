@@ -39,6 +39,7 @@ class NewBoardScreen extends StatelessWidget {
         builder: (context, state) => BoardEditPage(
               title: 'Create Board',
               submitButtonTitle: 'Create',
+              isSubmitButtonLoading: state is BoardCreatingState,
               onSubmit: _onSubmit,
             ));
   }

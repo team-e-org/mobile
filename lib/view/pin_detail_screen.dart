@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logger/logger.dart';
 import 'package:mobile/bloc/pin_detail_screen_bloc.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/users_repository.dart';
@@ -8,27 +7,43 @@ import 'package:mobile/routes.dart';
 import 'package:mobile/view/components/circle_flat_button.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/typography_common.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mobile/view/components/notification.dart';
 import 'package:mobile/view/components/pin_image.dart';
 import 'package:mobile/view/components/tag_chips.dart';
-import 'package:mobile/view/components/user_card.dart';
-import 'package:mobile/view/components/user_icon.dart';
+import 'package:mobile/view/pin_delete_dialog.dart';
 import 'package:mobile/view/pin_save_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PinDetailScreenArguments {
   const PinDetailScreenArguments({
+    this.board,
     @required this.pin,
   });
 
+  final Board board;
   final Pin pin;
 }
 
-class PinDetailScreen extends StatelessWidget {
+class PinDetailScreen extends StatefulWidget {
   const PinDetailScreen({this.args});
 
   final PinDetailScreenArguments args;
+  @override
+  _PinDetailScreenState createState() => _PinDetailScreenState();
+}
+
+class _PinDetailScreenState extends State<PinDetailScreen> {
+  PinDetailScreenArguments args;
+  bool isSaved = false;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      args = widget.args;
+      isSaved = widget.args?.board != null;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +69,7 @@ class PinDetailScreen extends StatelessWidget {
               bottom: MediaQuery.of(context).padding.bottom + 40,
               left: 0,
               right: 0,
-              child: _actionButtons(context, args.pin),
+              child: _actionButtons(context, args.board, args.pin),
             ),
             Positioned(
               left: 12,
@@ -107,19 +122,26 @@ class PinDetailScreen extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         children: [
           _pinImage(pin.imageUrl),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 24,
-              vertical: 16,
-            ),
-            child: Column(
-              children: [
-                _pinTitle(pin.title),
-                _pinDescription(pin.description),
-              ],
-            ),
-          )
-        ],
+          (pin.title != null && pin.title.isNotEmpty) ||
+                  (pin.description != null && pin.description.isNotEmpty)
+              ? Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 16,
+                  ),
+                  child: Column(
+                    children: [
+                      (pin.title != null && pin.title.isNotEmpty)
+                          ? _pinTitle(pin.title)
+                          : null,
+                      (pin.description != null && pin.description.isNotEmpty)
+                          ? _pinDescription(pin.description)
+                          : null,
+                    ]..removeWhere((element) => element == null),
+                  ),
+                )
+              : null,
+        ]..removeWhere((element) => element == null),
       ),
     );
   }
@@ -181,7 +203,7 @@ class PinDetailScreen extends StatelessWidget {
     return CircleFlatButton(
       icon: Icons.chevron_left,
       onTap: () {
-        Navigator.of(context).pop();
+        Navigator.of(context).pop(isSaved);
       },
     );
   }
@@ -206,14 +228,16 @@ class PinDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _actionButtons(BuildContext context, Pin pin) {
+  Widget _actionButtons(BuildContext context, Board board, Pin pin) {
     final enableAccessButton = (pin?.url != null) && (pin.url.isNotEmpty);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         enableAccessButton ? _accessButton(context, pin) : null,
         enableAccessButton ? const SizedBox(width: 8) : null,
-        _saveButton(context, pin),
+        !isSaved
+            ? _saveButton(context, pin)
+            : _unsaveButton(context, board, pin),
       ]..removeWhere((e) => e == null),
     );
   }
@@ -232,6 +256,13 @@ class PinDetailScreen extends StatelessWidget {
     );
   }
 
+  Widget _unsaveButton(BuildContext context, Board board, Pin pin) {
+    return PinterestButton.secondary(
+      text: 'Unsave',
+      onPressed: () => _onUnsavePressed(context, board, pin),
+    );
+  }
+
   Future _onAccessPressed(BuildContext context, String url) async {
     if (await canLaunch(url)) {
       await launch(url);
@@ -245,6 +276,16 @@ class PinDetailScreen extends StatelessWidget {
       Routes.pinSave,
       arguments: PinSaveScreenArguments(pin: args.pin),
     );
+    setState(() {
+      isSaved = true;
+    });
+  }
+
+  Future _onUnsavePressed(BuildContext context, Board board, Pin pin) async {
+    await PinDeleteDialog.show(context: context, board: board, pin: pin);
+    setState(() {
+      isSaved = false;
+    });
   }
 }
 
