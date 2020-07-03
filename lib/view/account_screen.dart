@@ -239,9 +239,6 @@ class AccountScreen extends StatelessWidget {
                     menuButton: _menuButton(context, state.boards[index]),
                   );
                 },
-                boards: state.boards,
-                boardPinMap: state.boardPinMap,
-                onBoardTap: _onBoardTap,
                 isError: state is ErrorState,
                 onReload: () {
                   BlocProvider.of<AccountScreenBloc>(context)
@@ -272,9 +269,6 @@ class AccountScreen extends StatelessWidget {
           menuButton: _menuButton(context, state.boards[index]),
         );
       },
-      boards: state.boards,
-      boardPinMap: state.boardPinMap,
-      onBoardTap: _onBoardTap,
       isError: state is ErrorState,
       onReload: () {
         BlocProvider.of<AccountScreenBloc>(context).add(const Refresh());
