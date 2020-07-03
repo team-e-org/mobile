@@ -7,7 +7,6 @@ class PinterestNotification {
     String title = 'Notification title',
     String subtitle = '',
     Duration duration = const Duration(seconds: 4),
-    Color textColor = Colors.black,
     Color color,
     Widget leading,
   }) {
@@ -15,9 +14,8 @@ class PinterestNotification {
       (context) => _PinterestNotificationWidget(
         title: title,
         subtitle: subtitle,
-        textColor: textColor,
-        color: color ?? Colors.grey[100],
         leading: leading,
+        color: color,
       ),
       duration: duration,
     );
@@ -39,7 +37,6 @@ class PinterestNotification {
     show(
       title: 'まだ実装してないねん。',
       subtitle: 'ほんまにごめんな...',
-      color: Colors.orange[300],
     );
   }
 }

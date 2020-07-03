@@ -24,7 +24,6 @@ class CircleFlatButton extends StatelessWidget {
             height: 42,
             child: Icon(
               icon,
-              color: Colors.white,
             ),
           ),
           onTap: onTap,

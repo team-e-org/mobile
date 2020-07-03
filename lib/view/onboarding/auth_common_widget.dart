@@ -88,7 +88,6 @@ class _Callout extends StatelessWidget {
         children: <Widget>[
           Text(message),
           FlatButton(
-            textColor: Theme.of(context).buttonColor,
             child: Text(buttonText),
             onPressed: onButtonPressed,
           ),
