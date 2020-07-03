@@ -10,10 +10,7 @@ class BoardGridView extends StatefulWidget {
   const BoardGridView({
     this.itemBuilder,
     this.itemCount,
-    this.boards = const [],
-    this.boardPinMap = const {},
     this.layout = BoardGridViewLayout.large,
-    this.onTap,
     this.shrinkWrap = false,
     this.primary = false,
     this.physics,
@@ -22,10 +19,7 @@ class BoardGridView extends StatefulWidget {
   final int itemCount;
   final BoardCardProps Function(BuildContext, int) itemBuilder;
 
-  final List<Board> boards;
-  final Map<int, List<Pin>> boardPinMap;
   final BoardGridViewLayout layout;
-  final BoardGridViewCallback onTap;
   final bool shrinkWrap, primary;
   final ScrollPhysics physics;
 
@@ -73,7 +67,7 @@ class _BoardGridViewState extends State<BoardGridView> {
       staggeredTileBuilder: (index) {
         return const StaggeredTile.fit(1);
       },
-      itemCount: widget.boards.length,
+      itemCount: widget.itemCount,
       itemBuilder: (context, index) {
         return BoardCardCompact(
           props: widget.itemBuilder(context, index),
@@ -94,7 +88,7 @@ class _BoardGridViewState extends State<BoardGridView> {
       staggeredTileBuilder: (index) {
         return const StaggeredTile.fit(1);
       },
-      itemCount: widget.boards.length,
+      itemCount: widget.itemCount,
       itemBuilder: (context, index) {
         return BoardCardSlim(
           props: widget.itemBuilder(context, index),
@@ -105,7 +99,7 @@ class _BoardGridViewState extends State<BoardGridView> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.boards.isNotEmpty) {
+    if (widget.itemCount != 0) {
       switch (widget.layout) {
         case BoardGridViewLayout.large:
           return _styleLarge(context);

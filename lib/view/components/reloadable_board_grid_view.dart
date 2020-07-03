@@ -10,9 +10,6 @@ class ReloadableBoardGridView extends StatelessWidget {
     this.isLoading = false,
     this.itemCount,
     this.itemBuilder,
-    this.boards = const [],
-    this.boardPinMap = const {},
-    this.onBoardTap,
     this.onScrollOut,
     this.isError = false,
     this.onReload,
@@ -28,9 +25,6 @@ class ReloadableBoardGridView extends StatelessWidget {
   final BoardCardProps Function(BuildContext, int) itemBuilder;
 
   final BoardGridViewLayout layout;
-  final List<Board> boards;
-  final Map<int, List<Pin>> boardPinMap;
-  final BoardGridViewCallback onBoardTap;
   final VoidCallback onScrollOut;
   final bool isError;
   final VoidCallback onReload;
@@ -75,7 +69,7 @@ class ReloadableBoardGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (boards.isEmpty) {
+    if (itemCount == 0) {
       if (isLoading) {
         return _loadingWidget();
       } else if (isError) {
@@ -110,9 +104,6 @@ class ReloadableBoardGridView extends StatelessWidget {
                 BoardGridView(
                   itemCount: itemCount,
                   itemBuilder: itemBuilder,
-                  boards: boards,
-                  boardPinMap: boardPinMap,
-                  onTap: onBoardTap,
                   shrinkWrap: shrinkWrap,
                   primary: primary,
                   physics: physics,
