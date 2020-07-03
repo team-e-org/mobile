@@ -82,7 +82,7 @@ class AccountScreen extends StatelessWidget {
                   ),
                 ),
                 title: Text(
-                  state.user.name,
+                  state.user == null ? ''  : state.user.name,
                   style: TextStyle(color: Colors.black),
                 ),
               ),
