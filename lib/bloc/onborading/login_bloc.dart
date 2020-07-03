@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:mobile/repository/account_repository.dart';
-import 'package:mobile/view/onboarding/authentication_bloc.dart';
+import 'package:mobile/bloc/onborading/authentication_bloc.dart';
 
 abstract class LoginState extends Equatable {
   @override

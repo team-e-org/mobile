@@ -5,11 +5,11 @@ import 'package:mobile/util/validator.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/textfield_common.dart';
 import 'package:mobile/view/components/notification.dart';
-import 'package:mobile/view/onboarding/auth_navigation_bloc.dart';
+import 'package:mobile/bloc/onborading/auth_navigation_bloc.dart';
 import 'package:mobile/view/onboarding/auth_common_widget.dart';
-import 'package:mobile/view/onboarding/authentication_bloc.dart';
-import 'package:mobile/view/onboarding/login_bloc.dart';
-import 'package:mobile/view/onboarding/signup_bloc.dart';
+import 'package:mobile/bloc/onborading/authentication_bloc.dart';
+import 'package:mobile/bloc/onborading/login_bloc.dart';
+import 'package:mobile/bloc/onborading/signup_bloc.dart';
 
 class SignUpFormModel {
   SignUpFormModel({

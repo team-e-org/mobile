@@ -21,7 +21,7 @@ import 'package:mobile/view/new_pin_board_select_screen.dart';
 import 'package:mobile/view/new_pin_edit_screen.dart';
 import 'package:mobile/view/new_pin_screen.dart';
 import 'package:mobile/view/onboarding/auth_screen.dart';
-import 'package:mobile/view/onboarding/authentication_bloc.dart';
+import 'package:mobile/bloc/onborading/authentication_bloc.dart';
 import 'package:mobile/view/pin_detail_screen.dart';
 import 'package:mobile/view/pin_edit_screen.dart';
 import 'package:mobile/view/pin_save_screen.dart';

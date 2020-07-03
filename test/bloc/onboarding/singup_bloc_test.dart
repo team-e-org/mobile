@@ -3,20 +3,22 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mobile/api/errors/error.dart';
 import 'package:mobile/repository/account_repository.dart';
 import 'package:mobile/model/auth.dart';
-import 'package:mobile/view/onboarding/authentication_bloc.dart';
-import 'package:mobile/view/onboarding/login_bloc.dart';
+import 'package:mobile/bloc/onborading/authentication_bloc.dart';
+import 'package:mobile/bloc/onborading/login_bloc.dart';
+import 'package:mobile/bloc/onborading/signup_bloc.dart';
 import 'package:mockito/mockito.dart';
 
 class MockAccountRepository extends Mock implements AccountRepository {}
 
 void main() {
-  group('LoginBloc test', () {
+  group('SignUpBloc test', () {
     AccountRepository accountRepository;
-    LoginBloc bloc;
+    SignUpBloc bloc;
 
     setUp(() {
       accountRepository = MockAccountRepository();
-      bloc = LoginBloc(
+
+      bloc = SignUpBloc(
         accountRepository: accountRepository,
         authenticationBloc:
             AuthenticationBloc(accountRepository: accountRepository),
@@ -28,29 +30,33 @@ void main() {
       expect(bloc.state, LoginInitial());
     });
 
-    blocTest<LoginBloc, LoginEvent, LoginState>(
+    blocTest<SignUpBloc, SignUpEvent, LoginState>(
       'LoginInitial -> LoginLoading',
       build: () async => bloc,
       act: (bloc) async {
-        when(accountRepository.authenticate(any, any))
+        when(accountRepository.register(any, any, any))
             .thenAnswer((_) => Future.value(Auth(token: '', userId: 0)));
-        bloc.add(LoginRequested(email: 'a@b.c', password: 'password'));
+        bloc.add(SignupRequested(
+            username: 'user', email: 'a@b.c', password: 'password'));
       },
       expect: <LoginState>[
         LoginLoading(),
       ],
     );
 
-    blocTest<LoginBloc, LoginEvent, LoginState>(
+    blocTest<SignUpBloc, SignUpEvent, LoginState>(
       'LoginInitial -> LoginLoading -> LoginFailure -> LoginLoading',
       build: () async => bloc,
       act: (bloc) async {
-        when(accountRepository.authenticate('a@b.c', '123'))
+        when(accountRepository.register('user', 'a@b.c', 'password'))
             .thenThrow(UnauthorizedError());
-        when(accountRepository.authenticate('a@b.c', 'pass'))
+        when(accountRepository.register('bob', any, any))
             .thenAnswer((_) => Future.value(Auth(token: '', userId: 0)));
-        bloc.add(LoginRequested(email: 'a@b.c', password: '123'));
-        bloc.add(LoginRequested(email: 'a@b.c', password: 'pass'));
+        bloc
+          ..add(SignupRequested(
+              username: 'user', email: 'a@b.c', password: 'password'))
+          ..add(SignupRequested(
+              username: 'bob', email: 'a@b.c', password: 'password'));
       },
       expect: <dynamic>[
         LoginLoading(),
