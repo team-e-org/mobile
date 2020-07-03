@@ -3,8 +3,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 import 'package:mobile/repository/account_repository.dart';
-import 'package:mobile/view/onboarding/authentication_bloc.dart';
-import 'package:mobile/view/onboarding/login_bloc.dart';
+import 'package:mobile/bloc/onborading/authentication_bloc.dart';
+import 'package:mobile/bloc/onborading/login_bloc.dart';
 
 abstract class SignUpEvent extends Equatable {
   @override

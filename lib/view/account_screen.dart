@@ -14,7 +14,7 @@ import 'package:mobile/view/components/menu_button.dart';
 import 'package:mobile/view/components/reloadable_board_grid_view.dart';
 import 'package:mobile/view/components/user_icon.dart';
 import 'package:mobile/view/create_new_button.dart';
-import 'package:mobile/view/onboarding/authentication_bloc.dart';
+import 'package:mobile/bloc/onborading/authentication_bloc.dart';
 
 import 'components/components.dart';
 

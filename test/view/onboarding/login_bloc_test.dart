@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mobile/api/errors/error.dart';
 import 'package:mobile/repository/account_repository.dart';
 import 'package:mobile/model/auth.dart';
-import 'package:mobile/view/onboarding/authentication_bloc.dart';
-import 'package:mobile/view/onboarding/login_bloc.dart';
+import 'package:mobile/bloc/onborading/authentication_bloc.dart';
+import 'package:mobile/bloc/onborading/login_bloc.dart';
 import 'package:mockito/mockito.dart';
 
 class MockAccountRepository extends Mock implements AccountRepository {}
