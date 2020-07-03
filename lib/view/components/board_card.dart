@@ -2,10 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/routes.dart';
+import 'package:mobile/theme.dart';
 import 'package:mobile/view/board_edit_screen.dart';
 import 'package:mobile/view/components/components.dart';
 import 'package:mobile/view/components/bottom_sheet_menu.dart';
 import 'package:mobile/view/components/menu_button.dart';
+import 'package:mobile/view/components/pin_image.dart';
 
 class BoardCardLarge extends BoardCardBase {
   BoardCardLarge({
@@ -201,12 +203,13 @@ abstract class BoardCardBase extends StatelessWidget {
   Widget _image() {
     if (props.pins.isEmpty) {
       return Container(
+        color: ColorPalettes.defaultPalette.divider,
         child: const Center(child: Icon(Icons.photo_library)),
       );
     }
 
-    return CachedNetworkImage(
-      imageUrl: props.pins[0].imageUrl,
+    return PinImage(
+      props.pins[0].imageUrl,
       fit: BoxFit.cover,
     );
   }
@@ -226,18 +229,18 @@ abstract class BoardCardBase extends StatelessWidget {
   Widget _imageGrids() {
     if (props.pins.isEmpty) {
       return Container(
+        color: ColorPalettes.defaultPalette.divider,
         child: const Center(child: Icon(Icons.photo_library)),
       );
     }
-
     return Container(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: CachedNetworkImage(
+            child: PinImage(
+              props.pins[0].imageUrl,
               fit: BoxFit.cover,
-              imageUrl: props.pins[0].imageUrl,
             ),
           ),
           props.pins.length > 1
@@ -247,16 +250,15 @@ abstract class BoardCardBase extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Expanded(
-                          child: CachedNetworkImage(
-                            fit: BoxFit.cover,
-                            imageUrl: props.pins[1].imageUrl,
-                          ),
-                        ),
+                            child: PinImage(
+                          props.pins[1].imageUrl,
+                          fit: BoxFit.cover,
+                        )),
                         props.pins.length > 2
                             ? Expanded(
-                                child: CachedNetworkImage(
+                                child: PinImage(
+                                  props.pins[0].imageUrl,
                                   fit: BoxFit.cover,
-                                  imageUrl: props.pins[2].imageUrl,
                                 ),
                               )
                             : Container()
