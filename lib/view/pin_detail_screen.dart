@@ -5,12 +5,15 @@ import 'package:mobile/bloc/pin_detail_screen_bloc.dart';
 import 'package:mobile/model/models.dart';
 import 'package:mobile/repository/users_repository.dart';
 import 'package:mobile/routes.dart';
+import 'package:mobile/view/components/circle_flat_button.dart';
 import 'package:mobile/view/components/common/button_common.dart';
 import 'package:mobile/view/components/common/typography_common.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mobile/view/components/notification.dart';
+import 'package:mobile/view/components/pin_image.dart';
 import 'package:mobile/view/components/tag_chips.dart';
 import 'package:mobile/view/components/user_card.dart';
+import 'package:mobile/view/components/user_icon.dart';
 import 'package:mobile/view/pin_save_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -42,14 +45,25 @@ class PinDetailScreen extends StatelessWidget {
 
   Widget _contentBuilder(BuildContext context, PinDetailScreenState state) {
     return Scaffold(
-      body: Stack(children: [
-        _builder(context, state),
-        Positioned(
-          left: 12,
-          top: 16,
-          child: SafeArea(child: _backButton(context)),
+      body: Container(
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            _builder(context, state),
+            Positioned(
+              bottom: MediaQuery.of(context).padding.bottom + 40,
+              left: 0,
+              right: 0,
+              child: _actionButtons(context, args.pin),
+            ),
+            Positioned(
+              left: 12,
+              top: 16,
+              child: SafeArea(child: _backButton(context)),
+            ),
+          ],
         ),
-      ]),
+      ),
     );
   }
 
@@ -74,131 +88,181 @@ class PinDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _pinImage(args.pin.imageUrl),
-            const SizedBox(height: 32),
-            _buildPinInfo(
-              title: args.pin.title,
-              description: args.pin.description,
+            _pinBuilder(args.pin),
+            _userBuilder(state.user),
+            _tagsBuilder(args.pin.tags),
+            _relatedPins(context),
+          ]..removeWhere((e) => e == null),
+        ),
+      ),
+    );
+  }
+
+  Widget _pinBuilder(Pin pin) {
+    return _RoundedContainer(
+      child: ListView(
+        padding: const EdgeInsets.all(0),
+        primary: true,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        children: [
+          _pinImage(pin.imageUrl),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24,
+              vertical: 16,
             ),
-            const SizedBox(height: 32),
-            _buildTags(args.pin.tags),
-            const SizedBox(height: 32),
-            UserCard(
-              user: user,
-              onTap: (context, user) =>
-                  {PinterestNotification.showNotImplemented()},
-              margin: const EdgeInsets.symmetric(horizontal: 40),
+            child: Column(
+              children: [
+                _pinTitle(pin.title),
+                _pinDescription(pin.description),
+              ],
             ),
-            const SizedBox(height: 32),
-            _buildActions(context),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _pinTitle(String text) {
+    return PinterestTypography.body1(text);
+  }
+
+  Widget _pinDescription(String text) {
+    return PinterestTypography.body2(text);
+  }
+
+  Widget _pinImage(String imageUrl) {
+    return PinImage(imageUrl);
+  }
+
+  Widget _userBuilder(User user) {
+    return _RoundedContainer(
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 16,
+        ),
+        child: Column(
+          children: [
+            PinterestTypography.body2('created by'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [Flexible(child: PinterestTypography.body2(user.name))],
+            )
           ],
         ),
       ),
     );
   }
 
-  Widget _pinImage(String imageUrl) {
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxHeight: 500), // FIXME 決め打ちにしない
-      child: CachedNetworkImage(
-        imageUrl: imageUrl,
-        fit: BoxFit.cover,
-        placeholder: (context, url) => Container(
-          height: 200,
-          width: 200,
+  Widget _tagsBuilder(List<String> tags) {
+    if (tags == null || tags.isEmpty) {
+      return null;
+    }
+
+    return _RoundedContainer(
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 16,
         ),
-        errorWidget: (_, __, dynamic err) => const Placeholder(
-          fallbackHeight: 200,
-          fallbackWidth: 200,
-          color: Colors.grey,
+        child: Column(
+          children: [
+            PinterestTypography.body2('tags'),
+            TagChips(tags: tags),
+          ],
         ),
       ),
     );
   }
 
   Widget _backButton(BuildContext context) {
-    return ClipOval(
-      child: Material(
-        color: Colors.black.withOpacity(0.3), // button color
-        child: InkWell(
-          child: SizedBox(
-            width: 42,
-            height: 42,
-            child: Icon(
-              Icons.chevron_left,
-              color: Colors.white,
+    return CircleFlatButton(
+      icon: Icons.chevron_left,
+      onTap: () {
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
+  Widget _relatedPins(BuildContext context) {
+    return _RoundedContainer(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: ListView(
+          padding: const EdgeInsets.all(0),
+          primary: true,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            Center(child: PinterestTypography.body1('関連するピン')),
+            Container(
+              height: 500,
             ),
-          ),
-          onTap: () {
-            Navigator.of(context).pop();
-          },
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildPinInfo({String title, String description}) {
-    if (title == null && String == null) {
-      return Container();
-    }
-
-    final list = <Widget>[];
-
-    if (title != null) {
-      list.add(PinterestTypography.body1(title));
-    }
-    if (title != null && description != null) {
-      list.add(const SizedBox(height: 8));
-    }
-    if (description != null) {
-      list.add(PinterestTypography.body2(description));
-    }
-
-    return Column(children: list);
-  }
-
-  Widget _buildTags(List<String> tags) {
-    return TagChips(tags: tags);
-  }
-
-  Widget _buildActions(BuildContext context) {
-    final list = <Widget>[];
-
-    if (args.pin.url != null && args.pin.url.isNotEmpty) {
-      list.addAll([
-        PinterestButton.secondary(
-          text: 'Access',
-          onPressed: () => _onAccessPressed(context),
-        ),
-        const SizedBox(width: 20),
-      ]);
-    }
-    list.add(
-      PinterestButton.primary(
-        text: 'Save',
-        onPressed: () => _onSavePressed(context),
-      ),
-    );
-
+  Widget _actionButtons(BuildContext context, Pin pin) {
+    final enableAccessButton = (pin?.url != null) && (pin.url.isNotEmpty);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: list,
+      children: [
+        enableAccessButton ? _accessButton(context, pin) : null,
+        enableAccessButton ? const SizedBox(width: 8) : null,
+        _saveButton(context, pin),
+      ]..removeWhere((e) => e == null),
     );
   }
 
-  Future _onAccessPressed(BuildContext context) async {
-    Logger().d('Open URL: ${args.pin.url}');
-    if (await canLaunch(args.pin.url)) {
-      await launch(args.pin.url);
+  Widget _accessButton(BuildContext context, Pin pin) {
+    return PinterestButton.secondary(
+      text: 'Access',
+      onPressed: () => _onAccessPressed(context, pin.url),
+    );
+  }
+
+  Widget _saveButton(BuildContext context, Pin pin) {
+    return PinterestButton.primary(
+      text: 'Save',
+      onPressed: () => _onSavePressed(context, pin),
+    );
+  }
+
+  Future _onAccessPressed(BuildContext context, String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
     } else {
       PinterestNotification.showError(title: '無効なURLです');
     }
   }
 
-  Future _onSavePressed(BuildContext context) async {
+  Future _onSavePressed(BuildContext context, Pin pin) async {
     await Navigator.of(context).pushNamed(
       Routes.pinSave,
       arguments: PinSaveScreenArguments(pin: args.pin),
+    );
+  }
+}
+
+class _RoundedContainer extends StatelessWidget {
+  _RoundedContainer({this.child});
+
+  final Widget child;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 2),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Container(
+          color: Colors.white,
+          child: child,
+        ),
+      ),
     );
   }
 }

@@ -46,7 +46,7 @@ class BoardSelectPage extends StatelessWidget {
               onReload: onReload,
               onRefresh: onRefresh,
             ),
-          ]..remove(null),
+          ]..removeWhere((e) => e == null),
         ),
       ),
     );

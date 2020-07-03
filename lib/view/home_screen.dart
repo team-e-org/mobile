@@ -33,21 +33,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _contentBuilder(BuildContext context, HomeScreenState state) {
     final bloc = BlocProvider.of<HomeScreenBloc>(context);
-    return SafeArea(
-      child: ReloadablePinGridView(
-        isLoading: state is Loading,
-        itemCount: state.pins.length,
-        itemBuilder: (context, index) {
-          return PinCard(
-            pin: state.pins[index],
-            onTap: () => _onPinTap(context, state.pins[index]),
-          );
-        },
-        onScrollOut: () => bloc.add(HomeScreenEvent.loadNext),
-        enableScrollOut: !state.isEndOfPins,
-        isError: state is ErrorState,
-        onReload: () => bloc.add(HomeScreenEvent.loadNext),
-        onRefresh: () async => bloc.add(HomeScreenEvent.refresh),
+    return Scaffold(
+      body: SafeArea(
+        top: false,
+        child: ReloadablePinGridView(
+          isLoading: state is Loading,
+          itemCount: state.pins.length,
+          itemBuilder: (context, index) {
+            return PinCard(
+              pin: state.pins[index],
+              onTap: () => _onPinTap(context, state.pins[index]),
+            );
+          },
+          onScrollOut: () => bloc.add(HomeScreenEvent.loadNext),
+          enableScrollOut: !state.isEndOfPins,
+          isError: state is ErrorState,
+          onReload: () => bloc.add(HomeScreenEvent.loadNext),
+          onRefresh: () async => bloc.add(HomeScreenEvent.refresh),
+        ),
       ),
     );
   }
