@@ -79,9 +79,16 @@ class DefaultPinsApi extends PinsApi {
   }
 
   Future<List<String>> getTags({int pinId}) async {
-    // final response = await _client.get(('/tags?pin_id=$pinId'));
-    // return jsonDecode(response.body) as List<String>;
-    return [];
+    try {
+      final response = await _client.get(('/tags?pin_id=$pinId'));
+      final bodyJson = jsonDecode(response.body) as List;
+      final tags = bodyJson
+          .map((dynamic e) => (e as Map<String, dynamic>)['tag'] as String)
+          .toList();
+      return tags;
+    } on Exception catch (e) {
+      return [];
+    }
   }
 
   @override
