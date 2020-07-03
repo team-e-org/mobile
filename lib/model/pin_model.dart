@@ -26,7 +26,9 @@ class NewPin extends Equatable {
   final String image;
 
   String tagsString = '';
+
   List<String> get tags => tagsString.toTagList();
+
   set tags(List<String> tags) {
     tagsString = _TagsString.fromTagList(tags);
   }
@@ -97,7 +99,9 @@ class EditPin extends Equatable {
   final bool isPrivate;
 
   String tagsString = '';
+
   List<String> get tags => tagsString.toTagList();
+
   set tags(List<String> tags) {
     tagsString = _TagsString.fromTagList(tags);
   }
@@ -169,7 +173,9 @@ class Pin extends Equatable {
   final bool isPrivate;
 
   String tagsString = '';
+
   List<String> get tags => tagsString.toTagList();
+
   set tags(List<String> tags) {
     tagsString = _TagsString.fromTagList(tags);
   }
@@ -231,6 +237,7 @@ class Pin extends Equatable {
         userId,
         imageUrl,
         isPrivate,
+//        tags,  // FIXME: tagsをpropsに含める
       ];
 }
 
