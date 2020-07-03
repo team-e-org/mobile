@@ -64,7 +64,7 @@ class BoardDetailScreen extends StatelessWidget {
         return PinCard(
           board: args.board,
           pin: state.pins[index],
-          onTap: () => _onPinTap(context, state.pins[index]),
+          onTap: () => _onPinTap(context, args.board, state.pins[index]),
           menuButton: _menuButton(context, state.pins[index]),
         );
       },
@@ -76,15 +76,21 @@ class BoardDetailScreen extends StatelessWidget {
     );
   }
 
-  void _onPinTap(BuildContext context, Pin pin) {
+  void _onPinTap(BuildContext context, Board board, Pin pin) async {
     if (pin == null) {
       return;
     }
 
-    Navigator.of(context).pushNamed(
+    final isSaved = await Navigator.of(context).pushNamed(
       Routes.pinDetail,
-      arguments: PinDetailScreenArguments(pin: pin),
-    );
+      arguments: PinDetailScreenArguments(
+        board: board,
+        pin: pin,
+      ),
+    ) as bool;
+    if (isSaved) {
+      bloc.add(PinsBlocEvent.refresh);
+    }
   }
 
   MenuButton _menuButton(BuildContext context, Pin pin) {
@@ -109,8 +115,8 @@ class BoardDetailScreen extends StatelessWidget {
         BottomSheetMenuItem(
             title: const Text('ピンをボードから削除する'),
             onTap: () async {
-              await PinDeleteDialog()
-                  .show(context: context, board: args.board, pin: pin);
+              await PinDeleteDialog.show(
+                  context: context, board: args.board, pin: pin);
               Navigator.of(context).pop();
               bloc.add(PinsBlocEvent.refresh);
             }),
