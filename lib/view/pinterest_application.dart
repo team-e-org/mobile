@@ -82,7 +82,7 @@ class PinterestApplication extends StatelessWidget {
     return OverlaySupport(
       child: MaterialApp(
         title: 'pinko',
-        theme: pinterestThemeData,
+        theme: PinterestTheme.defaultTheme,
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
             case Routes.root:
