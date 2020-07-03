@@ -9,7 +9,7 @@ class BoardEditPage extends StatefulWidget {
     this.title,
     this.board,
     this.submitButtonTitle,
-    this.isSubmitButtonLoading,
+    this.isSubmitButtonLoading = false,
     this.onSubmit,
   });
 
@@ -86,7 +86,7 @@ class _BoardEditPageState extends State<BoardEditPage> {
                 text: widget.submitButtonTitle,
                 loading: widget.isSubmitButtonLoading,
                 onPressed: _formData.name.isEmpty
-                    ? null
+                    ? () {}
                     : () => _onCreateButtonPressed(context),
               ),
             ),
