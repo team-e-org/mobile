@@ -22,6 +22,11 @@ class MockPinsRepository extends PinsRepository {
         RecommendPinResponse(pins: pins, pagingKey: 'pagingKey'));
   }
 
+  Future<List<Pin>> getPinsByTag({String tag, int page}) async {
+    final pins = List.filled(10, 1).map((_) => Pin.fromMock()).toList();
+    return Future.value(pins);
+  }
+
   Future<List<Pin>> getBoardPins({int boardId, int page}) async {
     final pins = List.filled(10, 1).map((_) => Pin.fromMock()).toList();
     return Future.value(pins);

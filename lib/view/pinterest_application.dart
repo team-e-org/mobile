@@ -51,7 +51,9 @@ class PinterestApplication extends StatelessWidget {
     final pinsRepo = DefaultPinsRepository(
         pinsApi: DefaultPinsApi(apiClient),
         boardsApi: DefaultBoardsApi(apiClient));
-    final boardsRepo = DefaultBoardsRepository(DefaultBoardsApi(apiClient));
+    final boardsRepo = DefaultBoardsRepository(
+        boardsApi: DefaultBoardsApi(apiClient),
+        pinsApi: DefaultPinsApi(apiClient));
     final usersRepo = DefaultUsersRepository(DefaultUsersApi(apiClient));
 
     return BlocProvider(

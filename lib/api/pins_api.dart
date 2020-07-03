@@ -8,7 +8,7 @@ import 'package:mobile/model/models.dart';
 abstract class PinsApi {
   Future<RecommendPinResponse> getRecommendPins({String pagingKey});
 
-  Future<List<Pin>> pins({int page});
+  Future<List<Pin>> pins({int page, String tag});
 
   Future<Pin> pin({int id});
 
@@ -27,6 +27,7 @@ abstract class PinsApi {
   Future<bool> unsavePin({int boardId, int pinId});
 
   Future<bool> savePin({int pinId, int boardId});
+  Future<List<String>> getTags({int pinId});
 }
 
 class DefaultPinsApi extends PinsApi {
@@ -63,8 +64,10 @@ class DefaultPinsApi extends PinsApi {
   }
 
   @override
-  Future<List<Pin>> pins({int page = 1}) async {
-    final response = await _client.get('/pins?page=$page');
+  Future<List<Pin>> pins({int page = 1, String tag = ''}) async {
+    final pageParam = 'page=$page';
+    final tagParam = tag.isNotEmpty ? '?tag=$tag' : '';
+    final response = await _client.get('/pins?$pageParam$tagParam');
     return (jsonDecode(response.body) as List)
         .map((dynamic it) => Pin.fromJson(it as Map<String, dynamic>))
         .toList();
@@ -73,6 +76,12 @@ class DefaultPinsApi extends PinsApi {
   Future<bool> savePin({int pinId, int boardId}) async {
     final response = await _client.post('/boards/$boardId/pins/$pinId');
     return response.statusCode == 201;
+  }
+
+  Future<List<String>> getTags({int pinId}) async {
+    // final response = await _client.get(('/tags?pin_id=$pinId'));
+    // return jsonDecode(response.body) as List<String>;
+    return [];
   }
 
   @override
